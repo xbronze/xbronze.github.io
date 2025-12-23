@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -17,16 +17,16 @@ Maven 3.6.3
 JDK 17
 
 项目的功能：读取数据库的report表中的数据，返回一个List集合对象reportList在JSP页面上，使用EL表达式+JSTL标签库，遍历集合，显示每一条report信息。
-123456789101112131415161718192021222324&amp;lt;%@ page contentType=&#34;text/html;charset=UTF-8&#34; language=&#34;java&#34; %&amp;gt;&amp;lt;%@ taglib prefix=&#34;c&#34; uri=&#34;http://java.sun.com/jsp/jstl/core&#34; %&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;    &amp;lt;meta charset=&#34;UTF-8&#34;&amp;gt;    &amp;lt;title&amp;gt;首页&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;    &amp;lt;h3&amp;gt;欢迎登录，$&amp;#123;sessionScope.get(&#34;user&#34;).name&amp;#125;&amp;lt;/h3&amp;gt;    &amp;lt;div&amp;gt;        &amp;lt;table&amp;gt;            &amp;lt;c:forEach items=&#34;$&amp;#123;reportList&amp;#125;&#34; var=&#34;report&#34;&amp;gt;                &amp;lt;tr&amp;gt;                    &amp;lt;td&amp;gt;报告编号：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.id&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告名称：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.reportName&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告内容：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.reportContext&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告截止提交日期：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.deadlineTime&amp;#125;&amp;lt;/td&amp;gt;                &amp;lt;/tr&amp;gt;            &amp;lt;/c:forEach&amp;gt;        &amp;lt;/table&amp;gt;    &amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;">
+123456789101112131415161718192021222324&amp;lt;%@ page contentType=&amp;quot;text/html;charset=UTF-8&amp;quot; language=&amp;quot;java&amp;quot; %&amp;gt;&amp;lt;%@ taglib prefix=&amp;quot;c&amp;quot; uri=&amp;quot;http://java.sun.com/jsp/jstl/core&amp;quot; %&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;    &amp;lt;title&amp;gt;首页&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;    &amp;lt;h3&amp;gt;欢迎登录，$&amp;#123;sessionScope.get(&amp;quot;user&amp;quot;).name&amp;#125;&amp;lt;/h3&amp;gt;    &amp;lt;div&amp;gt;        &amp;lt;table&amp;gt;            &amp;lt;c:forEach items=&amp;quot;$&amp;#123;reportList&amp;#125;&amp;quot; var=&amp;quot;report&amp;quot;&amp;gt;                &amp;lt;tr&amp;gt;                    &amp;lt;td&amp;gt;报告编号：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.id&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告名称：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.reportName&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告内容：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.reportContext&amp;#125;&amp;lt;/td&amp;gt;                    &amp;lt;td&amp;gt;报告截止提交日期：&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;$&amp;#123;report.deadlineTime&amp;#125;&amp;lt;/td&amp;gt;                &amp;lt;/tr&amp;gt;            &amp;lt;/c:forEach&amp;gt;        &amp;lt;/table&amp;gt;    &amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Tomcat10.1.x使用JSTL标签库">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="Tomcat10.1.x使用JSTL标签库"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -58,8 +58,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -141,8 +142,8 @@ MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
 <li>JDK 17</li>
 </ul>
 <p>项目的功能：读取数据库的report表中的数据，返回一个List集合对象<code>reportList</code>在JSP页面上，使用EL表达式+JSTL标签库，遍历集合，显示每一条report信息。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;%@ taglib prefix=<span class="string">"c"</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;欢迎登录，$&#123;sessionScope.get("user").name&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;table&gt;</span><br><span class="line">            &lt;c:forEach items=<span class="string">"$&#123;reportList&#125;"</span> <span class="keyword">var</span>=<span class="string">"report"</span>&gt;</span><br><span class="line">                &lt;tr&gt;</span><br><span class="line">                    &lt;td&gt;报告编号：&lt;/td&gt;&lt;td&gt;$&#123;report.id&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告名称：&lt;/td&gt;&lt;td&gt;$&#123;report.reportName&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告内容：&lt;/td&gt;&lt;td&gt;$&#123;report.reportContext&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告截止提交日期：&lt;/td&gt;&lt;td&gt;$&#123;report.deadlineTime&#125;&lt;/td&gt;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">            &lt;/c:forEach&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;欢迎登录，$&#123;sessionScope.get(<span class="string">&quot;user&quot;</span>).name&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;table&gt;</span><br><span class="line">            &lt;c:forEach items=<span class="string">&quot;$&#123;reportList&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;report&quot;</span>&gt;</span><br><span class="line">                &lt;tr&gt;</span><br><span class="line">                    &lt;td&gt;报告编号：&lt;/td&gt;&lt;td&gt;$&#123;report.id&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告名称：&lt;/td&gt;&lt;td&gt;$&#123;report.reportName&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告内容：&lt;/td&gt;&lt;td&gt;$&#123;report.reportContext&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告截止提交日期：&lt;/td&gt;&lt;td&gt;$&#123;report.deadlineTime&#125;&lt;/td&gt;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">            &lt;/c:forEach&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
 <p>EL表达式和JSTL标签的使用，需要再项目的pom.xml文件引入了一下依赖</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/javax.servlet/jstl --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/taglibs/standard --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>taglibs<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>standard<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>因为还需要使用<code>HttpServletRequest</code>对象，并且Tomcat版本是<code>Tomcat10.1.28</code>版本，所以项目的pom.xml增加了<code>jakarta.servlet-api</code>的依赖</p>
@@ -152,11 +153,13 @@ MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
 <p>java.lang.ClassNotFoundException:
 javax.servlet.jsp.tagext.TagLibraryValidator</p>
 </blockquote>
-<p><img src="https://img.picgo.net/2024/11/15/_20241115143734fb310f83e14d9209.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/11/15/_20241115143734fb310f83e14d9209.jpeg" /></p>
 <p>针对错误，去搜索了相关的解决办法，发现<code>javax.servlet.jstl</code>也不再符合Tomcat10版本的需求，需要使用<code>jakarta.servlet.jsp.jstl-api</code>版本，所以更改了pom.xml的依赖引用：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.servlet.jsp.jstl<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.servlet.jsp.jstl-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/taglibs/standard --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>taglibs<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>standard<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>结果运行还是报同样的错误。</p>
-<p>最终在stackoverflow上找到了一篇文章<a href="https://stackoverflow.com/questions/8021370/java-lang-noclassdeffounderror-javax-servlet-jsp-tagext-taglibraryvalidator" target="_blank" rel="noopener">https://stackoverflow.com/questions/8021370/java-lang-noclassdeffounderror-javax-servlet-jsp-tagext-taglibraryvalidator</a></p>
+<p>最终在stackoverflow上找到了一篇文章<a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8021370/java-lang-noclassdeffounderror-javax-servlet-jsp-tagext-taglibraryvalidator">https://stackoverflow.com/questions/8021370/java-lang-noclassdeffounderror-javax-servlet-jsp-tagext-taglibraryvalidator</a></p>
 <blockquote>
 <p>The javax.servlet.jsp.tagext.TagLibraryValidator class is introduced
 in JSP 2.0 and then later repackaged to
@@ -183,7 +186,8 @@ taglib" or NoClassDefFoundError or ClassCastException.</li>
 <p>您实际上正在运行与 JSP 3.0 兼容的 servletcontainer（第一个使用
 jakarta 包而不是 javax 的版本），例如 Tomcat 10.0
 或更新版本。在这种情况下，您需要将 JSTL 从 1.x 升级到 2.0
-或更新版本.安装说明可以在<a href="https://stackoverflow.com/questions/4928271/how-to-install-jstl-it-fails-with-the-absolute-uri-cannot-be-resolved-or-una" target="_blank" rel="noopener">How
+或更新版本.安装说明可以在<a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4928271/how-to-install-jstl-it-fails-with-the-absolute-uri-cannot-be-resolved-or-una">How
 to install JSTL? It fails with "The absolute uri cannot be resolved" or
 "Unable to find taglib" or NoClassDefFoundError or
 ClassCastException.</a></p>
@@ -201,20 +205,25 @@ project?</li>
 <p>您已将任意下载的 jsp-api.jar 或 j2ee.jar 或 javaee.jar 文件或任何包含
 JSP API 的文件弄得乱七八糟，这些文件来自完全不同的 servletcontainer
 make/version，而后者实际上并不符合 JSP 2.0
-标准。删除这些库。您不需要它们。如果您这样做是为了解决编译错误，那么您做错了。它们应该位于编译时类路径中，而不是运行时类路径中。另请参阅<a href="https://stackoverflow.com/questions/4076601/how-do-i-import-the-javax-servlet-jakarta-servlet-api-in-my-eclipse-project" target="_blank" rel="noopener">How
+标准。删除这些库。您不需要它们。如果您这样做是为了解决编译错误，那么您做错了。它们应该位于编译时类路径中，而不是运行时类路径中。另请参阅<a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4076601/how-do-i-import-the-javax-servlet-jakarta-servlet-api-in-my-eclipse-project">How
 do I import the javax.servlet / jakarta.servlet API in my Eclipse
 project?</a></p>
 </blockquote>
-<p><img src="https://img.picgo.net/2024/11/15/_20241115160000d08964e94b208b02.jpeg"></p>
-<p>在这个回答中，介绍了另一篇文章<a href="https://stackoverflow.com/questions/4928271/how-to-install-jstl-it-fails-with-the-absolute-uri-cannot-be-resolved-or-una" target="_blank" rel="noopener">How
+<p><img
+src="https://img.picgo.net/2024/11/15/_20241115160000d08964e94b208b02.jpeg" /></p>
+<p>在这个回答中，介绍了另一篇文章<a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4928271/how-to-install-jstl-it-fails-with-the-absolute-uri-cannot-be-resolved-or-una">How
 to install JSTL? It fails with "The absolute uri cannot be resolved" or
 "Unable to find taglib" or NoClassDefFoundError or
 ClassCastException.</a></p>
-<p><img src="https://img.picgo.net/2024/11/15/_20241115160408f907001b3f920d82.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/11/15/_20241115160408f907001b3f920d82.jpeg" /></p>
 <p>所以在pom.xml文件中又增加了<code>jakarta.servlet.jsp.jstl</code>的依赖</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.servlet.jsp.jstl<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.servlet.jsp.jstl-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.glassfish.web<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.servlet.jsp.jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/taglibs/standard --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>taglibs<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>standard<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>重启项目，页面访问数据显示正常。</p>
-<p><img src="https://img.picgo.net/2024/11/15/_20241115160918f4865955a7b38a66.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/11/15/_20241115160918f4865955a7b38a66.jpeg" /></p>
 	  
 	</div>
 
@@ -224,12 +233,14 @@ ClassCastException.</a></p>
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -241,7 +252,21 @@ ClassCastException.</a></p>
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -299,10 +324,10 @@ ClassCastException.</a></p>
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

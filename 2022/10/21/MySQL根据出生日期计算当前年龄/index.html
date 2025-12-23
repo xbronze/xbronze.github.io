@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -17,11 +17,11 @@ now()
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="MySQL根据出生日期计算当前年龄">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="MySQL根据出生日期计算当前年龄"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -53,8 +53,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -132,13 +133,13 @@ var _hmt = _hmt || [];
 <code>now()</code>
 函数获取当前系统日期，然后利用<code>DATE_FORMAT()</code>
 函数计算出当前年龄。</p>
-<a id="more"></a>
+<span id="more"></span>
 <blockquote>
 <p>注意：<code>DATE_FORMAT()</code> 方法后面要加<code>0</code></p>
 </blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">DATE_FORMAT</span>(<span class="keyword">FROM_DAYS</span>(<span class="keyword">DATEDIFF</span>(<span class="keyword">now</span>(), <span class="string">'1994-10-01'</span>)), <span class="string">'%Y'</span>)+<span class="number">0</span> <span class="keyword">as</span> age</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> DATE_FORMAT(FROM_DAYS(DATEDIFF(now(), <span class="string">&#x27;1994-10-01&#x27;</span>)), <span class="string">&#x27;%Y&#x27;</span>)<span class="operator">+</span><span class="number">0</span> <span class="keyword">as</span> age</span><br></pre></td></tr></table></figure>
 <p>实践一下，当前系统时间为 2022-08-29 10:50:54</p>
-<img src="/2022/10/21/MySQL根据出生日期计算当前年龄/1.png">
+<img src="/2022/10/21/MySQL%E6%A0%B9%E6%8D%AE%E5%87%BA%E7%94%9F%E6%97%A5%E6%9C%9F%E8%AE%A1%E7%AE%97%E5%BD%93%E5%89%8D%E5%B9%B4%E9%BE%84/1.png" class="">
 <ul>
 <li><code>DATEDIFF()</code> 函数返回两个日期之间的天数。</li>
 <li><code>FROM_DAYS()</code>
@@ -149,9 +150,10 @@ var _hmt = _hmt || [];
 <blockquote>
 <p>使用FROM_DAYS()谨慎旧日期，它不打算使用与之前的公历(1582年)的到来值。</p>
 </blockquote>
-<hr>
+<hr />
 <p>参考资料：</p>
-<p><a href="https://www.tutorialspoint.com/calculate-age-based-on-date-of-birth-in-mysql" target="_blank" rel="noopener">https://www.tutorialspoint.com/calculate-age-based-on-date-of-birth-in-mysql</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.tutorialspoint.com/calculate-age-based-on-date-of-birth-in-mysql">https://www.tutorialspoint.com/calculate-age-based-on-date-of-birth-in-mysql</a></p>
 	  
 	</div>
 
@@ -161,12 +163,14 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2022/10/21/处理MySQL使用concat-函数时遇到null值的问题/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -178,7 +182,21 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -203,8 +221,8 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
-  
+    <li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -241,10 +259,10 @@ var _hmt = _hmt || [];
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

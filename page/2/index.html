@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -13,10 +13,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -48,8 +48,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -131,7 +132,69 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/07/14/SpringBoot与SpringCloud/">SpringBoot与SpringCloud</a>
+			<a href="/2023/08/24/MySQL数据库InnoDB存储引擎/" >【翻译】MySQL数据库InnoDB存储引擎</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-24  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>InnoDB is a general-purpose storage engine that balances high
+reliability and high performance. In MySQL 8.0, InnoDB is the default
+MySQL storage engine. Unless you have configured a different default
+storage engine, issuing a CREATE TABLE statement without an ENGINE
+clause creates an InnoDB table.</p>
+<p>InnoDB是一种平衡高可靠性和高性能的通用存储引擎。在MySQL
+8.0中，InnoDB是MySQL默认的存储引擎。除非您配置了不同的默认存储引擎，否则发出不带
+ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
+	
+	</div>
+  <a type="button" href="/2023/08/24/MySQL数据库InnoDB存储引擎/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/" >MySQL数据库GROUP_CONCAT()函数输出结果的长度限制</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-08-16  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>GROUP_CONCAT()函数输出的结果，发现被截取了一部分，并没有显示完整，原来GROUP_CONCAT()
+默认的输出长度为1024字节，超出的部分会被截掉不显示。</p>
+	
+	</div>
+  <a type="button" href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/07/14/SpringBoot与SpringCloud/" >SpringBoot与SpringCloud</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -148,8 +211,10 @@ var _hmt = _hmt || [];
 		<h1 id="springboot">1. SpringBoot</h1>
 <h2 id="springboot的作用">1.1 SpringBoot的作用</h2>
 <p>SpringBoot是一个快速构建项目并简化项目配置的工具，内部集成了Tomcat及大多数第三方应用和Spring框架的默认配置。与我们学习的SpringMVC和SpringCloud并无冲突,SpringBoot提供的这些默认配置，大大简化了SpringMVC、SpringCloud等基于Spring的Web应用的开发。</p>
-<h2 id="springboot的自动配置原理如何实现">1.2.SpringBoot的自动配置原理（如何实现）？</h2>
-<h3 id="springboot的自动配置是如何实现的">SpringBoot的自动配置是如何实现的？</h3>
+<h2
+id="springboot的自动配置原理如何实现">1.2.SpringBoot的自动配置原理（如何实现）？</h2>
+<h3
+id="springboot的自动配置是如何实现的">SpringBoot的自动配置是如何实现的？</h3>
 <p>一般我们的SpringBoot项目启动类都会添加<code>@SpringBootApplication</code>注解，而这个注解的其中一个二级注解是<code>@EnableAutoConfiguration</code>注解。而<code>@EnableAutoConfiguration</code>注解通过<code>@Import</code>注解，以<code>ImportSelector</code>接口的方法来导入classpath下的<code>META-INF/spring.factories</code>文件，这些文件中会指定需要加载的一些类名称。</p>
 <p>这些类一般都加了<code>@Configuration</code>注解，并且完成了对某框架（例如Redis、SpringMVC）的默认配置，当这些类符合条件时，就会被实例化，其中的配置生效，那么自动配置自然生效了。</p>
 	
@@ -164,7 +229,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/">MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</a>
+			<a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/" >MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -179,8 +244,8 @@ var _hmt = _hmt || [];
 	
 	
 		<p>执行update更新操作</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"batchUpdate"</span> <span class="attr">parameterType</span>=<span class="string">"java.util.List"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"list"</span> <span class="attr">item</span>=<span class="string">"item"</span> <span class="attr">separator</span>=<span class="string">";"</span> <span class="attr">open</span>=<span class="string">""</span> <span class="attr">close</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.a != null"</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.b!= null"</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.c!= null"</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>执行报错： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;update test_table set a = 1, &apos; at line 14</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;batchUpdate&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;java.util.List&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;list&quot;</span> <span class="attr">item</span>=<span class="string">&quot;item&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;;&quot;</span> <span class="attr">open</span>=<span class="string">&quot;&quot;</span> <span class="attr">close</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.a != null&quot;</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.b!= null&quot;</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.c!= null&quot;</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>执行报错： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;update test_table set a = 1, &#x27; at line 14</span><br></pre></td></tr></table></figure></p>
 <p>刚开始出现这个错误，以为是update语句写的有问题，但是检查了很多遍都没有问题。奇怪的是，同样的代码，同样的数据，本地启的环境不行，测试环境却可以。经过同事提醒了一下，于是检查了一下配置文件，果然发现配置文件上的jdbc配置，测试环境比开发环境多了个<code>allowMultiQueries=true</code>。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true&amp;serverTimezone=GMT%2B8&amp;nullCatalogMeansCurrent=true</span><br></pre></td></tr></table></figure>
 <p>MyBatis默认情况下不允许批量插入或更新数据的原因是出于安全考虑。在许多情况下，数据的插入和更新都需要经过验证和控制，以确保数据的完整性和一致性。如果允许默认的批量操作，可能会导致不正确的数据插入或更新，从而影响应用程序的正常运行。</p>
@@ -198,7 +263,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/06/30/Flowable工作流重启已经结束的流程/">Flowable工作流重启已经结束的流程</a>
+			<a href="/2023/06/30/Flowable工作流重启已经结束的流程/" >Flowable工作流重启已经结束的流程</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -212,13 +277,14 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<h2 id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2>
+		<h2
+id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2>
 <p>在Flowable中，已终止的流程实例不能通过<code>RuntimeService</code>接口直接查询到。相反，你需要使用<code>HistoryService</code>接口来查询历史流程实例，并从中筛选出已终止的实例。以下是正确的步骤：</p>
 <ol type="1">
 <li><p>确保你的应用程序连接到正确的Flowable流程引擎实例。你需要使用Flowable的API来执行后续的操作。</p></li>
 <li><p>使用<code>HistoryService</code>接口的<code>createHistoricProcessInstanceQuery()</code>方法构建查询，设置适当的条件来筛选已终止的流程实例。</p></li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">		.finished();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HistoricProcessInstanceQuery</span> <span class="variable">query</span> <span class="operator">=</span> historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">		.finished();</span><br></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>执行查询并获取已终止的流程实例列表。</li>
 </ol>
@@ -240,7 +306,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/06/13/List＜String＞集合转Long-数组/">List＜String＞集合转Long[]数组</a>
+			<a href="/2023/06/13/List＜String＞集合转Long-数组/" >List＜String＞集合转Long[]数组</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -254,9 +320,9 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> Long[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+		<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> <span class="title class_">Long</span>[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
 <p><code>List&lt;String&gt;</code>直接以toArray的方式转换<code>Long数组</code>是错误的，运行后报错：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
 <p>查看<code>java.util.List.toArray(T[])</code>方法，注释中明确写到：</p>
 <blockquote>
 <p><span class="citation" data-cites="throws">@throws</span>
@@ -266,7 +332,7 @@ supertype of the runtime type of every element in this list
 </blockquote>
 <p>明显Long类型不是String类型的超类。</p>
 <p>可以通过下面的方式实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2023/06/13/List＜String＞集合转Long-数组/#more" class="btn btn-default more">Read More</a>
@@ -279,7 +345,7 @@ supertype of the runtime type of every element in this list
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/06/12/读取jar包中指定资源文件的内容/">读取jar包中指定资源文件的内容</a>
+			<a href="/2023/06/12/读取jar包中指定资源文件的内容/" >读取jar包中指定资源文件的内容</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -295,7 +361,7 @@ supertype of the runtime type of every element in this list
 	
 		<p>背景描述：SpringBoot项目构建打包生成的jar包，在资源文件夹下有个普通txt文件，路径：<code>/templates/content.txt</code></p>
 <h2 id="方式一">方式一：</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(ResourceUtils.getURL(<span class="string">"classpath:"</span>).getPath());</span><br><span class="line">File templateFile = <span class="keyword">new</span> File(file, <span class="string">"/templates/content.txt"</span>);</span><br><span class="line">BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">StringBuffer sbf = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">    String tempStr;</span><br><span class="line">    <span class="keyword">while</span> ((tempStr = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        sbf.append(tempStr);</span><br><span class="line">    &#125;</span><br><span class="line">    reader.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            reader.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e1) &#123;</span><br><span class="line">            e1.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sbf.toString();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(ResourceUtils.getURL(<span class="string">&quot;classpath:&quot;</span>).getPath());</span><br><span class="line"><span class="type">File</span> <span class="variable">templateFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(file, <span class="string">&quot;/templates/content.txt&quot;</span>);</span><br><span class="line"><span class="type">BufferedReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sbf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    reader = <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">FileReader</span>(file));</span><br><span class="line">    String tempStr;</span><br><span class="line">    <span class="keyword">while</span> ((tempStr = reader.readLine()) != <span class="literal">null</span>) &#123;</span><br><span class="line">        sbf.append(tempStr);</span><br><span class="line">    &#125;</span><br><span class="line">    reader.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (reader != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            reader.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e1) &#123;</span><br><span class="line">            e1.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sbf.toString();</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2023/06/12/读取jar包中指定资源文件的内容/#more" class="btn btn-default more">Read More</a>
@@ -308,7 +374,7 @@ supertype of the runtime type of every element in this list
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/">Convert Image File to Base64 String or Base64 String to Image File in Java</a>
+			<a href="/2023/06/07/Convert-Image-File-to-Base64-String-or-Base64-String-to-Image-File-in-Java/" >Convert Image File to Base64 String or Base64 String to Image File in Java</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -326,10 +392,10 @@ supertype of the runtime type of every element in this list
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="image-file-convert-base64-string">Image File Convert Base64
 String</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] fileContent = FileUtils.readFileToByteArray(<span class="keyword">new</span> File(filePath));</span><br><span class="line">String encodedString = Base64.getEncoder().encodeToString(fileContent);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] fileContent = FileUtils.readFileToByteArray(<span class="keyword">new</span> <span class="title class_">File</span>(filePath));</span><br><span class="line"><span class="type">String</span> <span class="variable">encodedString</span> <span class="operator">=</span> Base64.getEncoder().encodeToString(fileContent);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="base64-string-convert-image-file">Base64 String Convert Image
 File</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] decodedBytes = Base64.getDecoder().decode(encodedString);</span><br><span class="line">FileUtils.writeByteArrayToFile(<span class="keyword">new</span> File(outputFileName), decodedBytes);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] decodedBytes = Base64.getDecoder().decode(encodedString);</span><br><span class="line">FileUtils.writeByteArrayToFile(<span class="keyword">new</span> <span class="title class_">File</span>(outputFileName), decodedBytes);</span><br></pre></td></tr></table></figure>
 
 	
 	</div>
@@ -343,7 +409,7 @@ File</h2>
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/">SpringBoot项目下实践设计模式之工厂模式</a>
+			<a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/" >SpringBoot项目下实践设计模式之工厂模式</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -357,7 +423,7 @@ File</h2>
   <div class="row">
 	
            
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/"><img src="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/微信截图_20230423164322.png" alt="SpringBoot项目下实践设计模式之工厂模式" class="nofancybox"></a>
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/"><img src="/2023/04/23/SpringBoot项目下实践设计模式之工厂模式/微信截图_20230423164322.png" alt="SpringBoot项目下实践设计模式之工厂模式"  class="nofancybox"></a>
            
 		</div>
 	
@@ -380,7 +446,7 @@ new
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/04/20/单点登录解决方案/">单点登录解决方案</a>
+			<a href="/2023/04/20/单点登录解决方案/" >单点登录解决方案</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -394,7 +460,7 @@ new
   <div class="row">
 	
            
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/20/单点登录解决方案/"><img src="/2023/04/20/单点登录解决方案/single-sign-on.png" alt="单点登录解决方案" class="nofancybox"></a>
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/20/单点登录解决方案/"><img src="/2023/04/20/单点登录解决方案/single-sign-on.png" alt="单点登录解决方案"  class="nofancybox"></a>
            
 		</div>
 	
@@ -406,67 +472,6 @@ new
 	
 	</div>
   <a type="button" href="/2023/04/20/单点登录解决方案/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/17/ArrayList去重方式总结/">ArrayList去重方式总结</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-17  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2023/04/17/ArrayList去重方式总结/"><img src="/2023/04/17/ArrayList去重方式总结/title.png" alt="ArrayList去重方式总结" class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<p>我在日常工作中常用Stream方式去重，满足了工作上业务的需求即可，并没有深入了解和尝试其他方式的去重操作，这对于个人的成长是很有局限性的，遂借此机会整理ArrayList的去重方法。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/17/ArrayList去重方式总结/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/04/14/总结学习HashMap和HashTable/">总结学习HashMap和HashTable</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-04-14  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>HashMap 和 Hashtable
-都用于以键和值的形式存储数据。两者都使用散列技术来存储唯一密钥。但是HashMap和Hashtable
-类之间也是有许多区别。</p>
-	
-	</div>
-  <a type="button" href="/2023/04/14/总结学习HashMap和HashTable/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -505,7 +510,7 @@ new
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -523,7 +528,7 @@ new
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -532,6 +537,8 @@ new
 			<li><a href="/categories/升级之路/">升级之路<span>1</span></a></li>
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
+		
+			<li><a href="/categories/折腾/">折腾<span>1</span></a></li>
 		
 			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
@@ -550,48 +557,48 @@ new
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
 		
-			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+			<li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
 		
-			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
-		
-			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
-		
-			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
-		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
-		
-			<li><a href="/tags/minio/">minio<span>1</span></a></li>
-		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
-		
-			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
-		
-			<li><a href="/tags/String/">String<span>1</span></a></li>
-		
-			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
-		
-			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
-		
-			<li><a href="/tags/动态代理/">动态代理<span>1</span></a></li>
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
 		
 			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
-			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+			<li><a href="/tags/SpringCloud/">SpringCloud<span>2</span></a></li>
+		
+			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+		
+			<li><a href="/tags/File/">File<span>1</span></a></li>
+		
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
+		
+			<li><a href="/tags/索引/">索引<span>2</span></a></li>
+		
+			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
+		
+			<li><a href="/tags/mini/">mini<span>1</span></a></li>
+		
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
+		
+			<li><a href="/tags/minio/">minio<span>1</span></a></li>
+		
+			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
+		
+			<li><a href="/tags/jstl/">jstl<span>1</span></a></li>
+		
+			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
+		
+			<li><a href="/tags/反射/">反射<span>1</span></a></li>
+		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
 			<li><a href="/tags/UML/">UML<span>1</span></a></li>
 		
-			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
 		
-			<li><a href="/tags/RocketMQ/">RocketMQ<span>1</span></a></li>
-		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
-		
-		
-		   <li><a href="/tags">...<span>64</span></a></li>
+		   <li><a href="/tags">...<span>68</span></a></li>
 		 
 		</ul>
 	</div>
@@ -604,23 +611,23 @@ new
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/"><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
+        <a href="/2025/12/22/C语言定义指针变量并正确初始化/" ><i class="fa fa-file-o"></i>C语言定义指针变量并正确初始化</a>
       </li>
     
       <li>
-        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/"><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
+        <a href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/" ><i class="fa fa-file-o"></i>WARNING: The requested imag...</a>
       </li>
     
       <li>
-        <a href="/2024/10/26/Minio文件服务器：安装/"><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
+        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/" ><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
       </li>
     
       <li>
-        <a href="/2023/09/05/Arrays-binarySearch-方法详解/"><i class="fa fa-file-o"></i>Arrays.binarySearch()方法详解</a>
+        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" ><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
       </li>
     
       <li>
-        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
+        <a href="/2024/10/26/Minio文件服务器：安装/" ><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
       </li>
     
   </ul>
@@ -632,9 +639,9 @@ new
 	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank" ]);">My Github</a></li>
+		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank"]);">My Github</a></li>
 	
-		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank" ]);">My CSDN</a></li>
+		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank"]);">My CSDN</a></li>
 	
 	</ul>
 </div>
@@ -651,10 +658,10 @@ new
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

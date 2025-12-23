@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -25,11 +25,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="理解线程安全">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="理解线程安全"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -61,8 +61,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -148,12 +149,12 @@ var _hmt = _hmt || [];
 <p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
 <p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
 <p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="私有的东西就不该让别人知道">私有的东西就不该让别人知道</h1>
 <p>现实中很多人都会把1万块钱藏着掖着，不让无关的人知道，所以根本不可能扔到大马路上。因为这钱是你的私有物品。</p>
 <p>在程序中也是这样的，所以操作系统会为每个线程分配属于它自己的内存空间，通常称为栈内存，其它线程无权访问。这也是由操作系统保障的。</p>
 <p>如果一些数据只有某个线程会使用，其它线程不能操作也不需要操作，这些数据就可以放入线程的栈内存中。较为常见的就是局部变量。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">avgScore</span><span class="params">(<span class="keyword">double</span>[] scores)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">double</span> score : scores) &#123;</span><br><span class="line">        sum += score;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> count = scores.length;</span><br><span class="line">    <span class="keyword">double</span> avg = sum / count;</span><br><span class="line">    <span class="keyword">return</span> avg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">avgScore</span><span class="params">(<span class="type">double</span>[] scores)</span> &#123;</span><br><span class="line">    <span class="type">double</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">double</span> score : scores) &#123;</span><br><span class="line">        sum += score;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> scores.length;</span><br><span class="line">    <span class="type">double</span> <span class="variable">avg</span> <span class="operator">=</span> sum / count;</span><br><span class="line">    <span class="keyword">return</span> avg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里的变量sum，count，avg都是局部变量，它们都会被分配在线程栈内存中。</p>
 <p>假如现在A线程来执行这个方法，这些变量会在A的栈内存分配。与此同时，B线程也来执行这个方法，这些变量也会在B的栈内存中分配。</p>
 <p>也就是说这些局部变量会在每个线程的栈内存中都分配一份。由于线程的栈内存只能自己访问，所以栈内存中的变量只属于自己，其它线程根本就不知道。</p>
@@ -167,7 +168,7 @@ var _hmt = _hmt || [];
 <p>那怎么保证在公共区域的东西安全呢？答案就是，大家不要抢，人人有份。设想你在街头免费发放矿泉水，来了1万人，你却只有1千瓶水，结果可想而知，一拥而上，场面失守。但如果你有10万瓶水，大家一看，水多着呢，不用着急，一个个排着队来，因为肯定会领到。</p>
 <p>东西多了，自然就不值钱了，从另一个角度来说，也就安全了。大街上的共享单车，现在都很安全，因为太多了，到处都是，都长得一样，所以连搞破坏的人都放弃了。因此要让一个东西安全，就疯狂的copy它吧。</p>
 <p>回到程序里，要让公共区域堆内存中的数据对于每个线程都是安全的，那就每个线程都拷贝它一份，每个线程只处理自己的这一份拷贝而不去影响别的线程的，这不就安全了嘛。相信你已经猜到了，我要表达的就是ThreadLocal类了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StudentAssistant</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    ThreadLocal&lt;String&gt; realName = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line">    ThreadLocal&lt;Double&gt; totalScore = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">determineDegree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score = totalScore.get();</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">90</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"A"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">80</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"B"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">70</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"C"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">60</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"D"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"E"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">determineOptionalcourseScore</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> score = totalScore.get();</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">90</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">80</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">20</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">70</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">30</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">60</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">40</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">60</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StudentAssistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    ThreadLocal&lt;String&gt; realName = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">    ThreadLocal&lt;Double&gt; totalScore = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    String <span class="title function_">determineDegree</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">double</span> <span class="variable">score</span> <span class="operator">=</span> totalScore.get();</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">90</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;A&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">80</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;B&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">70</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;C&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">60</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;D&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;E&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> <span class="title function_">determineOptionalcourseScore</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">double</span> <span class="variable">score</span> <span class="operator">=</span> totalScore.get();</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">90</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">80</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">20</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">70</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">30</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (score &gt;= <span class="number">60</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">40</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">60</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个学生助手类有两个成员变量，realName和totalScore，都是ThreadLocal类型的。每个线程在运行时都会拷贝一份存储到自己的本地。</p>
 <p>A线程运行的是“张三”和“90”，那么这两个数据“张三”和“90”是存储到A线程对象（Thread类的实例对象）的成员变量里去了。假设此时B线程也在运行，是“李四”和“85”，那么“李四”和“85”这两个数据是存储到了B线程对象（Thread类的实例对象）的成员变量里去了。</p>
 <p>线程类（Thread）有一个成员变量，类似于Map类型的，专门用于存储ThreadLocal类型的数据。从逻辑从属关系来讲，这些ThreadLocal数据是属于Thread类的成员变量级别的。从所在“位置”的角度来讲，这些ThreadLocal数据是分配在公共区域的堆内存中的。</p>
@@ -180,7 +181,7 @@ var _hmt = _hmt || [];
 <p>再比如你去旅游时，经常发现一些珍贵的东西，会被用铁栅栏围起来，上面挂一个牌子，写着“只能看，不能摸”。当然可以国际化一点，“only
 look，don't touch”。这也是很安全的，因为光看几眼是不可能看坏的。</p>
 <p>回到程序里，这种情况就属于，只能读取，不能修改。其实就是常量或只读变量，它们对于多线程是安全的，想改也改不了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StudentAssistant</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">double</span> passScore = <span class="number">60</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StudentAssistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="type">double</span> <span class="variable">passScore</span> <span class="operator">=</span> <span class="number">60</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>比如把及格分数设定为60分，在前面加上一个final，这样所有线程都动不了它了。这就很安全了。</p>
 <p>小节一下：以上三种解决方案，其实都是在“耍花招”。</p>
 <p><strong>第一种，找个只有自己知道的地方藏起来，当然安全了。</strong></p>
@@ -198,7 +199,7 @@ worry，just continue reading。</p>
 <p>假设一个线程来到数据跟前一看，发现锁是空闲的，没有人持有。于是它就拿到了这把锁，然后开始操作数据，干了一会活，累了，就去休息了。</p>
 <p>这时，又来了一个线程，发现锁被别人持有着，按照规定，它不能操作数据，因为它无法得到这把锁。当然，它可以选择等待，或放弃，转而去干别的。</p>
 <p>第一个线程之所以敢大胆的去睡觉，就是因为它手里拿着锁呢，其它线程是不可能操作数据的。当它回来后继续把数据操作完，就可以把锁给释放了。锁再次回到空闲状态，其它线程就可以来抢这把锁了。还是谁先抢到锁谁操作数据。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassAssistant</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">double</span> totalScore = <span class="number">60</span>;</span><br><span class="line">    <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> Lock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addScore</span><span class="params">(<span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore += score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">subScore</span><span class="params">(<span class="keyword">double</span> score)</span> </span>&#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore -= score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ClassAssistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> <span class="variable">totalScore</span> <span class="operator">=</span> <span class="number">60</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Lock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addScore</span><span class="params">(<span class="type">double</span> score)</span> &#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore += score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">subScore</span><span class="params">(<span class="type">double</span> score)</span> &#123;</span><br><span class="line">        lock.obtain();</span><br><span class="line">        totalScore -= score;</span><br><span class="line">        lock.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>假定一个班级的初始分数是60分，这个班级抽出10名学生来同时参加10个不同的答题节目，每个学生答对一次为班级加上5分，答错一次减去5分。因为10个学生一起进行，所以这一定是一个并发情形。</p>
 <p>因此加分和减分这两个方法被并发的调用，它们共同操作总分数。为了保证数据的一致性，需要在每次操作前先获取锁，操作完成后再释放锁。</p>
 <h1 id="相信世界充满爱即使被伤害">相信世界充满爱，即使被伤害</h1>
@@ -221,7 +222,8 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 <p>然后两种是标记法，一个是只读标记，一个是加锁标记。</p>
 <p>最后一种是大胆法，先来怼一把试试，若不行从头再来。</p>
 <blockquote>
-<p>转自<a href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q" target="_blank" rel="noopener">编程新说李新杰</a></p>
+<p>转自<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/DJv7h8axGerrmCQFGSpj8Q">编程新说李新杰</a></p>
 </blockquote>
 	  
 	</div>
@@ -232,12 +234,14 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 
     
     
-    <a href="/2020/03/23/Oracle索引/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2020/03/23/Oracle索引/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2019/04/28/单例模式的7种写法/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2019/04/28/单例模式的7种写法/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -249,7 +253,21 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -274,8 +292,8 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
-  
+    <li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -298,7 +316,7 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#不是线程的安全"><span class="toc-article-text">不是线程的安全</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#私有的东西就不该让别人知道"><span class="toc-article-text">私有的东西就不该让别人知道</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#大家不要抢人人有份"><span class="toc-article-text">大家不要抢，人人有份</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#只能看不能摸"><span class="toc-article-text">只能看，不能摸</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#没有规则那就先入为主"><span class="toc-article-text">没有规则，那就先入为主</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#相信世界充满爱即使被伤害"><span class="toc-article-text">相信世界充满爱，即使被伤害</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#作者观点"><span class="toc-article-text">作者观点：</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%89%E5%85%A8"><span class="toc-article-text">不是线程的安全</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%A7%81%E6%9C%89%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%B0%B1%E4%B8%8D%E8%AF%A5%E8%AE%A9%E5%88%AB%E4%BA%BA%E7%9F%A5%E9%81%93"><span class="toc-article-text">私有的东西就不该让别人知道</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%A4%A7%E5%AE%B6%E4%B8%8D%E8%A6%81%E6%8A%A2%E4%BA%BA%E4%BA%BA%E6%9C%89%E4%BB%BD"><span class="toc-article-text">大家不要抢，人人有份</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%8F%AA%E8%83%BD%E7%9C%8B%E4%B8%8D%E8%83%BD%E6%91%B8"><span class="toc-article-text">只能看，不能摸</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%B2%A1%E6%9C%89%E8%A7%84%E5%88%99%E9%82%A3%E5%B0%B1%E5%85%88%E5%85%A5%E4%B8%BA%E4%B8%BB"><span class="toc-article-text">没有规则，那就先入为主</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%9B%B8%E4%BF%A1%E4%B8%96%E7%95%8C%E5%85%85%E6%BB%A1%E7%88%B1%E5%8D%B3%E4%BD%BF%E8%A2%AB%E4%BC%A4%E5%AE%B3"><span class="toc-article-text">相信世界充满爱，即使被伤害</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BD%9C%E8%80%85%E8%A7%82%E7%82%B9"><span class="toc-article-text">作者观点：</span></a></li></ol>
 		</div>
 	
 	</div>
@@ -318,10 +336,10 @@ Swap）。就是在并发很小的情况下，数据被意外修改的概率很�
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

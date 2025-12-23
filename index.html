@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -13,10 +13,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -48,8 +48,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -131,7 +132,66 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/">Tomcat10.1.x使用JSTL标签库</a>
+			<a href="/2025/12/22/C语言定义指针变量并正确初始化/" >C语言定义指针变量并正确初始化</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2025-12-22  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>用C语言实现贪吃蛇游戏过程中，定义蛇身节点是用到了结构体和指针。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 蛇身节点结构体，用于存储每个蛇身段的位置坐标</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> x;  <span class="comment">// x坐标</span></span><br><span class="line">    <span class="type">int</span> y;  <span class="comment">// y坐标</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>* <span class="title">next</span>;</span>  <span class="comment">// 指向下一个节点的指针</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在函数中定义蛇身（头部）节点时，我第一个想法是这样定义
+<code>struct Node *head</code>，但实际上完整的写法是
+<code>struct Node *head = (struct Node*)malloc(sizeof(struct Node));</code>。那么就要探究这两个写法的不同。</p>
+	
+	</div>
+  <a type="button" href="/2025/12/22/C语言定义指针变量并正确初始化/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/" >WARNING: The requested image&#39;s platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>当前我就遇到了这样的问题。我在Raspberry Pi 4B
+开发板上安装了Docker，使用命令<code>sudo docker run --platform linux/amd64 -p 12000:80     -e PAPERMERGE__SECURITY__SECRET_KEY=abc     -e PAPERMERGE__AUTH__PASSWORD=admin     papermerge/papermerge:3.0.3</code>安装papermerge的应用，但是镜像在下载完成后，启动容器失败。</p>
+	
+	</div>
+  <a type="button" href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/" >Tomcat10.1.x使用JSTL标签库</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -153,7 +213,7 @@ MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
 <li>JDK 17</li>
 </ul>
 <p>项目的功能：读取数据库的report表中的数据，返回一个List集合对象<code>reportList</code>在JSP页面上，使用EL表达式+JSTL标签库，遍历集合，显示每一条report信息。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;%@ taglib prefix=<span class="string">"c"</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;欢迎登录，$&#123;sessionScope.get("user").name&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;table&gt;</span><br><span class="line">            &lt;c:forEach items=<span class="string">"$&#123;reportList&#125;"</span> <span class="keyword">var</span>=<span class="string">"report"</span>&gt;</span><br><span class="line">                &lt;tr&gt;</span><br><span class="line">                    &lt;td&gt;报告编号：&lt;/td&gt;&lt;td&gt;$&#123;report.id&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告名称：&lt;/td&gt;&lt;td&gt;$&#123;report.reportName&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告内容：&lt;/td&gt;&lt;td&gt;$&#123;report.reportContext&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告截止提交日期：&lt;/td&gt;&lt;td&gt;$&#123;report.deadlineTime&#125;&lt;/td&gt;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">            &lt;/c:forEach&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;欢迎登录，$&#123;sessionScope.get(<span class="string">&quot;user&quot;</span>).name&#125;&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;table&gt;</span><br><span class="line">            &lt;c:forEach items=<span class="string">&quot;$&#123;reportList&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;report&quot;</span>&gt;</span><br><span class="line">                &lt;tr&gt;</span><br><span class="line">                    &lt;td&gt;报告编号：&lt;/td&gt;&lt;td&gt;$&#123;report.id&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告名称：&lt;/td&gt;&lt;td&gt;$&#123;report.reportName&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告内容：&lt;/td&gt;&lt;td&gt;$&#123;report.reportContext&#125;&lt;/td&gt;</span><br><span class="line">                    &lt;td&gt;报告截止提交日期：&lt;/td&gt;&lt;td&gt;$&#123;report.deadlineTime&#125;&lt;/td&gt;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">            &lt;/c:forEach&gt;</span><br><span class="line">        &lt;/table&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/#more" class="btn btn-default more">Read More</a>
@@ -166,7 +226,7 @@ MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/">Minio文件服务器：SpringBoot实现文件上传</a>
+			<a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" >Minio文件服务器：SpringBoot实现文件上传</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -193,7 +253,7 @@ MyBatis框架，使用maven管理依赖。项目当前的环境是：</p>
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/10/26/Minio文件服务器：安装/">Minio文件服务器：安装</a>
+			<a href="/2024/10/26/Minio文件服务器：安装/" >Minio文件服务器：安装</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -223,7 +283,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/09/05/Arrays-binarySearch-方法详解/">Arrays.binarySearch()方法详解</a>
+			<a href="/2023/09/05/Arrays-binarySearch-方法详解/" >Arrays.binarySearch()方法详解</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -238,9 +298,9 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 	
 	
 		<p>背景：我想校验一个指定的String字符串，是否存在于另一个String数组中，选择<code>Arrays.binarySearch()</code>方法实现，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String[] item = &#123;<span class="string">"0"</span>,<span class="string">"1"</span>,<span class="string">"16"</span>,<span class="string">"1591"</span>,<span class="string">"1594"</span>,<span class="string">"1596"</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (Arrays.binarySearch(item, <span class="string">"1591"</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    System.out.println(<span class="string">"exists"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">"not exists"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String[] item = &#123;<span class="string">&quot;0&quot;</span>,<span class="string">&quot;1&quot;</span>,<span class="string">&quot;16&quot;</span>,<span class="string">&quot;1591&quot;</span>,<span class="string">&quot;1594&quot;</span>,<span class="string">&quot;1596&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">if</span> (Arrays.binarySearch(item, <span class="string">&quot;1591&quot;</span>) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;exists&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;not exists&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not exists</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not exists</span><br></pre></td></tr></table></figure>
 <p>很直观的能看到item数组里面存在字符串<code>1591</code>，为什么程序运行的结果却是找不到该元素呢？</p>
 	
 	</div>
@@ -254,7 +314,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/08/28/泛型以及如何绕过泛型定义/">泛型以及如何绕过泛型定义</a>
+			<a href="/2023/08/28/泛型以及如何绕过泛型定义/" >泛型以及如何绕过泛型定义</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -287,7 +347,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/08/25/判断两个相同类型对象的值是否相等/">判断两个相同类型对象的值是否相等</a>
+			<a href="/2023/08/25/判断两个相同类型对象的值是否相等/" >判断两个相同类型对象的值是否相等</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -316,7 +376,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/08/25/MySQL行转列函数/">MySQL行转列函数</a>
+			<a href="/2023/08/25/MySQL行转列函数/" >MySQL行转列函数</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -332,7 +392,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 	
 		<h1 id="group_concat函数">GROUP_CONCAT()函数</h1>
 <p>创建表<code>person_info</code>，并插入数据</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`person_info`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`family`</span> <span class="built_in">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">8</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'张三'</span>, <span class="string">'张三妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四爸'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四妈'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'李四'</span>, <span class="string">'李四大哥'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二爷爷'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> niffler.person_info (<span class="keyword">name</span>, family) <span class="keyword">VALUES</span>(<span class="string">'王二'</span>, <span class="string">'王二姐姐'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `person_info` (</span><br><span class="line">  `id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `family` <span class="type">varchar</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">8</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;张三爸&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;张三妈&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;李四爸&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;李四妈&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;李四大哥&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;王二&#x27;</span>, <span class="string">&#x27;王二爷爷&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> niffler.person_info (name, family) <span class="keyword">VALUES</span>(<span class="string">&#x27;王二&#x27;</span>, <span class="string">&#x27;王二姐姐&#x27;</span>);</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2023/08/25/MySQL行转列函数/#more" class="btn btn-default more">Read More</a>
@@ -345,7 +405,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2023/08/25/经典Integer对象赋值128问题/">经典Integer对象赋值128问题</a>
+			<a href="/2023/08/25/经典Integer对象赋值128问题/" >经典Integer对象赋值128问题</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -364,73 +424,11 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 实际上是调用了Java的自动装箱功能。这会将整数 1
 自动装箱为Integer对象，然后将这个对象赋值给变量a。</p>
 <p>自动装箱功能是由编译器自动插入的，实际上它相当于执行了如下的代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer a = Integer.valueOf(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> Integer.valueOf(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 <p>这里的valueOf方法是Integer类的一个静态方法，它的作用就是将传入的参数（通常是基本数据类型）自动转换为对应的包装类对象。对于Integer类来说，就是将整数值转换为Integer对象。</p>
 	
 	</div>
   <a type="button" href="/2023/08/25/经典Integer对象赋值128问题/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/08/24/MySQL数据库InnoDB存储引擎/">【翻译】MySQL数据库InnoDB存储引擎</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-08-24  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>InnoDB is a general-purpose storage engine that balances high
-reliability and high performance. In MySQL 8.0, InnoDB is the default
-MySQL storage engine. Unless you have configured a different default
-storage engine, issuing a CREATE TABLE statement without an ENGINE
-clause creates an InnoDB table.</p>
-<p>InnoDB是一种平衡高可靠性和高性能的通用存储引擎。在MySQL
-8.0中，InnoDB是MySQL默认的存储引擎。除非您配置了不同的默认存储引擎，否则发出不带
-ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
-	
-	</div>
-  <a type="button" href="/2023/08/24/MySQL数据库InnoDB存储引擎/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/">MySQL数据库GROUP_CONCAT()函数输出结果的长度限制</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-08-16  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>GROUP_CONCAT()函数输出的结果，发现被截取了一部分，并没有显示完整，原来GROUP_CONCAT()
-默认的输出长度为1024字节，超出的部分会被截掉不显示。</p>
-	
-	</div>
-  <a type="button" href="/2023/08/16/MySQL数据库GROUP_CONCAT()函数输出结果的长度限制/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -469,7 +467,7 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -487,7 +485,7 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -496,6 +494,8 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 			<li><a href="/categories/升级之路/">升级之路<span>1</span></a></li>
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
+		
+			<li><a href="/categories/折腾/">折腾<span>1</span></a></li>
 		
 			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
@@ -514,48 +514,48 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
 		
-			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
+		
+			<li><a href="/tags/c-programming/">c programming<span>1</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
+		
+			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+		
+			<li><a href="/tags/String/">String<span>1</span></a></li>
+		
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
 			<li><a href="/tags/Java/">Java<span>6</span></a></li>
 		
-			<li><a href="/tags/group-concat/">group_concat<span>2</span></a></li>
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
-			<li><a href="/tags/序列化/">序列化<span>1</span></a></li>
+			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
 		
-			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+			<li><a href="/tags/raspberrypi/">raspberrypi<span>1</span></a></li>
 		
-			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
+			<li><a href="/tags/反射/">反射<span>1</span></a></li>
 		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
 		
-			<li><a href="/tags/File/">File<span>1</span></a></li>
+			<li><a href="/tags/索引/">索引<span>2</span></a></li>
 		
-			<li><a href="/tags/mini/">mini<span>1</span></a></li>
-		
-			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
-		
-			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
 		
 			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
 		
 			<li><a href="/tags/minio/">minio<span>1</span></a></li>
 		
-			<li><a href="/tags/线程/">线程<span>2</span></a></li>
+			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
 		
-			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
-		
-			<li><a href="/tags/Ioc和AOP/">Ioc和AOP<span>1</span></a></li>
-		
-			<li><a href="/tags/List/">List<span>1</span></a></li>
-		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
+			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>64</span></a></li>
+		   <li><a href="/tags">...<span>68</span></a></li>
 		 
 		</ul>
 	</div>
@@ -568,23 +568,23 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/"><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
+        <a href="/2025/12/22/C语言定义指针变量并正确初始化/" ><i class="fa fa-file-o"></i>C语言定义指针变量并正确初始化</a>
       </li>
     
       <li>
-        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/"><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
+        <a href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/" ><i class="fa fa-file-o"></i>WARNING: The requested imag...</a>
       </li>
     
       <li>
-        <a href="/2024/10/26/Minio文件服务器：安装/"><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
+        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/" ><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
       </li>
     
       <li>
-        <a href="/2023/09/05/Arrays-binarySearch-方法详解/"><i class="fa fa-file-o"></i>Arrays.binarySearch()方法详解</a>
+        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" ><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
       </li>
     
       <li>
-        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
+        <a href="/2024/10/26/Minio文件服务器：安装/" ><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
       </li>
     
   </ul>
@@ -596,9 +596,9 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
 	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank" ]);">My Github</a></li>
+		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank"]);">My Github</a></li>
 	
-		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank" ]);">My CSDN</a></li>
+		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank"]);">My CSDN</a></li>
 	
 	</ul>
 </div>
@@ -615,10 +615,10 @@ ENGINE 子句的 CREATE TABLE 语句将创建一个 InnoDB 表。</p>
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

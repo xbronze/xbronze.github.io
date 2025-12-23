@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -13,10 +13,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -48,8 +48,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -131,7 +132,82 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2019/04/08/Oracle的一些故障处理/">Oracle的一些故障处理</a>
+			<a href="/2019/05/28/理解线程安全/" >理解线程安全</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+           
+  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2019/05/28/理解线程安全/"><img src="/2019/05/28/理解线程安全/threadsafety.png" alt="理解线程安全"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<h1 id="不是线程的安全">不是线程的安全</h1>
+<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
+<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
+<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
+<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
+<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
+<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
+<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
+<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
+<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
+<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
+<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
+	
+	</div>
+  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/04/28/单例模式的7种写法/" >单例模式的7种写法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-04-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>文章转自公众号<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/zXhvdF9inUDkqwCrrBt_Cg">无敌码农 |
+谁要是再问你单例模式，那就抛给他这7种写法吧！</a></p>
+</blockquote>
+<p>单例设计模式是23种设计模式中，最基础也是最常用的设计模式之一，也是面试中关于设计模式知识点考察比较高频的问题之一。说起单例模式的写法，大多数情况下出现在我们脑海中的可能就是“饿汉式”，“懒汉式”这两种写法，但是今天小码哥今天要介绍的是单例模式的7种写法，以后面试官要是再问你单例模式，那就抛给他这七种写法吧！</p>
+	
+	</div>
+  <a type="button" href="/2019/04/28/单例模式的7种写法/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/04/08/Oracle的一些故障处理/" >Oracle的一些故障处理</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -158,7 +234,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2019/03/26/Java基础知识小结/">Java基础知识小结</a>
+			<a href="/2019/03/26/Java基础知识小结/" >Java基础知识小结</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -185,7 +261,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2018/03/03/Oracle存储过程的实现/">Oracle存储过程的实现</a>
+			<a href="/2018/03/03/Oracle存储过程的实现/" >Oracle存储过程的实现</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -241,7 +317,7 @@ var _hmt = _hmt || [];
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -259,7 +335,7 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/MySQL/">MySQL<span>1</span></a></li>
 		
-			<li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
+			<li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
@@ -268,6 +344,8 @@ var _hmt = _hmt || [];
 			<li><a href="/categories/升级之路/">升级之路<span>1</span></a></li>
 		
 			<li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
+		
+			<li><a href="/categories/折腾/">折腾<span>1</span></a></li>
 		
 			<li><a href="/categories/数据库/">数据库<span>11</span></a></li>
 		
@@ -286,48 +364,48 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/根据JetBrains/">根据JetBrains<span>1</span></a></li>
+			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
 		
-			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
+		
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
 		
 			<li><a href="/tags/Hashtable/">Hashtable<span>1</span></a></li>
 		
-			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
 		
-			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
+			<li><a href="/tags/jstl/">jstl<span>1</span></a></li>
 		
-			<li><a href="/tags/Double-String/">Double - String<span>1</span></a></li>
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+		
+			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+		
+			<li><a href="/tags/UML/">UML<span>1</span></a></li>
+		
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
+		
+			<li><a href="/tags/mini/">mini<span>1</span></a></li>
+		
+			<li><a href="/tags/Spring/">Spring<span>1</span></a></li>
 		
 			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
 		
-			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
-		
-			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
-		
-			<li><a href="/tags/索引/">索引<span>2</span></a></li>
-		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
-		
-			<li><a href="/tags/tomcat/">tomcat<span>1</span></a></li>
-		
-			<li><a href="/tags/SpringCloud/">SpringCloud<span>2</span></a></li>
-		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+			<li><a href="/tags/SpringBoot/">SpringBoot<span>2</span></a></li>
 		
 			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
 		
-			<li><a href="/tags/SpringBoot/">SpringBoot<span>2</span></a></li>
+			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
 		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
+			<li><a href="/tags/c-programming/">c programming<span>1</span></a></li>
 		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
+			<li><a href="/tags/优化/">优化<span>1</span></a></li>
 		
-			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
-		
-			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+			<li><a href="/tags/jar/">jar<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>64</span></a></li>
+		   <li><a href="/tags">...<span>68</span></a></li>
 		 
 		</ul>
 	</div>
@@ -340,23 +418,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/"><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
+        <a href="/2025/12/22/C语言定义指针变量并正确初始化/" ><i class="fa fa-file-o"></i>C语言定义指针变量并正确初始化</a>
       </li>
     
       <li>
-        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/"><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
+        <a href="/2024/12/28/WARNING-The-requested-image-s-platform-linux-amd64-does-not-match-the-detected-host-platform-linux-arm64-v8-and-no-specific-platform-was-requested/" ><i class="fa fa-file-o"></i>WARNING: The requested imag...</a>
       </li>
     
       <li>
-        <a href="/2024/10/26/Minio文件服务器：安装/"><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
+        <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/" ><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
       </li>
     
       <li>
-        <a href="/2023/09/05/Arrays-binarySearch-方法详解/"><i class="fa fa-file-o"></i>Arrays.binarySearch()方法详解</a>
+        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" ><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
       </li>
     
       <li>
-        <a href="/2023/08/28/泛型以及如何绕过泛型定义/"><i class="fa fa-file-o"></i>泛型以及如何绕过泛型定义</a>
+        <a href="/2024/10/26/Minio文件服务器：安装/" ><i class="fa fa-file-o"></i>Minio文件服务器：安装</a>
       </li>
     
   </ul>
@@ -368,9 +446,9 @@ var _hmt = _hmt || [];
 	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank" ]);">My Github</a></li>
+		<li><i class="fa fa-github"></i><a href="https://github.com/xbronze" title="My Github account." target="_blank"]);">My Github</a></li>
 	
-		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank" ]);">My CSDN</a></li>
+		<li><i class="fa fa-file-text"></i><a href="https://blog.csdn.net/Bronzehammer" title="My CSDN account." target="_blank"]);">My CSDN</a></li>
 	
 	</ul>
 </div>
@@ -387,10 +465,10 @@ var _hmt = _hmt || [];
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

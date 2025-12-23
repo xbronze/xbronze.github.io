@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -14,11 +14,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="面试官邪魅一笑：MySQL千万级别大表，你要如何优化？">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="面试官邪魅一笑：MySQL千万级别大表，你要如何优化？"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -50,8 +50,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -126,7 +127,7 @@ var _hmt = _hmt || [];
 	  		
 
 	  <p>当MySQL单表记录数过大时，增删改查性能都会急剧下降，可以参考以下步骤来优化：</p>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="单表优化">单表优化</h3>
 <p>除非单表数据未来会一直不断上涨，否则不要一开始就考虑拆分，拆分会带来逻辑、部署、运维的各种复杂度，一般以整型值为主的表在千万级以下，字符串为主的表在五百万以下是没有太大问题的。而事实上很多时候MySQL单表的性能依然有不少优化空间，甚至能正常支撑千万级以上的数据量：</p>
 <h4 id="字段">字段</h4>
@@ -260,7 +261,7 @@ Back）：当有数据要写入数据库时，只会更新缓存，然后异步�
 <p>对用户来说，分区表是一个独立的逻辑表，但是底层由多个物理子表组成，实现分区的代码实际上是通过对一组底层表的对象封装，但对SQL层来说是一个完全封装底层的黑盒子。MySQL实现分区的方式也意味着索引也是按照分区的子表定义，没有全局索引。</p>
 <p>用户的SQL语句是需要针对分区表做优化，SQL条件中要带上分区条件的列，从而使查询定位到少量的分区上，否则就会扫描全部分区，可以通过EXPLAIN
 PARTITIONS来查看某条SQL语句会落在那些分区上，从而进行SQL优化，如下图5条记录落在两个分区上：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain partitions select count(1) from user_partition where id in (1,2,3,4,5);</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">| id | select_type | table          | partitions | type  | possible_keys | key     | key_len | ref  | rows | Extra                    |</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">|  1 | SIMPLE      | user_partition | p1,p4      | range | PRIMARY       | PRIMARY | 8       | NULL |    5 | Using where; Using index |</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">1row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain partitions select count(1) from user_partition where id in (1,2,3,4,5);</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">| id | select_type | table          | partitions | type  | possible_keys | key     | key_len | ref  | rows | Extra                    |</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">|  1 | SIMPLE      | user_partition | p1,p4      | range | PRIMARY       | PRIMARY | 8       | NULL |    5 | Using where; Using index |</span><br><span class="line">+----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+--------------------------+</span><br><span class="line">1row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
 <p>分区的好处是：</p>
 <ul>
 <li>可以让单表存储更多的数据</li>
@@ -289,7 +290,7 @@ PARTITIONS来查看某条SQL语句会落在那些分区上，从而进行SQL优�
 <ul>
 <li>最适合的场景数据的时间序列性比较强，则可以按时间来分区，如下所示：</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> members (</span><br><span class="line">    firstname <span class="built_in">VARCHAR</span>(<span class="number">25</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    lastname <span class="built_in">VARCHAR</span>(<span class="number">25</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    username <span class="built_in">VARCHAR</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    email <span class="built_in">VARCHAR</span>(<span class="number">35</span>),</span><br><span class="line">    joined <span class="built_in">DATE</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">RANGE</span>( <span class="keyword">YEAR</span>(joined) ) (</span><br><span class="line">    <span class="keyword">PARTITION</span> p0 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1960</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p1 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1970</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p2 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1980</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p3 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> (<span class="number">1990</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p4 <span class="keyword">VALUES</span> <span class="keyword">LESS</span> <span class="keyword">THAN</span> MAXVALUE</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> members (</span><br><span class="line">    firstname <span class="type">VARCHAR</span>(<span class="number">25</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    lastname <span class="type">VARCHAR</span>(<span class="number">25</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    username <span class="type">VARCHAR</span>(<span class="number">16</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">35</span>),</span><br><span class="line">    joined <span class="type">DATE</span> <span class="keyword">NOT NULL</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="keyword">RANGE</span>( <span class="keyword">YEAR</span>(joined) ) (</span><br><span class="line">    <span class="keyword">PARTITION</span> p0 <span class="keyword">VALUES</span> LESS THAN (<span class="number">1960</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p1 <span class="keyword">VALUES</span> LESS THAN (<span class="number">1970</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p2 <span class="keyword">VALUES</span> LESS THAN (<span class="number">1980</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p3 <span class="keyword">VALUES</span> LESS THAN (<span class="number">1990</span>),</span><br><span class="line">    <span class="keyword">PARTITION</span> p4 <span class="keyword">VALUES</span> LESS THAN MAXVALUE</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <p>查询时加上时间范围条件效率会非常高，同时对于不需要的历史数据能很容的批量删除。</p>
 <ul>
 <li>如果数据有明显的热点，而且除了这部分数据，其他数据很少被访问到，那么可以将热点数据单独放在一个分区，让这个分区的数据能够有机会都缓存在内存中，查询时只访问一个很小的分区表，能够有效使用索引和缓存</li>
@@ -299,9 +300,9 @@ table），限制较多且缺乏优化，不建议使用，应该用新的分区
 <h3 id="垂直拆分">垂直拆分</h3>
 <p>垂直分库是根据数据库里面的数据表的相关性进行拆分，比如：一个数据库里面既存在用户数据，又存在订单数据，那么垂直拆分可以把用户数据放到用户库、把订单数据放到订单库。垂直分表是对数据表进行垂直拆分的一种方式，常见的是把一个多字段的大表按常用字段和非常用字段进行拆分，每个表里面的数据记录数一般情况下是相同的，只是字段不一样，使用主键关联</p>
 <p>比如原始的用户表是：</p>
-<img src="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/640.webp">
+<img src="/2020/04/09/%E9%9D%A2%E8%AF%95%E5%AE%98%E9%82%AA%E9%AD%85%E4%B8%80%E7%AC%91%EF%BC%9AMySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E5%A4%A7%E8%A1%A8%EF%BC%8C%E4%BD%A0%E8%A6%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%EF%BC%9F/640.webp" class="">
 <p>垂直拆分后是：</p>
-<img src="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/641.webp">
+<img src="/2020/04/09/%E9%9D%A2%E8%AF%95%E5%AE%98%E9%82%AA%E9%AD%85%E4%B8%80%E7%AC%91%EF%BC%9AMySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E5%A4%A7%E8%A1%A8%EF%BC%8C%E4%BD%A0%E8%A6%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%EF%BC%9F/641.webp" class="">
 <p>垂直拆分的优点是：</p>
 <ul>
 <li>可以使得行数据变小，一个数据块(Block)就能存放更多的数据，在查询时就会减少I/O次数(每次查询时读取的Block
@@ -321,7 +322,7 @@ table），限制较多且缺乏优化，不建议使用，应该用新的分区
 <p>水平拆分是通过某种策略将数据分片来存储，分库内分表和分库两部分，每片数据会分散到不同的MySQL表或库，达到分布式的效果，能够支持非常大的数据量。前面的表分区本质上也是一种特殊的库内分表
 库内分表，仅仅是单纯的解决了单一表数据过大的问题，由于没有把表的数据分布到不同的机器上，因此对于减轻MySQL服务器的压力来说，并没有太大的作用，大家还是竞争同一个物理机上的IO、CPU、网络，这个就要通过分库来解决</p>
 <p>前面垂直拆分的用户表如果进行水平拆分，结果是：</p>
-<img src="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/642.webp">
+<img src="/2020/04/09/%E9%9D%A2%E8%AF%95%E5%AE%98%E9%82%AA%E9%AD%85%E4%B8%80%E7%AC%91%EF%BC%9AMySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E5%A4%A7%E8%A1%A8%EF%BC%8C%E4%BD%A0%E8%A6%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%EF%BC%9F/642.webp" class="">
 <p>实际情况中往往会是垂直拆分和水平拆分的结合，即将Users_A_M和Users_N_Z再拆成Users和UserExtras，这样一共四张表</p>
 <p>水平拆分的优点是:</p>
 <ul>
@@ -353,7 +354,7 @@ table），限制较多且缺乏优化，不建议使用，应该用新的分区
 <p>通过修改数据访问层，如JDBC、Data
 Source、MyBatis，通过配置来管理多个数据源，直连数据库，并在模块内完成数据的分片整合，一般以Jar包的方式呈现
 这是一个客户端架构的例子：</p>
-<img src="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/643.webp">
+<img src="/2020/04/09/%E9%9D%A2%E8%AF%95%E5%AE%98%E9%82%AA%E9%AD%85%E4%B8%80%E7%AC%91%EF%BC%9AMySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E5%A4%A7%E8%A1%A8%EF%BC%8C%E4%BD%A0%E8%A6%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%EF%BC%9F/643.webp" class="">
 <p>可以看到分片的实现是和应用服务器在一起的，通过修改Spring
 JDBC层来实现</p>
 <p>客户端架构的优点是：</p>
@@ -369,7 +370,7 @@ JDBC层来实现</p>
 <h4 id="代理架构">代理架构</h4>
 <p>通过独立的中间件来统一管理所有数据源和数据分片整合，后端数据库集群对前端应用程序透明，需要独立部署和运维代理组件</p>
 <p>这是一个代理架构的例子：</p>
-<img src="/2020/04/09/面试官邪魅一笑：MySQL千万级别大表，你要如何优化？/644.webp">
+<img src="/2020/04/09/%E9%9D%A2%E8%AF%95%E5%AE%98%E9%82%AA%E9%AD%85%E4%B8%80%E7%AC%91%EF%BC%9AMySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E5%A4%A7%E8%A1%A8%EF%BC%8C%E4%BD%A0%E8%A6%81%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%EF%BC%9F/644.webp" class="">
 <p>代理组件为了分流和防止单点，一般以集群形式存在，同时可能需要Zookeeper之类的服务组件来管理</p>
 <p>代理架构的优点是：</p>
 <ul>
@@ -382,7 +383,8 @@ JDBC层来实现</p>
 <li>应用需经过代理来连接数据库，网络上多了一跳，性能有损失且有额外风险。</li>
 </ul>
 <blockquote>
-<p>文章转自 <a href="https://mp.weixin.qq.com/s?__biz=MzU4MDUyMDQyNQ==&amp;mid=2247485433&amp;idx=1&amp;sn=a59fd55f75da2c7d85485f9e14ea3146&amp;chksm=fd54d77fca235e69cc26e4ca0470a5d9645ad68749dbd7cd48114ddb7ef3746da2a66abc619a&amp;scene=0&amp;xtrack=1&amp;key=93cf6330e2c3895d7798fbfcc50115f3ce9cc2124f2a02da453a73811d7dc2191eb51b1aef02bd9db9f6af5da064a538f2f01ee8a1a55bacd47fc0d1ce9de5a25ce4d190c43fb4ed63355a692b270176&amp;ascene=14&amp;uin=OTQ3NzYxMTM2&amp;devicetype=Windows+10&amp;version=62090045&amp;lang=zh_CN&amp;exportkey=A2qPhmUra1QLj8SqVzT%2BH%2BA%3D&amp;pass_ticket=68s9wHa3wq3PpjIOxEIv9R1ixVdAGKQSLEGXMCjvnr8f1ToROQg%2FiZUTnu1yKfs%2F" target="_blank" rel="noopener">小哈学Java</a></p>
+<p>文章转自 <a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzU4MDUyMDQyNQ==&amp;mid=2247485433&amp;idx=1&amp;sn=a59fd55f75da2c7d85485f9e14ea3146&amp;chksm=fd54d77fca235e69cc26e4ca0470a5d9645ad68749dbd7cd48114ddb7ef3746da2a66abc619a&amp;scene=0&amp;xtrack=1&amp;key=93cf6330e2c3895d7798fbfcc50115f3ce9cc2124f2a02da453a73811d7dc2191eb51b1aef02bd9db9f6af5da064a538f2f01ee8a1a55bacd47fc0d1ce9de5a25ce4d190c43fb4ed63355a692b270176&amp;ascene=14&amp;uin=OTQ3NzYxMTM2&amp;devicetype=Windows+10&amp;version=62090045&amp;lang=zh_CN&amp;exportkey=A2qPhmUra1QLj8SqVzT%2BH%2BA%3D&amp;pass_ticket=68s9wHa3wq3PpjIOxEIv9R1ixVdAGKQSLEGXMCjvnr8f1ToROQg%2FiZUTnu1yKfs%2F">小哈学Java</a></p>
 </blockquote>
 	  
 	</div>
@@ -393,12 +395,14 @@ JDBC层来实现</p>
 
     
     
-    <a href="/2020/04/14/Java多线程/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2020/04/14/Java多线程/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2020/04/02/vsftpd配置文件详解/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2020/04/02/vsftpd配置文件详解/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -410,7 +414,21 @@ JDBC层来实现</p>
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -435,8 +453,8 @@ JDBC层来实现</p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
-  
+    <li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -473,10 +491,10 @@ JDBC层来实现</p>
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

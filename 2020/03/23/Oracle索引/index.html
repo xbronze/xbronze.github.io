@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -15,11 +15,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Oracle索引">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="Oracle索引"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -51,8 +51,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -128,9 +129,10 @@ var _hmt = _hmt || [];
 
 	  <p>索引的作用相当于图书的目录，可以根据目录中的页码快速找到所需的内容。</p>
 <p>在没有创建索引之前，如果要按照用户名字段username全表查询一条用户数据，就要必须在全表都搜索一遍；在username上创建索引，Oracle会对全表进行一次搜索，将每条记录的username按照顺序排序，然后构建索引条目（name和rowid），存储到索引段中。在接下来查找username等于某个值时即可直接查找到相应的地方。</p>
-<a id="more"></a>
+<span id="more"></span>
 <blockquote>
-<p>文章来自 <a href="https://www.oraclejsq.com/article/010100478.html" target="_blank" rel="noopener">FREE教程</a></p>
+<p>文章来自 <a
+target="_blank" rel="noopener" href="https://www.oraclejsq.com/article/010100478.html">FREE教程</a></p>
 </blockquote>
 <p>既然我们都知道建立索引有利于查询速率的提升，那是不是所有字段都可以加上索引。这是万万不行的，建立索引不仅仅要浪费空间来存储索引表，当数据量较少时，直接查询数据比经过查询索引表再定位到表数据的速度更快。索引可以提高查询的效率，但是在数据增删改时需要更新索引，因此索引对增删改时会有负面影响。所以要根据实际情况，
 考虑好再建立索引。</p>
@@ -154,7 +156,7 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
 <p>6、分区索引和分区表的全局索引：这两个索引是应用在分区表上面的，前者的分区索引是对分区表内的单个分区进行数据索引，后者是对分区表的全表进行全局索引。分区表的介绍，可以后期再做单独详解，这里就不累述了。</p>
 <h3 id="创建索引">创建索引</h3>
 <h4 id="语法结构">语法结构：</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span>[<span class="keyword">unique</span>]|[<span class="keyword">bitmap</span>] <span class="keyword">index</span> index_name <span class="comment">--UNIQUE表示唯一索引、BITMAP位图索引</span></span><br><span class="line"><span class="keyword">on</span> table_name(column1,column2...|[express])<span class="comment">--express表示函数索引</span></span><br><span class="line">[<span class="keyword">tablespace</span> tab_name] <span class="comment">--tablespace表示索引存储的表空间</span></span><br><span class="line">[pctfree n1]    <span class="comment">--索引块的空闲空间n1</span></span><br><span class="line">[<span class="keyword">storage</span>         <span class="comment">--存储块的空间</span></span><br><span class="line"> (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K  <span class="comment">--初始64k</span></span><br><span class="line">    <span class="keyword">next</span> <span class="number">1</span>M</span><br><span class="line">    <span class="keyword">minextents</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">maxextents</span> <span class="keyword">unlimited</span></span><br><span class="line"> </span><br><span class="line">)];</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span>[<span class="keyword">unique</span>]<span class="operator">|</span>[bitmap] index index_name <span class="comment">--UNIQUE表示唯一索引、BITMAP位图索引</span></span><br><span class="line"><span class="keyword">on</span> table_name(column1,column2...<span class="operator">|</span>[express])<span class="comment">--express表示函数索引</span></span><br><span class="line">[tablespace tab_name] <span class="comment">--tablespace表示索引存储的表空间</span></span><br><span class="line">[pctfree n1]    <span class="comment">--索引块的空闲空间n1</span></span><br><span class="line">[storage         <span class="comment">--存储块的空间</span></span><br><span class="line"> (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K  <span class="comment">--初始64k</span></span><br><span class="line">    next <span class="number">1</span>M</span><br><span class="line">    minextents <span class="number">1</span></span><br><span class="line">    maxextents unlimited</span><br><span class="line"> </span><br><span class="line">)];</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>Oracle要求创建索引的列不能超过32列</p>
 </blockquote>
@@ -165,22 +167,25 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
 <p>4、column_name：指定要对哪个列创建索引。我们也可以对多列创建索引，这种索引称为组合索引。也可以是函数表达式，这种就是函数索引。</p>
 <h3 id="修改索引">修改索引：</h3>
 <h4 id="重命名索引">1、重命名索引：</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">index</span> index_old <span class="keyword">rename</span> <span class="keyword">to</span> index_new;<span class="comment">--重新命名索引</span></span><br></pre></td></tr></table></figure>
-<h4 id="合并索引重新构造索引我们索引建好后经过很长一段时间的使用索引表中存储的空间会产生一些碎片导致索引的查询效率会有所下降这个时候可以合并索引原理是按照索引规则重新分类存储一下或者也可以选择删除索引重新构造索引">2、合并索引、重新构造索引：我们索引建好后，经过很长一段时间的使用，索引表中存储的空间会产生一些碎片，导致索引的查询效率会有所下降，这个时候可以合并索引，原理是按照索引规则重新分类存储一下，或者也可以选择删除索引重新构造索引。</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">index</span> index_name <span class="keyword">coalesce</span>;<span class="comment">--合并索引</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">index</span> index_name <span class="keyword">rebuild</span>;<span class="comment">--重新构造</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> index index_old rename <span class="keyword">to</span> index_new;<span class="comment">--重新命名索引</span></span><br></pre></td></tr></table></figure>
+<h4
+id="合并索引重新构造索引我们索引建好后经过很长一段时间的使用索引表中存储的空间会产生一些碎片导致索引的查询效率会有所下降这个时候可以合并索引原理是按照索引规则重新分类存储一下或者也可以选择删除索引重新构造索引">2、合并索引、重新构造索引：我们索引建好后，经过很长一段时间的使用，索引表中存储的空间会产生一些碎片，导致索引的查询效率会有所下降，这个时候可以合并索引，原理是按照索引规则重新分类存储一下，或者也可以选择删除索引重新构造索引。</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> index index_name coalesce;<span class="comment">--合并索引</span></span><br><span class="line"><span class="keyword">alter</span> index index_name rebuild;<span class="comment">--重新构造</span></span><br></pre></td></tr></table></figure>
 <h3 id="删除索引">删除索引：</h3>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> index_name;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> index index_name;</span><br></pre></td></tr></table></figure>
 <h3 id="查看索引">查看索引：</h3>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.INDEX_NAME,<span class="comment">--索引名字</span></span><br><span class="line">       t.index_type,<span class="comment">--索引类型</span></span><br><span class="line">       t.TABLESPACE_NAME,<span class="comment">--表空间</span></span><br><span class="line">       t.status,<span class="comment">--状态</span></span><br><span class="line">       t.UNIQUENESS<span class="comment">--是否唯一索引</span></span><br><span class="line">  <span class="keyword">from</span> all_indexes T </span><br><span class="line">  <span class="keyword">where</span>  t.INDEX_NAME=<span class="string">'index_name'</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.INDEX_NAME,<span class="comment">--索引名字</span></span><br><span class="line">       t.index_type,<span class="comment">--索引类型</span></span><br><span class="line">       t.TABLESPACE_NAME,<span class="comment">--表空间</span></span><br><span class="line">       t.status,<span class="comment">--状态</span></span><br><span class="line">       t.UNIQUENESS<span class="comment">--是否唯一索引</span></span><br><span class="line">  <span class="keyword">from</span> all_indexes T </span><br><span class="line">  <span class="keyword">where</span>  t.INDEX_NAME<span class="operator">=</span><span class="string">&#x27;index_name&#x27;</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="案例分析">案例分析：</h3>
-<h4 id="案例1学生信息表stuinfo创建的时候就对学号stuid设置了主键pk_stuinfo当我们学生信息表数据量大的情况下我们明显发现班号classno需要一个索引不仅仅是用来关联班级信息表class而且经常作为查询条件因此创建脚本如下">案例1、学生信息表（stuinfo）创建的时候就对学号（stuid）设置了主键（PK_STUINFO），当我们学生信息表数据量大的情况下，我们明显发现班号（classno）需要一个索引，不仅仅是用来关联班级信息表（class）、而且经常作为查询条件，因此创建脚本如下：</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> STUDENT.IDX_STUINFO_CLASSNO <span class="keyword">on</span> STUDENT.STUINFO (CLASSNO)</span><br><span class="line">  <span class="keyword">tablespace</span> <span class="keyword">USERS</span></span><br><span class="line">  pctfree <span class="number">10</span></span><br><span class="line">  <span class="keyword">initrans</span> <span class="number">2</span></span><br><span class="line">  <span class="keyword">maxtrans</span> <span class="number">255</span></span><br><span class="line">  <span class="keyword">storage</span></span><br><span class="line">  (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K</span><br><span class="line">    <span class="keyword">next</span> <span class="number">1</span>M</span><br><span class="line">    <span class="keyword">minextents</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">maxextents</span> <span class="keyword">unlimited</span></span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
-<h4 id="案例2对于学生信息我们经常用性别作为统计条件进行对学生信息进行统计因此我们可以在性别sex建立一个位图索引进行查询优化代码如下">案例2、对于学生信息我们经常用性别作为统计条件进行对学生信息进行统计，因此我们可以在性别（sex）建立一个位图索引进行查询优化。代码如下：</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">bitmap</span> <span class="keyword">index</span> STUDENT.IDX_STUINFO_SEX <span class="keyword">on</span> STUDENT.STUINFO (SEX)</span><br><span class="line">  <span class="keyword">tablespace</span> <span class="keyword">USERS</span></span><br><span class="line">  pctfree <span class="number">10</span></span><br><span class="line">  <span class="keyword">initrans</span> <span class="number">2</span></span><br><span class="line">  <span class="keyword">maxtrans</span> <span class="number">255</span></span><br><span class="line">  <span class="keyword">storage</span></span><br><span class="line">  (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K</span><br><span class="line">    <span class="keyword">next</span> <span class="number">1</span>M</span><br><span class="line">    <span class="keyword">minextents</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">maxextents</span> <span class="keyword">unlimited</span></span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<h4
+id="案例1学生信息表stuinfo创建的时候就对学号stuid设置了主键pk_stuinfo当我们学生信息表数据量大的情况下我们明显发现班号classno需要一个索引不仅仅是用来关联班级信息表class而且经常作为查询条件因此创建脚本如下">案例1、学生信息表（stuinfo）创建的时候就对学号（stuid）设置了主键（PK_STUINFO），当我们学生信息表数据量大的情况下，我们明显发现班号（classno）需要一个索引，不仅仅是用来关联班级信息表（class）、而且经常作为查询条件，因此创建脚本如下：</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> index STUDENT.IDX_STUINFO_CLASSNO <span class="keyword">on</span> STUDENT.STUINFO (CLASSNO)</span><br><span class="line">  tablespace USERS</span><br><span class="line">  pctfree <span class="number">10</span></span><br><span class="line">  initrans <span class="number">2</span></span><br><span class="line">  maxtrans <span class="number">255</span></span><br><span class="line">  storage</span><br><span class="line">  (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K</span><br><span class="line">    next <span class="number">1</span>M</span><br><span class="line">    minextents <span class="number">1</span></span><br><span class="line">    maxextents unlimited</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<h4
+id="案例2对于学生信息我们经常用性别作为统计条件进行对学生信息进行统计因此我们可以在性别sex建立一个位图索引进行查询优化代码如下">案例2、对于学生信息我们经常用性别作为统计条件进行对学生信息进行统计，因此我们可以在性别（sex）建立一个位图索引进行查询优化。代码如下：</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> bitmap index STUDENT.IDX_STUINFO_SEX <span class="keyword">on</span> STUDENT.STUINFO (SEX)</span><br><span class="line">  tablespace USERS</span><br><span class="line">  pctfree <span class="number">10</span></span><br><span class="line">  initrans <span class="number">2</span></span><br><span class="line">  maxtrans <span class="number">255</span></span><br><span class="line">  storage</span><br><span class="line">  (</span><br><span class="line">    <span class="keyword">initial</span> <span class="number">64</span>K</span><br><span class="line">    next <span class="number">1</span>M</span><br><span class="line">    minextents <span class="number">1</span></span><br><span class="line">    maxextents unlimited</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
 <h4 id="查询一下三种索引的状态">查询一下三种索引的状态：</h4>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.INDEX_NAME,</span><br><span class="line">       t.index_type,</span><br><span class="line">       t.TABLESPACE_NAME,</span><br><span class="line">       t.status,</span><br><span class="line">       t.UNIQUENESS</span><br><span class="line">  <span class="keyword">from</span> all_indexes T</span><br><span class="line">  <span class="keyword">where</span> t.TABLE_NAME=<span class="string">'STUINFO'</span></span><br><span class="line">  <span class="keyword">AND</span> T.OWNER=<span class="string">'STUDENT'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.INDEX_NAME,</span><br><span class="line">       t.index_type,</span><br><span class="line">       t.TABLESPACE_NAME,</span><br><span class="line">       t.status,</span><br><span class="line">       t.UNIQUENESS</span><br><span class="line">  <span class="keyword">from</span> all_indexes T</span><br><span class="line">  <span class="keyword">where</span> t.TABLE_NAME<span class="operator">=</span><span class="string">&#x27;STUINFO&#x27;</span></span><br><span class="line">  <span class="keyword">AND</span> T.OWNER<span class="operator">=</span><span class="string">&#x27;STUDENT&#x27;</span></span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
-<img src="/2020/03/23/Oracle索引/queryIndex.png">
+<img src="/2020/03/23/Oracle%E7%B4%A2%E5%BC%95/queryIndex.png" class="">
 	  
 	</div>
 
@@ -190,12 +195,14 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
 
     
     
-    <a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2019/05/28/理解线程安全/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2019/05/28/理解线程安全/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -207,7 +214,21 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -232,8 +253,8 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
-  
+    <li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -270,10 +291,10 @@ index创建的normal就是b-tree索引，没有特殊的必须应用在哪些数
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

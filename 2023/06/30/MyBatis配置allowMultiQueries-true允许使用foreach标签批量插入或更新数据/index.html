@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -10,16 +10,16 @@
   <meta name="author" content="xuzh">
   
   <meta name="description" content="执行update更新操作
-1234567891011&amp;lt;update id=&#34;batchUpdate&#34; parameterType=&#34;java.util.List&#34;&amp;gt;    &amp;lt;foreach collection=&#34;list&#34; item=&#34;item&#34; separator=&#34;;&#34; o">
+1234567891011&amp;lt;update id=&amp;quot;batchUpdate&amp;quot; parameterType=&amp;quot;java.util.List&amp;quot;&amp;gt;    &amp;lt;foreach collection=&amp;quot;list&amp;quo">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -51,8 +51,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -127,8 +128,8 @@ var _hmt = _hmt || [];
 	  		
 
 	  <p>执行update更新操作</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"batchUpdate"</span> <span class="attr">parameterType</span>=<span class="string">"java.util.List"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"list"</span> <span class="attr">item</span>=<span class="string">"item"</span> <span class="attr">separator</span>=<span class="string">";"</span> <span class="attr">open</span>=<span class="string">""</span> <span class="attr">close</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.a != null"</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.b!= null"</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"item.c!= null"</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>执行报错： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;update test_table set a = 1, &apos; at line 14</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;batchUpdate&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;java.util.List&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;list&quot;</span> <span class="attr">item</span>=<span class="string">&quot;item&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;;&quot;</span> <span class="attr">open</span>=<span class="string">&quot;&quot;</span> <span class="attr">close</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.a != null&quot;</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.b!= null&quot;</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.c!= null&quot;</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>执行报错： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;update test_table set a = 1, &#x27; at line 14</span><br></pre></td></tr></table></figure></p>
 <p>刚开始出现这个错误，以为是update语句写的有问题，但是检查了很多遍都没有问题。奇怪的是，同样的代码，同样的数据，本地启的环境不行，测试环境却可以。经过同事提醒了一下，于是检查了一下配置文件，果然发现配置文件上的jdbc配置，测试环境比开发环境多了个<code>allowMultiQueries=true</code>。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true&amp;serverTimezone=GMT%2B8&amp;nullCatalogMeansCurrent=true</span><br></pre></td></tr></table></figure>
 <p>MyBatis默认情况下不允许批量插入或更新数据的原因是出于安全考虑。在许多情况下，数据的插入和更新都需要经过验证和控制，以确保数据的完整性和一致性。如果允许默认的批量操作，可能会导致不正确的数据插入或更新，从而影响应用程序的正常运行。</p>
@@ -142,12 +143,14 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2023/07/14/SpringBoot与SpringCloud/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2023/07/14/SpringBoot与SpringCloud/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/06/30/Flowable工作流重启已经结束的流程/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/06/30/Flowable工作流重启已经结束的流程/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -159,7 +162,21 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -184,8 +201,8 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/MySQL/">MySQL<span>1</span></a></li> <li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li> <li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
-  
+    <li><a href="/categories/MySQL/">MySQL<span>1</span></a></li> <li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li> <li><a href="/categories/MySQL/代码人生/数据库/">数据库<span>1</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -228,10 +245,10 @@ var _hmt = _hmt || [];
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

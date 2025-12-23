@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -15,11 +15,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="程序猿三部曲之白银时代">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="程序猿三部曲之白银时代"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -51,8 +51,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -126,9 +127,10 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>之前在某篇<a href="https://mp.weixin.qq.com/s/CfBwk0dttd1eb2PvOvGvuQ" target="_blank" rel="noopener">公众号文章</a>中，看到工资10K、15K、20K的Java程序员应该掌握的技术。大致对应着初、中、高级开发人员，所以我打算针对这三个阶段，写三篇文章，一边学习，一边总结。</p>
+	  <p>之前在某篇<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/CfBwk0dttd1eb2PvOvGvuQ">公众号文章</a>中，看到工资10K、15K、20K的Java程序员应该掌握的技术。大致对应着初、中、高级开发人员，所以我打算针对这三个阶段，写三篇文章，一边学习，一边总结。</p>
 <p>曾经读过王小波的时代三部曲，分别是《青铜时代》、《白银时代》、《黄金时代》，遂借用来类比程序员的三个阶段。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="hashmap和concurrenthashmap有什么区别">1
 HashMap和ConcurrentHashMap有什么区别？</h1>
 <p>HashMap是传统集合下的类，ConcurrentHashMap是并发集合下的类。除此之外，它们之间还有各种不同之处：</p>
@@ -149,14 +151,15 @@ Microsystem 在 JDK 1.5 中引入的</li>
 <li>修饰一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象。</li>
 <li>修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。</li>
 </ol>
-<p>资料：<a href="https://www.cnblogs.com/weibanggang/p/9470718.html" target="_blank" rel="noopener">Java中Synchronized的用法（简单介绍）</a></p>
+<p>资料：<a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/weibanggang/p/9470718.html">Java中Synchronized的用法（简单介绍）</a></p>
 <h1 id="volatile关键字">3 volatile关键字</h1>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoVisibility</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready) &#123;</span><br><span class="line">                Thread.yield();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ReaderThread().start();</span><br><span class="line">        number = <span class="number">42</span>;</span><br><span class="line">        ready = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NoVisibility</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> number;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ReaderThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready) &#123;</span><br><span class="line">                Thread.<span class="keyword">yield</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ReaderThread</span>().start();</span><br><span class="line">        number = <span class="number">42</span>;</span><br><span class="line">        ready = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>NoVisibility可能会持续循环下去，因为读线程可能永远都看不到ready的值。甚至NoVisibility可能会输出0，因为读线程可能看到了写入ready的值，但却没有看到之后写入number的值，这种现象被称为“重排序”。只要在某个线程中无法检测到重排序情况（即使在其他线程中可以明显地看到该线程中的重排序），那么就无法确保线程中的操作将按照程序中指定的顺序来执行。当主线程首先写入number，然后在没有同步的情况下写入ready，那么读线程看到的顺序可能与写入的顺序完全相反。</p>
 <h2 id="volatile原理">3.1 volatile原理</h2>
 <p>Java语言提供了一种稍弱的同步机制，即volatile变量，用来确保将变量的更新操作通知到其他线程。当把变量声明为volatile类型后，编译器与运行时都会注意到这个变量是共享的，因此不会将该变量上的操作与其他内存操作一起重排序。volatile变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取volatile类型的变量时总会返回最新写入的值。</p>
 <p>在访问volatile变量时不会执行加锁操作，因此也就不会使执行线程阻塞，因此volatile变量是一种比sychronized关键字更轻量级的同步机制。</p>
-<img src="/2023/04/04/程序猿三部曲之白银时代/cpu_read_memory.png">
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/cpu_read_memory.png" class="">
 <p>当对非 volatile
 变量进行读写的时候，每个线程先从内存拷贝变量到CPU缓存中。如果计算机有多个CPU，每个线程可能在不同的CPU上被处理，这意味着每个线程可以拷贝到不同的
 CPU cache 中。</p>
@@ -174,7 +177,8 @@ addl $0x0,
 <h2 id="volatile-性能">3.3 volatile 性能：</h2>
 <p>volatile
 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
-<p>资料：<a href="https://www.cnblogs.com/zhengbin/p/5654805.html" target="_blank" rel="noopener">Java中Volatile关键字详解</a></p>
+<p>资料：<a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/zhengbin/p/5654805.html">Java中Volatile关键字详解</a></p>
 <h1 id="堆和栈的区别堆中存放的是什么栈中存放的是什么">4
 堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</h1>
 <h2 id="堆空间">4.1 堆空间</h2>
@@ -188,9 +192,9 @@ Stack内存用于线程的执行。它们包含特定于方法的值，这些值
 <li>堆：操作系统有一个记录空间内存地址的链表，当系统收到程序的申请时，会遍历链表，寻找第一个空间大于所申请空间的堆节点，然后将节点从内存空闲节点链表中删除，并将该节点的空间分配给程序。对于大多数操作系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的对节点的大小不一定正好等于申请的大小，系统会自动地将多余的那部分重新放入到链表中。</li>
 </ul>
 <h2 id="java-程序中的堆和栈内存">4.4 Java 程序中的堆和栈内存</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Memory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123; <span class="comment">// Line 1</span></span><br><span class="line">		<span class="keyword">int</span> i=<span class="number">1</span>; <span class="comment">// Line 2</span></span><br><span class="line">		Object obj = <span class="keyword">new</span> Object(); <span class="comment">// Line 3</span></span><br><span class="line">		Memory mem = <span class="keyword">new</span> Memory(); <span class="comment">// Line 4</span></span><br><span class="line">		mem.foo(obj); <span class="comment">// Line 5</span></span><br><span class="line">	&#125; <span class="comment">// Line 9</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object param)</span> </span>&#123; <span class="comment">// Line 6</span></span><br><span class="line">		String str = param.toString(); <span class="comment">//// Line 7</span></span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125; <span class="comment">// Line 8</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Memory</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; <span class="comment">// Line 1</span></span><br><span class="line">		<span class="type">int</span> i=<span class="number">1</span>; <span class="comment">// Line 2</span></span><br><span class="line">		<span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>(); <span class="comment">// Line 3</span></span><br><span class="line">		<span class="type">Memory</span> <span class="variable">mem</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Memory</span>(); <span class="comment">// Line 4</span></span><br><span class="line">		mem.foo(obj); <span class="comment">// Line 5</span></span><br><span class="line">	&#125; <span class="comment">// Line 9</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">(Object param)</span> &#123; <span class="comment">// Line 6</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> param.toString(); <span class="comment">//// Line 7</span></span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125; <span class="comment">// Line 8</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>下图显示了程序运行中堆空间和堆内存的引用，以及它们如何用于存储基元、对象和引用变量。</p>
-<img src="/2023/04/04/程序猿三部曲之白银时代/Java-Heap-Stack-Memory.png">
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/Java-Heap-Stack-Memory.png" class="">
 <ol type="1">
 <li>当我们运行该程序，系统会将所有运行时类加载到堆空间中。当在第一步执行main()方法时，Java
 Runtime会创建栈内存以供main()方法线程使用。</li>
@@ -217,7 +221,8 @@ Runtime释放所有内存并结束程序的执行。</li>
 <li>存储在堆中的对象是全局可访问的，而堆栈内存不能被其他线程访问；</li>
 <li>Memory management in stack is done in LIFO manner whereas it’s more
 complex in Heap memory because it’s used globally. Heap memory is
-divided into Young-Generation, Old-Generation etc, more details at <a href="https://www.digitalocean.com/community/tutorials/java-jvm-memory-model-memory-management-in-java" target="_blank" rel="noopener">Java
+divided into Young-Generation, Old-Generation etc, more details at <a
+target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/java-jvm-memory-model-memory-management-in-java">Java
 Garbage Collection</a>；</li>
 <li>堆栈内存是短暂的，而堆内存从应用程序执行开始到结束都存在；</li>
 <li>我们可以使用JVM的<code>-Xms</code>和<code>-Xmx</code>选项来定义堆内存的启动内存和最大内存。我们可以使用<code>-Xss</code>来定义栈内存大小；</li>
@@ -227,7 +232,8 @@ java.lang.OutOfMemoryError: Java Heap Space 错误;</li>
 <li>与堆内存相比，堆栈内存非常小。由于内存分配
 (LIFO)的简单性，与堆内存相比，堆栈内存非常快。</li>
 </ol>
-<p>资料：<a href="https://www.digitalocean.com/community/tutorials/java-heap-space-vs-stack-memory" target="_blank" rel="noopener">Java
+<p>资料：<a
+target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/java-heap-space-vs-stack-memory">Java
 Heap Space vs Stack - Memory Allocation in Java</a></p>
 <h1 id="字符串池">5 字符串池</h1>
 <p>顾名思义，java中的String Pool就是一个存储在Java Heap
@@ -237,20 +243,21 @@ Memory中的Strings池。我们知道 String 是 java
 <h2 id="java中的字符串池">5.1 Java中的字符串池</h2>
 <p>下面这张图很清楚的解释了String
 Pool在java堆空间中是如何维护的，以及当我们使用不同的方式创建String时会发生什么</p>
-<img src="/2023/04/04/程序猿三部曲之白银时代/String-Pool-Java.png">
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/String-Pool-Java.png" class="">
 <p>当我们使用双引号创建一个字符串时，它首先在字符串池中寻找具有相同值的字符串，如果找到则返回引用，否则在池中创建一个新的字符串，然后返回引用。但是使用new运算符，我们强制String类在堆空间中创建一个新的String对象。我们可以使用
 intern() 方法将其放入池中，或者从字符串池中引用另一个具有相同值的 String
 对象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringPool</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Java String Pool example</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String s1 = <span class="string">"Cat"</span>;</span><br><span class="line">        String s2 = <span class="string">"Cat"</span>;</span><br><span class="line">        String s3 = <span class="keyword">new</span> String(<span class="string">"Cat"</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">"s1 == s2 :"</span>+(s1==s2));</span><br><span class="line">        System.out.println(<span class="string">"s1 == s3 :"</span>+(s1==s3));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Java String Pool example</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s2 :&quot;</span>+(s1==s2));</span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s3 :&quot;</span>+(s1==s3));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s1 == s2 :true</span><br><span class="line">s1 == s3 :false</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s1 == s2 :true</span><br><span class="line">s1 == s3 :false</span><br></pre></td></tr></table></figure>
 <h2 id="在字符串池中创建了多少字符串对象">5.2
 在字符串池中创建了多少字符串对象？</h2>
 <p>有时候在java面试中，你会被问到一个关于String
 pool的问题。例如，在下面的语句中创建了多少个字符串对象？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"Cat"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br></pre></td></tr></table></figure>
 <p>首先在堆空间创建一个“Cat”对象，在栈内存创建str，并指向堆空间的“Cat”对象;然后检查堆空间中的字符串池中查看是否存在“Cat”对象，如果存在，则将new出来的“Cat”对象与字符串池中的“Cat”对象联系起来。若不存在，则在字符串池中创建“Cat”对象，并将堆中的“Cat”对象与之关联起来。</p>
-<p>资料：<a href="https://www.digitalocean.com/community/tutorials/what-is-java-string-pool" target="_blank" rel="noopener">What
+<p>资料：<a
+target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/what-is-java-string-pool">What
 is Java String Pool?</a></p>
 <h1 id="io和nio的区别">6. IO和NIO的区别</h1>
 <p>NIO是为了弥补IO操作的不足而诞生的，NIO的特性包括：非阻塞I/O，选择器，缓冲以及管道。其中管道（Channel）、缓冲（Buffer）、选择器（Selector）是NIO的三大主要特征。</p>
@@ -258,7 +265,7 @@ is Java String Pool?</a></p>
 <li><p>管道（Channel）：它就像传统IO中的流，到任何目的地（或来自任何地方）的所有数据都必须通过一个Channel对象。</p></li>
 <li><p>缓存（Buffer）：一个Buffer实际上就是一个容器对象。Java的每一种基本类型都有一种缓冲区类型：</p></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">byte----ByteBuffer</span><br><span class="line">char----CharBuffer</span><br><span class="line">shotr----ShortBuffer</span><br><span class="line">int----IntBuffer</span><br><span class="line">long----LongBuffer</span><br><span class="line">float----FloatBuffer</span><br><span class="line">double----DoubleBuffer</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">byte----ByteBuffer</span><br><span class="line">char----CharBuffer</span><br><span class="line">shotr----ShortBuffer</span><br><span class="line">int----IntBuffer</span><br><span class="line">long----LongBuffer</span><br><span class="line">float----FloatBuffer</span><br><span class="line">double----DoubleBuffer</span><br></pre></td></tr></table></figure>
 <ul>
 <li>选择器（Selector）：用于监听多个管道（Channel）的事件，使用传统的阻塞IO时我们可以方便的知道什么时候可以进行读写，而使用NIO非阻塞通道，我们需要一些方法来知道什么时候通道准备好了，选择器证实为这个需要而诞生的。</li>
 </ul>
@@ -278,7 +285,7 @@ is Java String Pool?</a></p>
 <p>如果管理的是成千上万个连接，但是这些连接每次只是发送少量的数据，例如我们常用的聊天服务器，这时候选择NIO处理数据可能是个很好的选择;
 如果是少量连接，而这些连接每次都要发送大量的数据，这时候就应该选择IO对数据进行操作。</p>
 </blockquote>
-<hr>
+<hr />
 <p>未完，待续...</p>
 	  
 	</div>
@@ -289,12 +296,14 @@ is Java String Pool?</a></p>
 
     
     
-    <a href="/2023/04/14/总结学习HashMap和HashTable/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2023/04/14/总结学习HashMap和HashTable/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/03/14/程序猿三部曲之青铜时代/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/03/14/程序猿三部曲之青铜时代/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -306,7 +315,21 @@ is Java String Pool?</a></p>
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -331,8 +354,8 @@ is Java String Pool?</a></p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
-  
+    <li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -355,11 +378,11 @@ is Java String Pool?</a></p>
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#hashmap和concurrenthashmap有什么区别"><span class="toc-article-text">1
-HashMap和ConcurrentHashMap有什么区别？</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#synchronized关键字"><span class="toc-article-text">2 synchronized关键字</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#volatile关键字"><span class="toc-article-text">3 volatile关键字</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile原理"><span class="toc-article-text">3.1 volatile原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#当一个变量定义为volatile之后将具备两种特性"><span class="toc-article-text">3.2
-当一个变量定义为volatile之后，将具备两种特性</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile-性能"><span class="toc-article-text">3.3 volatile 性能：</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#堆和栈的区别堆中存放的是什么栈中存放的是什么"><span class="toc-article-text">4
-堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#堆空间"><span class="toc-article-text">4.1 堆空间</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#栈内存"><span class="toc-article-text">4.2 栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#栈和堆申请空间后系统的响应"><span class="toc-article-text">4.3 栈和堆申请空间后系统的响应</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java-程序中的堆和栈内存"><span class="toc-article-text">4.4 Java 程序中的堆和栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java堆空间和栈内存的区别"><span class="toc-article-text">4.5 Java堆空间和栈内存的区别</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#字符串池"><span class="toc-article-text">5 字符串池</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java中的字符串池"><span class="toc-article-text">5.1 Java中的字符串池</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#在字符串池中创建了多少字符串对象"><span class="toc-article-text">5.2
-在字符串池中创建了多少字符串对象？</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#io和nio的区别"><span class="toc-article-text">6. IO和NIO的区别</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#hashmap%E5%92%8Cconcurrenthashmap%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-article-text">1
+HashMap和ConcurrentHashMap有什么区别？</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#synchronized%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-article-text">2 synchronized关键字</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#volatile%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-article-text">3 volatile关键字</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile%E5%8E%9F%E7%90%86"><span class="toc-article-text">3.1 volatile原理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BD%93%E4%B8%80%E4%B8%AA%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E4%B8%BAvolatile%E4%B9%8B%E5%90%8E%E5%B0%86%E5%85%B7%E5%A4%87%E4%B8%A4%E7%A7%8D%E7%89%B9%E6%80%A7"><span class="toc-article-text">3.2
+当一个变量定义为volatile之后，将具备两种特性</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#volatile-%E6%80%A7%E8%83%BD"><span class="toc-article-text">3.3 volatile 性能：</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB%E5%A0%86%E4%B8%AD%E5%AD%98%E6%94%BE%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%88%E4%B8%AD%E5%AD%98%E6%94%BE%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-article-text">4
+堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A0%86%E7%A9%BA%E9%97%B4"><span class="toc-article-text">4.1 堆空间</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A0%88%E5%86%85%E5%AD%98"><span class="toc-article-text">4.2 栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A0%88%E5%92%8C%E5%A0%86%E7%94%B3%E8%AF%B7%E7%A9%BA%E9%97%B4%E5%90%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%93%8D%E5%BA%94"><span class="toc-article-text">4.3 栈和堆申请空间后系统的响应</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%A0%86%E5%92%8C%E6%A0%88%E5%86%85%E5%AD%98"><span class="toc-article-text">4.4 Java 程序中的堆和栈内存</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java%E5%A0%86%E7%A9%BA%E9%97%B4%E5%92%8C%E6%A0%88%E5%86%85%E5%AD%98%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-article-text">4.5 Java堆空间和栈内存的区别</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B1%A0"><span class="toc-article-text">5 字符串池</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#java%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B1%A0"><span class="toc-article-text">5.1 Java中的字符串池</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9C%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B1%A0%E4%B8%AD%E5%88%9B%E5%BB%BA%E4%BA%86%E5%A4%9A%E5%B0%91%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1"><span class="toc-article-text">5.2
+在字符串池中创建了多少字符串对象？</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#io%E5%92%8Cnio%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-article-text">6. IO和NIO的区别</span></a></li></ol>
 		</div>
 	
 	</div>
@@ -379,10 +402,10 @@ HashMap和ConcurrentHashMap有什么区别？</span></a></li><li class="toc-arti
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -21,16 +21,16 @@ supertype of the runtime type of every element in this list
 
 明显Long类型不是String类型的超类。
 可以通过下面的方式实现
-12List&amp;lt;String&amp;gt; stringList = Arrays.asList(&#34;1&#34;, &#34;2&#34;, &#34;3&#34;);Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::new);">
+12List&amp;lt;String&amp;gt; stringList = Arrays.asList(&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;3&amp;quot;);Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::new);">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="List＜String＞集合转Long[]数组">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="List＜String＞集合转Long[]数组"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -62,8 +62,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -137,9 +138,9 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> Long[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+	  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">Long[] item = list.toArray(<span class="keyword">new</span> <span class="title class_">Long</span>[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
 <p><code>List&lt;String&gt;</code>直接以toArray的方式转换<code>Long数组</code>是错误的，运行后报错：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ArrayStoreException</span><br></pre></td></tr></table></figure>
 <p>查看<code>java.util.List.toArray(T[])</code>方法，注释中明确写到：</p>
 <blockquote>
 <p><span class="citation" data-cites="throws">@throws</span>
@@ -149,14 +150,14 @@ supertype of the runtime type of every element in this list
 </blockquote>
 <p>明显Long类型不是String类型的超类。</p>
 <p>可以通过下面的方式实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">Long[] item = list.stream().map(Long::valueOf).toArray(Long[]::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
 <p><strong>引申：</strong></p>
 <p>如何实现 <code>List&lt;String&gt;</code> 转
 <code>List&lt;Long&gt;</code> ?</p>
 <p>实现方式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>);</span><br><span class="line">List&lt;Long&gt; longList = stringList.stream().map(Long::valueOf).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
-<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; stringList = Arrays.asList(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">List&lt;Long&gt; longList = stringList.stream().map(Long::valueOf).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<hr />
 <p><code>java.util.List.toArray(T[])</code> 源码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array containing all of the elements in this list in</span></span><br><span class="line"><span class="comment">     * proper sequence (from first to last element); the runtime type of</span></span><br><span class="line"><span class="comment">     * the returned array is that of the specified array.  If the list fits</span></span><br><span class="line"><span class="comment">     * in the specified array, it is returned therein.  Otherwise, a new</span></span><br><span class="line"><span class="comment">     * array is allocated with the runtime type of the specified array and</span></span><br><span class="line"><span class="comment">     * the size of this list.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;If the list fits in the specified array with room to spare (i.e.,</span></span><br><span class="line"><span class="comment">     * the array has more elements than the list), the element in the array</span></span><br><span class="line"><span class="comment">     * immediately following the end of the list is set to &lt;tt&gt;null&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     * (This is useful in determining the length of the list &lt;i&gt;only&lt;/i&gt; if</span></span><br><span class="line"><span class="comment">     * the caller knows that the list does not contain any null elements.)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;Like the &#123;<span class="doctag">@link</span> #toArray()&#125; method, this method acts as bridge between</span></span><br><span class="line"><span class="comment">     * array-based and collection-based APIs.  Further, this method allows</span></span><br><span class="line"><span class="comment">     * precise control over the runtime type of the output array, and may,</span></span><br><span class="line"><span class="comment">     * under certain circumstances, be used to save allocation costs.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;Suppose &lt;tt&gt;x&lt;/tt&gt; is a list known to contain only strings.</span></span><br><span class="line"><span class="comment">     * The following code can be used to dump the list into a newly</span></span><br><span class="line"><span class="comment">     * allocated array of &lt;tt&gt;String&lt;/tt&gt;:</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;pre&gt;&#123;<span class="doctag">@code</span></span></span><br><span class="line"><span class="comment">     *     String[] y = x.toArray(new String[0]);</span></span><br><span class="line"><span class="comment">     * &#125;&lt;/pre&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * Note that &lt;tt&gt;toArray(new Object[0])&lt;/tt&gt; is identical in function to</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;toArray()&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> a the array into which the elements of this list are to</span></span><br><span class="line"><span class="comment">     *          be stored, if it is big enough; otherwise, a new array of the</span></span><br><span class="line"><span class="comment">     *          same runtime type is allocated for this purpose.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> an array containing the elements of this list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ArrayStoreException if the runtime type of the specified array</span></span><br><span class="line"><span class="comment">     *         is not a supertype of the runtime type of every element in</span></span><br><span class="line"><span class="comment">     *         this list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified array is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    &lt;T&gt; T[] toArray(T[] a);</span><br></pre></td></tr></table></figure>
 	  
@@ -168,12 +169,14 @@ supertype of the runtime type of every element in this list
 
     
     
-    <a href="/2023/06/30/Flowable工作流重启已经结束的流程/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2023/06/30/Flowable工作流重启已经结束的流程/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/06/12/读取jar包中指定资源文件的内容/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/06/12/读取jar包中指定资源文件的内容/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -185,7 +188,21 @@ supertype of the runtime type of every element in this list
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -210,8 +227,8 @@ supertype of the runtime type of every element in this list
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li>
-  
+    <li><a href="/categories/代码人生/">代码人生<span>17</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -254,10 +271,10 @@ supertype of the runtime type of every element in this list
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -29,11 +29,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Flowable工作流重启已经结束的流程">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="Flowable工作流重启已经结束的流程"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -65,8 +65,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -140,13 +141,14 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <h2 id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2>
+	  <h2
+id="使用historyservice接口来查询历史流程实例">使用<code>HistoryService</code>接口来查询历史流程实例</h2>
 <p>在Flowable中，已终止的流程实例不能通过<code>RuntimeService</code>接口直接查询到。相反，你需要使用<code>HistoryService</code>接口来查询历史流程实例，并从中筛选出已终止的实例。以下是正确的步骤：</p>
 <ol type="1">
 <li><p>确保你的应用程序连接到正确的Flowable流程引擎实例。你需要使用Flowable的API来执行后续的操作。</p></li>
 <li><p>使用<code>HistoryService</code>接口的<code>createHistoricProcessInstanceQuery()</code>方法构建查询，设置适当的条件来筛选已终止的流程实例。</p></li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">		.finished();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HistoricProcessInstanceQuery</span> <span class="variable">query</span> <span class="operator">=</span> historyService.createHistoricProcessInstanceQuery()</span><br><span class="line">		.finished();</span><br></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>执行查询并获取已终止的流程实例列表。</li>
 </ol>
@@ -156,74 +158,78 @@ var _hmt = _hmt || [];
 <li><p>如果你需要将已终止的流程实例重新激活，可以创建一个新的流程实例，或者使用历史流程实例中的数据进行修复。请注意，这取决于你的业务需求和流程定义的复杂性。</p></li>
 </ol>
 <p>请注意，已终止的流程实例是历史数据，因此无法直接重新激活。你需要根据业务需求进行相应的处理。使用<code>HistoryService</code>接口可以提供有关已终止流程实例的详细信息，但不能直接操作它们。</p>
-<a id="more"></a>
-<h2 id="使用historyservice获取的流程实例信息重新发起一个新的流程实例">使用<code>HistoryService</code>获取的流程实例信息重新发起一个新的流程实例</h2>
+<span id="more"></span>
+<h2
+id="使用historyservice获取的流程实例信息重新发起一个新的流程实例">使用<code>HistoryService</code>获取的流程实例信息重新发起一个新的流程实例</h2>
 <p>要使用<code>HistoryService</code>获取的流程实例信息重新发起一个新的流程实例，你需要执行以下步骤：</p>
 <ol type="1">
 <li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">processDefinitionId</span> <span class="operator">=</span> historicProcessInstance.getProcessDefinitionId();</span><br><span class="line"><span class="type">String</span> <span class="variable">businessKey</span> <span class="operator">=</span> historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>方法或<code>startProcessInstanceByKey()</code>方法来启动新的流程实例。根据你的需求选择合适的方法。</li>
 </ol>
 <p>如果你选择使用流程定义ID：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">				.startProcessInstanceById(processDefinitionId, businessKey);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProcessInstance</span> <span class="variable">newProcessInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">				.startProcessInstanceById(processDefinitionId, businessKey);</span><br></pre></td></tr></table></figure>
 <p>如果你选择使用流程定义的键（Key）：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">				.startProcessInstanceByKey(processDefinitionKey, businessKey);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProcessInstance</span> <span class="variable">newProcessInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">				.startProcessInstanceByKey(processDefinitionKey, businessKey);</span><br></pre></td></tr></table></figure>
 <p>在这里，<code>processDefinitionKey</code>是流程定义的键（Key）。</p>
 <ol start="3" type="1">
 <li>在启动新的流程实例后，你可以执行后续的操作，例如处理任务等，以继续流程的执行。</li>
 </ol>
 <p>请注意，重新发起的新流程实例与原始已终止的流程实例是独立的。你需要根据需求来处理任何必要的数据复制或流程初始化操作。</p>
-<h2 id="设置重新发起的流程实例的变量variables">设置重新发起的流程实例的变量（variables）</h2>
+<h2
+id="设置重新发起的流程实例的变量variables">设置重新发起的流程实例的变量（variables）</h2>
 <p>要设置重新发起的流程实例的变量（variables），你可以使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>或<code>startProcessInstanceByKey()</code>方法的重载版本来指定变量的值。以下是设置变量的步骤：</p>
 <ol type="1">
 <li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">processDefinitionId</span> <span class="operator">=</span> historicProcessInstance.getProcessDefinitionId();</span><br><span class="line"><span class="type">String</span> <span class="variable">businessKey</span> <span class="operator">=</span> historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>创建一个<code>Map</code>对象，将变量名和对应的值放入该对象中。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">"variable1"</span>, value1);</span><br><span class="line">variables.put(<span class="string">"variable2"</span>, value2);</span><br><span class="line"><span class="comment">// 添加其他变量</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">&quot;variable1&quot;</span>, value1);</span><br><span class="line">variables.put(<span class="string">&quot;variable2&quot;</span>, value2);</span><br><span class="line"><span class="comment">// 添加其他变量</span></span><br></pre></td></tr></table></figure>
 <p>在上述代码中，"variable1"和"variable2"是变量名，value1和value2是对应的值。</p>
 <ol start="3" type="1">
 <li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>方法或<code>startProcessInstanceByKey()</code>方法的重载版本来启动新的流程实例，并在参数中传递变量的Map对象。</li>
 </ol>
 <p>如果你选择使用流程定义ID：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">		.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProcessInstance</span> <span class="variable">newProcessInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">		.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure>
 <p>如果你选择使用流程定义的键（Key）：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">		.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProcessInstance</span> <span class="variable">newProcessInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">		.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);</span><br></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>通过上述步骤，变量将与新的流程实例关联，并可以在流程的执行中使用。</li>
 </ol>
 <p>请注意，如果重新发起的流程实例需要使用历史流程实例的数据作为变量的值，你需要根据业务需求将这些数据复制到新的流程实例中。</p>
-<h2 id="关于新发起流程的processinstancename为空的情况说明">关于新发起流程的<code>processInstanceName</code>为空的情况说明</h2>
+<h2
+id="关于新发起流程的processinstancename为空的情况说明">关于新发起流程的<code>processInstanceName</code>为空的情况说明</h2>
 <p>在Flowable中，流程实例的名称（process instance
 name）是一个可选的属性，并且不会自动从历史流程实例中继承。因此，在重新发起流程实例时，<code>processInstanceName</code>默认为空。</p>
 <p>如果你想为重新发起的流程实例设置一个名称，可以通过设置流程变量的方式来实现。以下是设置流程实例名称的步骤：</p>
 <ol type="1">
 <li>获取已终止流程实例的相关信息，如流程定义ID、业务关联键等。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String processDefinitionId = historicProcessInstance.getProcessDefinitionId();</span><br><span class="line">String businessKey = historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">processDefinitionId</span> <span class="operator">=</span> historicProcessInstance.getProcessDefinitionId();</span><br><span class="line"><span class="type">String</span> <span class="variable">businessKey</span> <span class="operator">=</span> historicProcessInstance.getBusinessKey();</span><br><span class="line"><span class="comment">// 其他需要的信息</span></span><br></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>使用<code>RuntimeService</code>接口的<code>startProcessInstanceById()</code>或<code>startProcessInstanceByKey()</code>方法启动新的流程实例，并在参数中传递变量的Map对象。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">"processInstanceName"</span>, <span class="string">"My Process Instance"</span>); <span class="comment">// 设置流程实例名称</span></span><br><span class="line"></span><br><span class="line">ProcessInstance newProcessInstance = runtimeService</span><br><span class="line">		.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; variables = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">variables.put(<span class="string">&quot;processInstanceName&quot;</span>, <span class="string">&quot;My Process Instance&quot;</span>); <span class="comment">// 设置流程实例名称</span></span><br><span class="line"></span><br><span class="line"><span class="type">ProcessInstance</span> <span class="variable">newProcessInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">		.startProcessInstanceById(processDefinitionId, businessKey, variables);</span><br></pre></td></tr></table></figure>
 <p>在上述代码中，我们将流程实例名称作为变量
 <code>"processInstanceName"</code>
 的值传递给了<code>startProcessInstanceById()</code>方法。</p>
 <ol start="3" type="1">
 <li>在新的流程实例中，你可以使用<code>RuntimeService</code>接口的<code>getVariable()</code>方法来获取流程实例名称。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String processInstanceName = runtimeService</span><br><span class="line">		.getVariable(newProcessInstance.getId(), <span class="string">"processInstanceName"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">processInstanceName</span> <span class="operator">=</span> runtimeService</span><br><span class="line">		.getVariable(newProcessInstance.getId(), <span class="string">&quot;processInstanceName&quot;</span>);</span><br></pre></td></tr></table></figure>
 <p>在上述代码中，<code>newProcessInstance.getId()</code>是重新发起的流程实例的ID。</p>
 <p>通过上述步骤，你可以在重新发起的流程实例中设置和获取流程实例名称。</p>
-<h2 id="关于流程中historicprocessinstance的endtime字段为空的情况说明">关于流程中<code>HistoricProcessInstance</code>的<code>endTime</code>字段为空的情况说明</h2>
+<h2
+id="关于流程中historicprocessinstance的endtime字段为空的情况说明">关于流程中<code>HistoricProcessInstance</code>的<code>endTime</code>字段为空的情况说明</h2>
 <p>在Flowable中，<code>HistoricProcessInstance</code>的<code>endTime</code>字段为空是因为该字段仅在流程实例完成时被设置为非空值。当你重新发起一个新的流程实例时，该实例尚未完成，因此<code>endTime</code>字段仍然为空。</p>
 <p><code>HistoricProcessInstance</code>对象表示已完成或已终止的流程实例的历史记录，其中<code>endTime</code>字段指示流程实例的结束时间。只有在流程实例完成时，即流程的所有活动都已完成，<code>endTime</code>字段才会被设置为相应的时间戳。</p>
 <p>当你重新发起一个新的流程实例时，新的流程实例将被视为全新的实例，其<code>endTime</code>字段将在实例完成时被设置为相应的时间戳。因此，刚刚重新发起的流程实例的<code>endTime</code>字段为空是符合预期的行为。</p>
 <p>如果你需要确定新流程实例的完成状态，你可以使用<code>RuntimeService</code>接口或其他相关接口来查询并检查流程实例的状态。例如，可以使用<code>RuntimeService</code>的<code>createProcessInstanceQuery()</code>方法查询并判断流程实例是否已完成。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ProcessInstanceQuery query = runtimeService</span><br><span class="line">		.createProcessInstanceQuery().processInstanceId(newProcessInstanceId);</span><br><span class="line"><span class="keyword">boolean</span> isProcessInstanceFinished = query.singleResult() == <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProcessInstanceQuery</span> <span class="variable">query</span> <span class="operator">=</span> runtimeService</span><br><span class="line">		.createProcessInstanceQuery().processInstanceId(newProcessInstanceId);</span><br><span class="line"><span class="type">boolean</span> <span class="variable">isProcessInstanceFinished</span> <span class="operator">=</span> query.singleResult() == <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
 <p>在上述代码中，<code>newProcessInstanceId</code>是你重新发起的新流程实例的ID。</p>
 	  
 	</div>
@@ -234,12 +240,14 @@ name）是一个可选的属性，并且不会自动从历史流程实例中继�
 
     
     
-    <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2023/06/30/MyBatis配置allowMultiQueries-true允许使用foreach标签批量插入或更新数据/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/06/13/List＜String＞集合转Long-数组/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/06/13/List＜String＞集合转Long-数组/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -251,7 +259,21 @@ name）是一个可选的属性，并且不会自动从历史流程实例中继�
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -276,8 +298,8 @@ name）是一个可选的属性，并且不会自动从历史流程实例中继�
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/代码人生/">代码人生<span>16</span></a></li> <li><a href="/categories/代码人生/Flowable/">Flowable<span>1</span></a></li>
-  
+    <li><a href="/categories/代码人生/">代码人生<span>17</span></a></li> <li><a href="/categories/代码人生/Flowable/">Flowable<span>1</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -300,7 +322,7 @@ name）是一个可选的属性，并且不会自动从历史流程实例中继�
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#使用historyservice接口来查询历史流程实例"><span class="toc-article-text">使用HistoryService接口来查询历史流程实例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#使用historyservice获取的流程实例信息重新发起一个新的流程实例"><span class="toc-article-text">使用HistoryService获取的流程实例信息重新发起一个新的流程实例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#设置重新发起的流程实例的变量variables"><span class="toc-article-text">设置重新发起的流程实例的变量（variables）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#关于新发起流程的processinstancename为空的情况说明"><span class="toc-article-text">关于新发起流程的processInstanceName为空的情况说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#关于流程中historicprocessinstance的endtime字段为空的情况说明"><span class="toc-article-text">关于流程中HistoricProcessInstance的endTime字段为空的情况说明</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8historyservice%E6%8E%A5%E5%8F%A3%E6%9D%A5%E6%9F%A5%E8%AF%A2%E5%8E%86%E5%8F%B2%E6%B5%81%E7%A8%8B%E5%AE%9E%E4%BE%8B"><span class="toc-article-text">使用HistoryService接口来查询历史流程实例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8historyservice%E8%8E%B7%E5%8F%96%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AE%9E%E4%BE%8B%E4%BF%A1%E6%81%AF%E9%87%8D%E6%96%B0%E5%8F%91%E8%B5%B7%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AE%9E%E4%BE%8B"><span class="toc-article-text">使用HistoryService获取的流程实例信息重新发起一个新的流程实例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%BE%E7%BD%AE%E9%87%8D%E6%96%B0%E5%8F%91%E8%B5%B7%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%8F%98%E9%87%8Fvariables"><span class="toc-article-text">设置重新发起的流程实例的变量（variables）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%B3%E4%BA%8E%E6%96%B0%E5%8F%91%E8%B5%B7%E6%B5%81%E7%A8%8B%E7%9A%84processinstancename%E4%B8%BA%E7%A9%BA%E7%9A%84%E6%83%85%E5%86%B5%E8%AF%B4%E6%98%8E"><span class="toc-article-text">关于新发起流程的processInstanceName为空的情况说明</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%B3%E4%BA%8E%E6%B5%81%E7%A8%8B%E4%B8%ADhistoricprocessinstance%E7%9A%84endtime%E5%AD%97%E6%AE%B5%E4%B8%BA%E7%A9%BA%E7%9A%84%E6%83%85%E5%86%B5%E8%AF%B4%E6%98%8E"><span class="toc-article-text">关于流程中HistoricProcessInstance的endTime字段为空的情况说明</span></a></li></ol>
 		</div>
 	
 	</div>
@@ -320,10 +342,10 @@ name）是一个可选的属性，并且不会自动从历史流程实例中继�
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

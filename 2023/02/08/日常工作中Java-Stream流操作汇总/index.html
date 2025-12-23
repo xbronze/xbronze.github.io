@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -24,11 +24,11 @@ operation)得到前面处理的结果。
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="日常工作中Java.Stream流操作汇总">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="日常工作中Java.Stream流操作汇总"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -60,8 +60,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -146,18 +147,20 @@ operation）的处理，最后由最终操作(terminal
 operation)得到前面处理的结果。</p>
 <p>————《菜鸟教程》</p>
 <p>本片文章记录了工作中常用的Stream流操作，方便之后回顾。</p>
-<a id="more"></a>
-<h2 id="对list集合取user中的一个元素形成新的list集合">1.对List<user>集合，取User中的一个元素，形成新的List<string>集合</string></user></h2>
+<span id="more"></span>
+<h2
+id="对list集合取user中的一个元素形成新的list集合">1.对List<User>集合，取User中的一个元素，形成新的List<String>集合</h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; userList;</span></span><br><span class="line">List&lt;String&gt; userNameList = userList.stream.map(User::getUserName).collect(Collectors.toList);</span><br></pre></td></tr></table></figure>
 <h2 id="去重">2.去重</h2>
-<p>对集合 List<user> userList 内的对象去重（实体类User 使用Lombok
-插件的@Data 注解，自动覆写 equals 和 hashCode 方法） <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; userList;</span></span><br><span class="line">List&lt;User&gt; newUserList = userList.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure></user></p>
+<p>对集合 List<User> userList 内的对象去重（实体类User 使用Lombok
+插件的@Data 注解，自动覆写 equals 和 hashCode 方法） <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; userList;</span></span><br><span class="line">List&lt;User&gt; newUserList = userList.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure></p>
 <h2 id="过滤">3.过滤</h2>
 <p>过滤集合 List&lt;SysOptionData&gt; optionDataList 对象label为
-"zhangsan" 的数据 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">"zhangsan"</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回过滤后的集合第一条数据</span></span><br><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">"zhangsan"</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).findFirst();</span><br></pre></td></tr></table></figure></p>
+"zhangsan" 的数据 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">&quot;zhangsan&quot;</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回过滤后的集合第一条数据</span></span><br><span class="line">List&lt;SysOptionData&gt; resultList = optionDataList.stream().filter(</span><br><span class="line">	optionData -&gt; <span class="string">&quot;zhangsan&quot;</span>.equals(optionData.getOptionLabel())</span><br><span class="line">).findFirst(); </span><br></pre></td></tr></table></figure></p>
 <h2 id="list集合转string字符串">4.List集合转String字符串</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; 包含User实体的集合，只提取username拼成一个字符串，以“，”隔开</span></span><br><span class="line">String username = userList.stream().map(User::getUsername()).collect(Collectors.joining(<span class="string">","</span>));  </span><br><span class="line"></span><br><span class="line"><span class="comment">// List&lt;String&gt; usernameList</span></span><br><span class="line">String username = usernameList.stream().collect(Collectors.joining(<span class="string">","</span>));</span><br></pre></td></tr></table></figure>
-<h2 id="匹配两个list集合返回新的list集合">5.匹配两个List集合，返回新的List集合</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List&lt;User&gt; 包含User实体的集合，只提取username拼成一个字符串，以“，”隔开</span></span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> userList.stream().map(User::getUsername()).collect(Collectors.joining(<span class="string">&quot;,&quot;</span>));  </span><br><span class="line"></span><br><span class="line"><span class="comment">// List&lt;String&gt; usernameList</span></span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> usernameList.stream().collect(Collectors.joining(<span class="string">&quot;,&quot;</span>));   </span><br></pre></td></tr></table></figure>
+<h2
+id="匹配两个list集合返回新的list集合">5.匹配两个List集合，返回新的List集合</h2>
 <p>比如有两个集合，List&lt;User&gt;、 List&lt;Address&gt;</p>
 <p>List&lt;User&gt; 集合的数据</p>
 <table>
@@ -212,7 +215,7 @@ operation)得到前面处理的结果。</p>
 <p>对比着两个集合，以List&lt;User&gt;为主体，按照name字段匹配List&lt;Address&gt;集合，把匹配到的Address对象的address字段的值设置到User对象的address字段</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; list = userList.stream()</span><br><span class="line">	.map(u -&gt; &#123;</span><br><span class="line">		<span class="keyword">return</span> addrList.stream()</span><br><span class="line">				.filter(a -&gt; &#123;</span><br><span class="line">					<span class="keyword">return</span> a.getName().equals(u.getName());</span><br><span class="line">				&#125;).map(a -&gt; &#123;</span><br><span class="line">					u.setAddress(a.getAddress());</span><br><span class="line">					<span class="keyword">return</span> u;</span><br><span class="line">				&#125;).collect(Collectors.toList());</span><br><span class="line">	&#125;)</span><br><span class="line">	.flatMap(List::stream)</span><br><span class="line">	.collect(Collectors.toList());</span><br><span class="line"><span class="keyword">for</span> (User user : list) &#123;</span><br><span class="line">	System.out.println(user.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>结果输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User [name=zhangsan, age=15, address=China]</span><br><span class="line">User [name=tom, age=16, address=USA]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User [name=zhangsan, age=15, address=China]</span><br><span class="line">User [name=tom, age=16, address=USA]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>需要注意的是，结果只会返回匹配到的数据</p>
 </blockquote>
@@ -222,13 +225,13 @@ operation)得到前面处理的结果。</p>
 givenfunction to the elements of this stream.</em></p>
 <p>返回一个流，由将给定函数应用于该流的元素的结果组成。</p>
 <p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">nameList.stream().map(n -&gt; n + <span class="string">", welcome"</span>).forEach(e -&gt; System.out.println(e));</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">&quot;ZhangSan&quot;</span>, <span class="string">&quot;Tom&quot;</span>).collect(Collectors.toList());</span><br><span class="line">nameList.stream().map(n -&gt; n + <span class="string">&quot;, welcome&quot;</span>).forEach(e -&gt; System.out.println(e));</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZhangSan, welcome</span><br><span class="line">Tom, welcome</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZhangSan, welcome</span><br><span class="line">Tom, welcome</span><br></pre></td></tr></table></figure>
 <p>请注意另一种情况：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String[]&gt; list = nameList.stream().map(n -&gt; n.split(<span class="string">""</span>)).collect(Collectors.toList());</span><br><span class="line"><span class="keyword">for</span> (String[] strings : list) &#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strings.length; i++) &#123;</span><br><span class="line">		System.out.print(strings[i] + <span class="string">" "</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">&quot;ZhangSan&quot;</span>, <span class="string">&quot;Tom&quot;</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String[]&gt; list = nameList.stream().map(n -&gt; n.split(<span class="string">&quot;&quot;</span>)).collect(Collectors.toList());</span><br><span class="line"><span class="keyword">for</span> (String[] strings : list) &#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; strings.length; i++) &#123;</span><br><span class="line">		System.out.print(strings[i] + <span class="string">&quot; &quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Z  h  a  n  g  S  a  n  </span><br><span class="line">T  o  m</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Z  h  a  n  g  S  a  n  </span><br><span class="line">T  o  m  </span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>map操作就是把一种操作运算，映射到一个序列的每一个元素上。以每个元素为一个单位，运算的结果也是相互独立的，所以返回的是List&lt;String[]&gt;，而不是List&lt;String&gt;</p>
 </blockquote>
@@ -244,30 +247,32 @@ one-to-manytransformation to the elements of the stream, and then
 flattening theresulting elements into a new stream.</em></p>
 <p>flatMap()操作的效果是对流的元素应用一对多的转换，然后将产生的元素平铺成一个新的流。</p>
 <p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">"ZhangSan"</span>, <span class="string">"Tom"</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String&gt; list = nameList.stream()</span><br><span class="line">		.map(n -&gt; n.split(<span class="string">""</span>))</span><br><span class="line">		.flatMap(e -&gt; Arrays.stream(e))</span><br><span class="line">		.collect(Collectors.toList());</span><br><span class="line">System.out.println(list.toString());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; nameList = Stream.of(<span class="string">&quot;ZhangSan&quot;</span>, <span class="string">&quot;Tom&quot;</span>).collect(Collectors.toList());</span><br><span class="line">List&lt;String&gt; list = nameList.stream()</span><br><span class="line">		.map(n -&gt; n.split(<span class="string">&quot;&quot;</span>))</span><br><span class="line">		.flatMap(e -&gt; Arrays.stream(e))</span><br><span class="line">		.collect(Collectors.toList());</span><br><span class="line">System.out.println(list.toString());</span><br></pre></td></tr></table></figure>
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Z, h, a, n, g, S, a, n, T, o, m]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Z, h, a, n, g, S, a, n, T, o, m]</span><br></pre></td></tr></table></figure>
 <h2 id="list集合转map">7.List集合转Map</h2>
 <p>List&lt;User&gt; 集合，设置 User.name
 作为Map的key，User对象作为value，转换为Map集合</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, User&gt; userMap = userList.stream()</span><br><span class="line">	.collect(Collectors.toMap(User::getName, Function.identity()));</span><br></pre></td></tr></table></figure>
-<h2 id="针对list列表按照指定元素分组生成新的map集合">8.针对List列表，按照指定元素分组，生成新的Map集合</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, User&gt; userMap = userList.stream()</span><br><span class="line">	.collect(Collectors.toMap(User::getName, Function.identity()));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2
+id="针对list列表按照指定元素分组生成新的map集合">8.针对List列表，按照指定元素分组，生成新的Map集合</h2>
 <p>例如对下面List列表的数据做分组</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new User(&quot;zhangsan&quot;, 12, &quot;Guangzhou&quot;);</span><br><span class="line">new User(&quot;lisi&quot;, 13, &quot;Shenzhen&quot;);</span><br><span class="line">new User(&quot;tom&quot;, 12, &quot;Beijing&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">new User(&quot;zhangsan&quot;, 12, &quot;Guangzhou&quot;);</span><br><span class="line">new User(&quot;lisi&quot;, 13, &quot;Shenzhen&quot;);</span><br><span class="line">new User(&quot;tom&quot;, 12, &quot;Beijing&quot;);</span><br></pre></td></tr></table></figure>
 <p>分组操作</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, List&lt;User&gt;&gt; map = userList.stream().collect(Collectors.groupingBy(User::getAge));</span><br></pre></td></tr></table></figure>
 <p>分组结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	12=[</span><br><span class="line">		User [name=zhangsan, age=12, address=Guangzhou], </span><br><span class="line">		User [name=tom, age=12, address=Beijing]</span><br><span class="line">	], </span><br><span class="line">	13=[</span><br><span class="line">		User [name=lisi, age=13, address=Shenzhen]</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	12=[</span><br><span class="line">		User [name=zhangsan, age=12, address=Guangzhou], </span><br><span class="line">		User [name=tom, age=12, address=Beijing]</span><br><span class="line">	], </span><br><span class="line">	13=[</span><br><span class="line">		User [name=lisi, age=13, address=Shenzhen]</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="根据指定元素去重">9.根据指定元素去重</h2>
 <p>第1部分已经介绍了<code>distinct</code>去重方法，但是这种方法只能针对整个对象去重，如果想只根据对象中的某几个元素去重，可以通过下面的方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User(name=zhangsan, sex=man, ages=1)</span><br><span class="line">User(name=zhangsan, sex=man, ages=2)</span><br><span class="line">User(name=lisi, sex=woman, ages=3)</span><br><span class="line">User(name=wanger, sex=man, ages=4)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User(name=zhangsan, sex=man, ages=1)</span><br><span class="line">User(name=zhangsan, sex=man, ages=2)</span><br><span class="line">User(name=lisi, sex=woman, ages=3)</span><br><span class="line">User(name=wanger, sex=man, ages=4)</span><br></pre></td></tr></table></figure>
 <p>如果只根据name和sex去重</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">userList.stream().collect(</span><br><span class="line">    Collectors.collectingAndThen(</span><br><span class="line">        Collectors.toCollection(() -&gt; <span class="keyword">new</span> TreeSet&lt;&gt;(</span><br><span class="line">        	Comparator.comparing(p -&gt; p.getName()+<span class="string">";"</span>+p.getSex()))</span><br><span class="line">        ) , ArrayList::<span class="keyword">new</span>)</span><br><span class="line">).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">userList.stream().collect(</span><br><span class="line">    Collectors.collectingAndThen(</span><br><span class="line">        Collectors.toCollection(() -&gt; <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;(</span><br><span class="line">        	Comparator.comparing(p -&gt; p.getName()+<span class="string">&quot;;&quot;</span>+p.getSex()))</span><br><span class="line">        ) , ArrayList::<span class="keyword">new</span>)</span><br><span class="line">).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
 <p>结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User(name=lisi, sex=woman, ages=3)</span><br><span class="line">User(name=wanger, sex=man, ages=4)</span><br><span class="line">User(name=zhangsan, sex=man, ages=1)</span><br></pre></td></tr></table></figure>
-<h2 id="list转为listmapstringobject格式">10.List<user>转为List&lt;Map&lt;String,Object&gt;&gt;格式</user></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User(name=lisi, sex=woman, ages=3)</span><br><span class="line">User(name=wanger, sex=man, ages=4)</span><br><span class="line">User(name=zhangsan, sex=man, ages=1)</span><br></pre></td></tr></table></figure>
+<h2
+id="list转为listmapstringobject格式">10.List<User>转为List&lt;Map&lt;String,Object&gt;&gt;格式</h2>
 <p>把<code>List&lt;User&gt;</code>集合，按指定字段，转为<code>List&lt;Map&lt;String,Object&gt;&gt;</code>格式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; userList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">List&lt;Map&lt;String,Object&gt;&gt; result = userList.stream().map(user -&gt; &#123;</span><br><span class="line">    Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"id"</span>, user.getId());</span><br><span class="line">    map.put(<span class="string">"name"</span>, user.getName());</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; userList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">List&lt;Map&lt;String,Object&gt;&gt; result = userList.stream().map(user -&gt; &#123;</span><br><span class="line">    Map&lt;String,Object&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;id&quot;</span>, user.getId());</span><br><span class="line">    map.put(<span class="string">&quot;name&quot;</span>, user.getName());</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;).collect(Collectors.toList());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 	  
 	</div>
 
@@ -277,12 +282,14 @@ flattening theresulting elements into a new stream.</em></p>
 
     
     
-    <a href="/2023/02/22/浅析Field-injection-is-not-recommended/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2023/02/22/浅析Field-injection-is-not-recommended/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/02/01/处理SpringCloudConfig客户端启动无法读取到配置参数/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -294,7 +301,21 @@ flattening theresulting elements into a new stream.</em></p>
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -319,8 +340,8 @@ flattening theresulting elements into a new stream.</em></p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/编程语言/">编程语言<span>7</span></a></li>
-  
+    <li><a href="/categories/编程语言/">编程语言<span>7</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -357,10 +378,10 @@ flattening theresulting elements into a new stream.</em></p>
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

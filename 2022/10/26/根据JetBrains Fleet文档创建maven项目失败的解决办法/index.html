@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -21,11 +21,11 @@ mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -Darchety
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="根据JetBrains Fleet文档创建maven项目失败的解决办法">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="根据JetBrains Fleet文档创建maven项目失败的解决办法"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -57,8 +57,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -132,7 +133,8 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>打算尝试一下Fleet编辑器，根据<a href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace" target="_blank" rel="noopener">JetBrains
+	  <p>打算尝试一下Fleet编辑器，根据<a
+target="_blank" rel="noopener" href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace">JetBrains
 Fleet文档</a>创建maven项目.</p>
 <p>首选确认本地机器上已经安装并配置了maven</p>
 <p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal
@@ -140,17 +142,18 @@ Fleet文档</a>创建maven项目.</p>
 <p>粘贴并执行
 <code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p>
 <p>创建失败，提下如下</p>
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170547.png">
-<a id="more"></a>
-<p>然后google之，在stackoverflow上发现了这篇文章 <a href="https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom" target="_blank" rel="noopener">https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom</a></p>
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026170831.png">
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/UFqqh.png">
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/QQ%E6%88%AA%E5%9B%BE20221026170547.png" class="">
+<span id="more"></span>
+<p>然后google之，在stackoverflow上发现了这篇文章 <a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom">https://stackoverflow.com/questions/16348459/error-the-goal-you-specified-requires-a-project-to-execute-but-there-is-no-pom</a></p>
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/QQ%E6%88%AA%E5%9B%BE20221026170831.png" class="">
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/UFqqh.png" class="">
 <p>简而言之：<em>必须用引号括起所有参数</em></p>
 <p>于是重新修改了mvn命令并重新执行</p>
 <p><code>mvn archetype:generate "-DgroupId=com.mycompany.app" "-DartifactId=my-app" "-DarchetypeArtifactId=maven-archetype-quickstart" "-DarchetypeVersion=1.4" "-DinteractiveMode=false"</code></p>
 <p>于是maven项目创建成功</p>
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171206.png">
-<img src="/2022/10/26/根据JetBrains%20Fleet文档创建maven项目失败的解决办法/QQ截图20221026171222.png">
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/QQ%E6%88%AA%E5%9B%BE20221026171206.png" class="">
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/QQ%E6%88%AA%E5%9B%BE20221026171222.png" class="">
 	  
 	</div>
 
@@ -160,12 +163,14 @@ Fleet文档</a>创建maven项目.</p>
 
     
     
-    <a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2022/10/21/MySQL根据出生日期计算当前年龄/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2022/10/21/MySQL根据出生日期计算当前年龄/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -177,7 +182,21 @@ Fleet文档</a>创建maven项目.</p>
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -202,8 +221,8 @@ Fleet文档</a>创建maven项目.</p>
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
-  
+    <li><a href="/categories/开发工具/">开发工具<span>1</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -240,10 +259,10 @@ Fleet文档</a>创建maven项目.</p>
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -24,11 +24,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="MySQL事务">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="MySQL事务"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -60,8 +60,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -147,7 +148,7 @@ var _hmt = _hmt || [];
 <li>持久性
 -一旦事务提交，则其所做的修改就会永久保存在数据库中。此时即使系统崩溃，修改的数据也不会丢失。</li>
 </ul>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="事务的脏读不可重复读幻读">事务的脏读、不可重复读、幻读</h3>
 <ul>
 <li>脏读：事务 A 读取了事务 B 更新后的数据，但是事务 B
@@ -168,12 +169,12 @@ committed)、可重复读(repetable read) 和 串行化(serializable)。</p>
 <li><p>可重复读：可重复读指的是一个事务在执行的过程中，看到的数据是和启动时看到的数据是一致的。未提交的变更对其他事务不可见。</p></li>
 <li><p>串行化：顾名思义是对于同一行记录，写会加写锁，读会加读锁。当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行。</p></li>
 </ul>
-<img src="/2020/04/26/MySQL事务/640.png">
+<img src="/2020/04/26/MySQL%E4%BA%8B%E5%8A%A1/640.png" class="">
 <p>隔离级别由低到高是：读未提交 &lt; 读已提交 &lt; 可重复读 &lt;
 串行化</p>
 <h3 id="mysql-常见存储引擎的区别">MySQL 常见存储引擎的区别</h3>
 <p>通过SQL语句 <code>SHOW ENGINES</code>查看存储引擎</p>
-<img src="/2020/04/26/MySQL事务/641.png">
+<img src="/2020/04/26/MySQL%E4%BA%8B%E5%8A%A1/641.png" class="">
 <p>可以看到，InnoDB 是 MySQL
 默认支持的存储引擎，支持事务、行级锁定和外键。</p>
 <h4 id="myisam-存储引擎的特点">MyISAM 存储引擎的特点</h4>
@@ -236,7 +237,8 @@ MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数�
 的表结构文件包括：.frm(表结构定义),.MYI(索引),.MYD(数据)；而 InnoDB
 的表数据文件为:.ibd和.frm(表结构定义)；</p></li>
 </ul>
-<p>文章来自<a href="https://mp.weixin.qq.com/s?__biz=MzU2NDg0OTgyMA==&amp;mid=2247486267&amp;idx=1&amp;sn=b96d38b39c34d400c9985c54899e126b&amp;chksm=fc45f6c8cb327fdecabac01cb7d6fe0d75c8c212fb341cf3dc7e481b53d5fe8915160b2059e8&amp;mpshare=1&amp;scene=24&amp;srcid=0514ROWD2lIjFItWOKlBYXL7&amp;sharer_sharetime=1589434711640&amp;sharer_shareid=50e38dcd7776348278a128de8ad8d396&amp;key=8d915c155b1ceb9625a9dda450e6bf03db464ddba9fffe454cf51960477f186591696584f72a61f96c942a2e9bf698615ae2bec9e397ec4b765aab5f5874b8272c427f9aed42e3c9fc5fc7dfc1bbd1c7&amp;ascene=14&amp;uin=OTQ3NzYxMTM2&amp;devicetype=Windows+10+x64&amp;version=62090070&amp;lang=zh_CN&amp;exportkey=AzZJkfttIkfe4EOendMMvhg%3D&amp;pass_ticket=Ca7nWpSV1zN1yKOGQoK6bpsW%2BmahyJBCE2FC9DYbOLGCDSxdtOi15zeY3wsLQ%2Bdd" target="_blank" rel="noopener">Java建设者</a></p>
+<p>文章来自<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzU2NDg0OTgyMA==&amp;mid=2247486267&amp;idx=1&amp;sn=b96d38b39c34d400c9985c54899e126b&amp;chksm=fc45f6c8cb327fdecabac01cb7d6fe0d75c8c212fb341cf3dc7e481b53d5fe8915160b2059e8&amp;mpshare=1&amp;scene=24&amp;srcid=0514ROWD2lIjFItWOKlBYXL7&amp;sharer_sharetime=1589434711640&amp;sharer_shareid=50e38dcd7776348278a128de8ad8d396&amp;key=8d915c155b1ceb9625a9dda450e6bf03db464ddba9fffe454cf51960477f186591696584f72a61f96c942a2e9bf698615ae2bec9e397ec4b765aab5f5874b8272c427f9aed42e3c9fc5fc7dfc1bbd1c7&amp;ascene=14&amp;uin=OTQ3NzYxMTM2&amp;devicetype=Windows+10+x64&amp;version=62090070&amp;lang=zh_CN&amp;exportkey=AzZJkfttIkfe4EOendMMvhg%3D&amp;pass_ticket=Ca7nWpSV1zN1yKOGQoK6bpsW%2BmahyJBCE2FC9DYbOLGCDSxdtOi15zeY3wsLQ%2Bdd">Java建设者</a></p>
 	  
 	</div>
 
@@ -246,12 +248,14 @@ MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数�
 
     
     
-    <a href="/2022/07/25/货币的发行/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2022/07/25/货币的发行/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2020/04/14/Java多线程/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2020/04/14/Java多线程/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -263,7 +267,21 @@ MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数�
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -288,8 +306,8 @@ MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数�
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/数据库/">数据库<span>11</span></a></li>
-  
+    <li><a href="/categories/数据库/">数据库<span>11</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -326,10 +344,10 @@ MyISAM 可以直接定位到数据所在的内存地址，可以直接找到数�
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->

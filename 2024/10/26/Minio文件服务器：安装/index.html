@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="cache-control" content="no-cache">
@@ -17,11 +17,11 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Minio文件服务器：安装">
-  <meta property="og:site_name" content="徐子辉的个人站点">
+  <meta property="og:title" content="Minio文件服务器：安装"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
 
   
-    <meta property="og:image" content>
+    <meta property="og:image" content=""/>
   
 
   
@@ -53,8 +53,9 @@ var _hmt = _hmt || [];
 
   
 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
 </head>
-</html>
+
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -132,58 +133,72 @@ var _hmt = _hmt || [];
 等。而且，很少有人有预算购买云服务，只是为了在云上保存文件。因此，在本教程中，我们将在
 Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 服务器和您的应用程序</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="安装">安装</h2>
 <p>首先在 Centos 7 上为 minio 添加一些用户</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># useradd -s /sbin/nologin -d /opt/minio minio</span><br></pre></td></tr></table></figure>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026160606ebabbfa3555d8f14.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># useradd -s /sbin/nologin -d /opt/minio minio</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026160606ebabbfa3555d8f14.jpeg" /></p>
 <p>并为 minio 应用程序和配置文件创建一些文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /opt/minio/bin</span><br></pre></td></tr></table></figure>
-<p><img src="https://img.picgo.net/2024/10/26/_2024102616071144a7aa8997205fae.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /opt/minio/bin</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://img.picgo.net/2024/10/26/_2024102616071144a7aa8997205fae.jpeg" /></p>
 <p>创建文件夹后，现在下载 minio 二进制文件并将其放入我们之前创建的 minio
 文件夹中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># wget https://dl.minio.io/server/minio/release/linux-amd64/minio -O /opt/minio/bin/minio</span><br></pre></td></tr></table></figure>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026161000bd2b7ceaa08ca171.jpeg"></p>
-<p>修改权限文件以便 minio 二进制文件可以执行 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># chmod +x /opt/minio/bin/minio</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://img.picgo.net/2024/10/26/_2024102616132534159224cdfa9dc8.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># wget https://dl.minio.io/server/minio/release/linux-amd64/minio -O /opt/minio/bin/minio</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026161000bd2b7ceaa08ca171.jpeg" /></p>
+<p>修改权限文件以便 minio 二进制文件可以执行 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># chmod +x /opt/minio/bin/minio</span><br></pre></td></tr></table></figure></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_2024102616132534159224cdfa9dc8.jpeg" /></p>
 <p>现在我们为minio创建配置文件以便于配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /opt/minio/minio.conf</span><br></pre></td></tr></table></figure>
-<p>在配置文件中我们放置了端口、访问密钥和密钥等环境信息 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://img.picgo.net/2024/10/26/_202410261615141a2e611bf8cc6138.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /opt/minio/minio.conf</span><br></pre></td></tr></table></figure>
+<p>在配置文件中我们放置了端口、访问密钥和密钥等环境信息
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_202410261615141a2e611bf8cc6138.jpeg" /></p>
 <p>之后我们为 minio
 存储文件创建一些文件夹，并确保我们使用的路径文件夹与我们放在配置文件
 (/opt/minio/minio.conf) 上的路径文件夹相同，并将所有者更改为 minio
 用户</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /var/www/minio_storage/ </span><br><span class="line"># chown -R minio:minio /var/www/minio_storage/</span><br></pre></td></tr></table></figure>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026161641e10e03c5213e1575.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># mkdir -p /var/www/minio_storage/ </span><br><span class="line"># chown -R minio:minio /var/www/minio_storage/</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026161641e10e03c5213e1575.jpeg" /></p>
 <p>现在我们创建系统文件服务，以便 minio 可以作为后台服务运行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/systemd/system/minio.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/systemd/system/minio.service</span><br></pre></td></tr></table></figure>
 <p>并将脚本服务放在该文件上，像这样</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Minio</span><br><span class="line">Documentation=https://docs.minio.io</span><br><span class="line">Wants=network-online.target</span><br><span class="line">After=network-online.target</span><br><span class="line">AssertFileIsExecutable=/opt/minio/bin/minio</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/opt/minio</span><br><span class="line">User=minio</span><br><span class="line">Group=minio</span><br><span class="line">PermissionsStartOnly=true</span><br><span class="line">EnvironmentFile=-/opt/minio/minio.conf</span><br><span class="line">ExecStartPre=/bin/bash -c &quot;[ -n \&quot;$&#123;MINIO_VOLUMES&#125;\&quot; ] || echo \&quot;Variable MINIO_VOLUMES not set in /opt/minio/minio.conf\&quot;&quot;</span><br><span class="line">ExecStart=/opt/minio/bin/minio server $MINIO_OPTS $MINIO_VOLUMES</span><br><span class="line">StandardOutput=journal</span><br><span class="line">StandardError=inherit</span><br><span class="line"># Specifies the maximum file descriptor number that can be opened by this process</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"># Disable timeout logic and wait until process is stopped</span><br><span class="line">TimeoutStopSec=0</span><br><span class="line"># SIGTERM signal is used to stop Minio</span><br><span class="line">KillSignal=SIGTERM</span><br><span class="line">SendSIGKILL=no</span><br><span class="line">SuccessExitStatus=0</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Minio</span><br><span class="line">Documentation=https://docs.minio.io</span><br><span class="line">Wants=network-online.target</span><br><span class="line">After=network-online.target</span><br><span class="line">AssertFileIsExecutable=/opt/minio/bin/minio</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/opt/minio</span><br><span class="line">User=minio</span><br><span class="line">Group=minio</span><br><span class="line">PermissionsStartOnly=true</span><br><span class="line">EnvironmentFile=-/opt/minio/minio.conf</span><br><span class="line">ExecStartPre=/bin/bash -c &quot;[ -n \&quot;$&#123;MINIO_VOLUMES&#125;\&quot; ] || echo \&quot;Variable MINIO_VOLUMES not set in /opt/minio/minio.conf\&quot;&quot;</span><br><span class="line">ExecStart=/opt/minio/bin/minio server $MINIO_OPTS $MINIO_VOLUMES</span><br><span class="line">StandardOutput=journal</span><br><span class="line">StandardError=inherit</span><br><span class="line"># Specifies the maximum file descriptor number that can be opened by this process</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"># Disable timeout logic and wait until process is stopped</span><br><span class="line">TimeoutStopSec=0</span><br><span class="line"># SIGTERM signal is used to stop Minio</span><br><span class="line">KillSignal=SIGTERM</span><br><span class="line">SendSIGKILL=no</span><br><span class="line">SuccessExitStatus=0</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
 <p>使用以下方法在 Centos 7 上重新加载系统守护进程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl daemon-reload</span><br></pre></td></tr></table></figure>
 <p>现在启动并启用 minio 服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start minio </span><br><span class="line"># systemctl enable minio</span><br></pre></td></tr></table></figure>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026164329f7deae00ee883032.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start minio </span><br><span class="line"># systemctl enable minio</span><br></pre></td></tr></table></figure>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026164329f7deae00ee883032.jpeg" /></p>
 <p>这就是在 Centos 7 上安装和设置 minio 应用程序的方法。</p>
 <h2 id="访问">访问</h2>
 <p>打开浏览器，<code>访问 localhost:9100</code>（或者自己本机的ip:9100）</p>
 <blockquote>
 <p>当访问<code>localhost:9100</code>，minio会自动重定向到<code>localhost:43755</code></p>
 </blockquote>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026164526e6bf5678d438d02f.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026164526e6bf5678d438d02f.jpeg" /></p>
 <p>创建一个Bucket</p>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026165243cf915068b7db5b5f.jpeg"></p>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026165316f9b603218d87209a.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026165243cf915068b7db5b5f.jpeg" /></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026165316f9b603218d87209a.jpeg" /></p>
 <p>并且设置访问权限为<code>public</code></p>
-<p><img src="https://img.picgo.net/2024/10/26/_20241026165405a242600d198385d7.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/10/26/_20241026165405a242600d198385d7.jpeg" /></p>
 <h2 id="年10月28日-补充">2024年10月28日 补充：</h2>
 <p><code>/opt/minio/minio.conf</code>的配置中，设置了<code>MINIO_OPTS="--address:9100"</code>，代表MinIO服务的监听端口和Minio服务UI界面的访问端口都是<code>9100</code>，需要注意的是，当在浏览器输入<code>localhost:9100</code>访问Minio服务的UI界面时，Minio服务会通知浏览器重定向到<code>localhost:45750</code>(重定向后的端口号不固定，可能之后的访问会重定向到<code>45755</code>、或者其他端口号)。</p>
-<p><img src="https://img.picgo.net/2024/10/28/_202410281258444ae432a47c278dbd.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/10/28/_202410281258444ae432a47c278dbd.jpeg" /></p>
 <p>所以可以更改一下<code>/opt/minio/minio.conf</code>的配置，分别设置Minio服务的监听端口和Minio服务UI界面的访问端口.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100 --console-address:43755&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MINIO_VOLUMES=&quot;/var/www/minio_storage/&quot; </span><br><span class="line">MINIO_OPTS=&quot;--address:9100 --console-address:43755&quot; </span><br><span class="line">MINIO_ACCESS_KEY=admin</span><br><span class="line">MINIO_SECRET_KEY=admin123</span><br></pre></td></tr></table></figure>
 <p>重启minio应用，再次访问<code>localhost:9100</code>，浏览器会固定重定向到<code>localhost:43755</code>，并且之后不管什么时候再次访问，重定向后端的端口一直会是<code>43755</code></p>
-<p><img src="https://img.picgo.net/2024/10/28/_2024102813102977d819dd54719606.jpeg"></p>
+<p><img
+src="https://img.picgo.net/2024/10/28/_2024102813102977d819dd54719606.jpeg" /></p>
 	  
 	</div>
 
@@ -193,12 +208,14 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 
     
     
-    <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2023/09/05/Arrays-binarySearch-方法详解/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    <a href="/2023/09/05/Arrays-binarySearch-方法详解/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
 
     
@@ -210,7 +227,21 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 	<!-- comment -->
 	
 <section id="comment">
-    <script src="https://giscus.app/client.js" data-repo="xbronze/giscus" data-repo-id="R_kgDOJ4tM7g" data-category="Announcements" data-category-id="DIC_kwDOJ4tM7s4CXvDw" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async>
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
     </script>
 </section>
 
@@ -235,8 +266,8 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    </li><li><a href="/categories/文件服务器/">文件服务器<span>2</span></a></li>
-  
+    <li><a href="/categories/文件服务器/">文件服务器<span>2</span></a></li>
+  </li>
 
     </ul>
 	</div>
@@ -259,7 +290,7 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#安装"><span class="toc-article-text">安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#访问"><span class="toc-article-text">访问</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#年10月28日-补充"><span class="toc-article-text">2024年10月28日 补充：</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-article-text">安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-article-text">访问</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B9%B410%E6%9C%8828%E6%97%A5-%E8%A1%A5%E5%85%85"><span class="toc-article-text">2024年10月28日 补充：</span></a></li></ol>
 		</div>
 	
 	</div>
@@ -279,10 +310,10 @@ Centos 7 上设置 minio 服务器，并设置 Nginx 以安全连接 minio
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2024 xuzh
+  &copy; 2025 xuzh
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
-     <br> Theme by <a href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
 </p>
  </footer>
 </div> <!-- container-narrow -->
