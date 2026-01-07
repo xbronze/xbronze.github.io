@@ -132,6 +132,39 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/" >Arrays.asList()生成的对象不能执行add()的操作</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-01-12  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>之前项目上，有使用 Arrays.asList()
+创建一个List集合，并在后续的操作中使用之前创建的List集合继续 add()
+添加元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="string">&quot;one&quot;</span>, <span class="string">&quot;two&quot;</span>, <span class="string">&quot;three&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;five&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>运行项目却在 list.add("five"); 处报错： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.UnsupportedOperationException</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:148)</span><br><span class="line">	at java.util.AbstractList.add(AbstractList.java:108)</span><br><span class="line">	...</span><br></pre></td></tr></table></figure></p>
+<p>网上搜索资料得知， Arrays.asList() 生成的 ArrayList 对象是 Arrays
+自己的内部类对象</p>
+	
+	</div>
+  <a type="button" href="/2023/01/12/Arrays-asList-生成的对象不能执行add-的操作/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2022/11/03/关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题/" >关于《软件设计师教程第5版》UML构件图两类接口描述错误的问题</a>
 		</h3>
 		</div>
@@ -407,38 +440,6 @@ Fleet文档</a>创建maven项目.</p>
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/" >不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-03-26  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<blockquote>
-<p>文章来自 <a
-target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">Hollis</a></p>
-</blockquote>
-<p>数据库查询相信很多人都不陌生，所有经常有人调侃程序员就是CRUD专员，这所谓的CRUD指的就是数据库的增删改查。</p>
-<p>在数据库的增删改查操作中，使用最频繁的就是查询操作。而在所有查询操作中，统计数量操作更是经常被用到。</p>
-	
-	</div>
-  <a type="button" href="/2020/03/26/不就是SELECT COUNT语句吗，竟然能被面试官虐的体无完肤/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -496,7 +497,7 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
 		
 			<li><a href="/categories/MySQL/代码人生/">代码人生<span>1</span></a></li>
 		
-			<li><a href="/categories/兴趣使然/">兴趣使然<span>2</span></a></li>
+			<li><a href="/categories/兴趣使然/">兴趣使然<span>3</span></a></li>
 		
 			<li><a href="/categories/升级之路/">升级之路<span>1</span></a></li>
 		
@@ -521,48 +522,48 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
-		
-			<li><a href="/tags/UML/">UML<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
 			<li><a href="/tags/List/">List<span>1</span></a></li>
 		
-			<li><a href="/tags/Spring-Cloud-Config/">Spring Cloud Config<span>1</span></a></li>
-		
-			<li><a href="/tags/jstl/">jstl<span>1</span></a></li>
-		
-			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
-		
-			<li><a href="/tags/事务/">事务<span>1</span></a></li>
-		
-			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
-		
-			<li><a href="/tags/tomcat/">tomcat<span>1</span></a></li>
+			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
 		
 			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
 		
-			<li><a href="/tags/SSO/">SSO<span>1</span></a></li>
+			<li><a href="/tags/COUNT/">COUNT<span>1</span></a></li>
 		
-			<li><a href="/tags/Integer/">Integer<span>1</span></a></li>
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
 		
-			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
+			<li><a href="/tags/单例模式/">单例模式<span>1</span></a></li>
 		
-			<li><a href="/tags/retainAll/">retainAll()<span>1</span></a></li>
+			<li><a href="/tags/设计模式/">设计模式<span>3</span></a></li>
 		
 			<li><a href="/tags/软件设计/">软件设计<span>1</span></a></li>
 		
-			<li><a href="/tags/存储过程/">存储过程<span>1</span></a></li>
+			<li><a href="/tags/线程/">线程<span>2</span></a></li>
 		
-			<li><a href="/tags/货币/">货币<span>1</span></a></li>
+			<li><a href="/tags/group-concat/">group_concat<span>2</span></a></li>
 		
-			<li><a href="/tags/field-injection/">field injection<span>1</span></a></li>
+			<li><a href="/tags/SpringCloud/">SpringCloud<span>2</span></a></li>
 		
-			<li><a href="/tags/maven/">maven<span>1</span></a></li>
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+		
+			<li><a href="/tags/c-programming/">c programming<span>1</span></a></li>
+		
+			<li><a href="/tags/Oracle/">Oracle<span>3</span></a></li>
+		
+			<li><a href="/tags/ArrayList/">ArrayList<span>1</span></a></li>
+		
+			<li><a href="/tags/MySQL/">MySQL<span>8</span></a></li>
+		
+			<li><a href="/tags/Double-String/">Double - String<span>1</span></a></li>
+		
+			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
+		
+			<li><a href="/tags/矛盾论/">矛盾论<span>1</span></a></li>
+		
+			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>70</span></a></li>
+		   <li><a href="/tags">...<span>71</span></a></li>
 		 
 		</ul>
 	</div>
@@ -573,6 +574,10 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2026/01/07/少年心气是不可再生之物/" ><i class="fa fa-file-o"></i>少年心气是不可再生之物</a>
+      </li>
     
       <li>
         <a href="/2025/12/31/不要尝试一次性解决所有问题，因为问题的背后还是问题/" ><i class="fa fa-file-o"></i>不要尝试一次性解决所有问题，因为问题的背后还是问题</a>
@@ -588,10 +593,6 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
     
       <li>
         <a href="/2024/11/15/Tomcat10-1-x使用JSTL标签库/" ><i class="fa fa-file-o"></i>Tomcat10.1.x使用JSTL标签库</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/27/Minio文件服务器：SpringBoot实现文件上传/" ><i class="fa fa-file-o"></i>Minio文件服务器：SpringBoot实现文件上传</a>
       </li>
     
   </ul>
