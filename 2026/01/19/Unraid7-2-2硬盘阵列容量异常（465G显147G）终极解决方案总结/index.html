@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Unraid7.2.2硬盘阵列容量异常（465G显147G）终极解决方案总结 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="Unraid
+7.2.2 硬盘阵列容量异常（465G显147G）终极解决方案总结
+一、问题概述
+场景描述
+
+硬件：3块物理硬盘（/dev/sdb、/dev/sdc、/dev/sdd），单盘物理容量约465.8G（系统按1024进制识别为490G左右）；
+需求：纯命令行格式化、单分区、Unraid原生XFS格式，加入阵列（Array）Slots使用；
+异常现象：命令行格式化后加入阵列，硬盘可用容量仅显示147G/150G，物理容量被大量隐藏，lsblk可确认硬盘本身为完整465.8G裸盘。
+
+最终结果
+所有硬盘均成功恢复490G左右满容可用，状态为：单分区+XFS格式+阵列稳定挂载+重启自动复现+无任何残留/报错，达到Unraid阵列硬盘最优工作状态。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Unraid7.2.2硬盘阵列容量异常（465G显147G）终极解决方案总结"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Unraid7.2.2硬盘阵列容量异常（465G显147G）终极解决方案总结</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="unraid-7.2.2-硬盘阵列容量异常465g显147g终极解决方案总结">Unraid
+7.2.2 硬盘阵列容量异常（465G显147G）终极解决方案总结</h1>
+<h1 id="一问题概述">一、问题概述</h1>
+<h3 id="场景描述">场景描述</h3>
+<ol type="1">
+<li>硬件：3块物理硬盘（/dev/sdb、/dev/sdc、/dev/sdd），单盘物理容量约465.8G（系统按1024进制识别为490G左右）；</li>
+<li>需求：纯命令行格式化、单分区、Unraid原生XFS格式，加入阵列（Array）Slots使用；</li>
+<li>异常现象：命令行格式化后加入阵列，硬盘可用容量仅显示147G/150G，物理容量被大量隐藏，lsblk可确认硬盘本身为完整465.8G裸盘。</li>
+</ol>
+<h3 id="最终结果">最终结果</h3>
+<p>所有硬盘均成功恢复490G左右满容可用，状态为：单分区+XFS格式+阵列稳定挂载+重启自动复现+无任何残留/报错，达到Unraid阵列硬盘最优工作状态。</p>
+<span id="more"></span>
+<h1 id="二核心根因unraid-7.2.2-专属特性">二、核心根因（Unraid 7.2.2
+专属特性）</h1>
+<p>问题为纯软件层面的“容量识别锁死”，非硬盘硬件故障、分区错误或格式化失败，核心由三重因素叠加导致：</p>
+<ol type="1">
+<li>内存级顽固缓存：Unraid
+7.2.2将硬盘旧容量信息写入内存缓存，常规刷新命令（udevadm/partprobe）无法清除，仅重启可彻底清空；</li>
+<li>虚拟阵列分区锁容：系统自动创建虚拟阵列设备（/dev/md1）及分区（/dev/md1p1），强制沿用旧模板划147G分区，无视硬盘真实容量；</li>
+<li>硬盘元数据残留：硬盘头部/尾部残留旧阵列超级块、分区表签名，普通清盘命令（dd清头尾）无法彻底抹除，导致系统复用旧配置。</li>
+</ol>
+<h1 id="三前置准备必做避免误操作">三、前置准备（必做，避免误操作）</h1>
+<ol type="1">
+<li><p>数据备份：格式化/清盘会彻底清空硬盘数据，确认目标硬盘无重要数据后操作；</p></li>
+<li><p>停止阵列：登录Unraid WebUI → 顶部「Main」→ 底部「Array
+Operation」→
+点击「Stop」，等待阵列状态变为「Stopped」，目标硬盘回到「Unassigned」状态；</p></li>
+<li><p>确认硬盘状态：执行命令
+<code>lsblk /dev/sdb</code>（替换为目标硬盘），输出显示“无分区、容量465G左右”即为纯净裸盘，可继续操作。</p></li>
+</ol>
+<h1
+id="四解决方案分单盘修复批量修复均实测可用">四、解决方案（分单盘修复、批量修复，均实测可用）</h1>
+<h2 id="单盘修复以devsdb为例适配单块硬盘">4.1
+单盘修复（以/dev/sdb为例，适配单块硬盘）</h2>
+<ol type="1">
+<li><p>强制卸载+解除占用：彻底释放硬盘及关联虚拟分区的进程占用，避免清盘失败。
+<code>fuser -km /dev/sdb &amp;&amp; umount -lf /dev/sdb* /dev/md1* /mnt/disk1 &amp;&gt;/dev/null</code>
+无报错即成功，若有进程提示属正常现象。</p></li>
+<li><p>彻底清盘（出厂级）：使用sgdisk命令抹除所有分区表、签名及元数据，速度快、无硬盘损耗，优于dd命令。
+<code>sgdisk --zap-all /dev/sdb &amp;&amp; sgdisk --clear /dev/sdb &amp;&amp; sync</code>
+输出“Creating new GPT entries.”即为成功。</p></li>
+<li><p>清除系统缓存：删除阵列及磁盘识别缓存文件，避免重启后复用旧配置。
+<code>rm -rf /var/run/mdadm/* /var/lib/blkid/* &amp;&gt;/dev/null udevadm trigger &amp;&amp; udevadm settle &amp;&amp; partprobe &amp;&amp; sync</code>
+无输出即成功。</p></li>
+<li><p>重启Unraid（核心步骤）：仅重启可彻底清空内存顽固缓存，让系统对硬盘“完全失忆”。
+<code>reboot</code></p></li>
+<li><p>重新分配阵列：重启后登录WebUI → 「Main」→
+阵列插槽下拉框选择「/dev/sdb」→
+底部点击「Start」启动阵列，无需额外操作（系统自动创建满容分区+XFS格式化+挂载）。</p></li>
+</ol>
+<h2 id="批量修复适配sdbsdcsdd三块硬盘一键复刻">4.2
+批量修复（适配sdb/sdc/sdd三块硬盘，一键复刻）</h2>
+<p>适用于多块硬盘同故障场景，复用单盘成功逻辑，无需逐块操作，效率拉满。</p>
+<ol type="1">
+<li><p>前置准备：停止阵列，确保sdb/sdc/sdd均为「Unassigned」裸盘状态；</p></li>
+<li><p>批量清盘+解除占用+清缓存：</p></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> disk <span class="keyword">in</span> sdb sdc sdd; <span class="keyword">do</span></span><br><span class="line">  fuser -km /dev/<span class="variable">$&#123;disk&#125;</span> &amp;&amp; umount -lf /dev/<span class="variable">$&#123;disk&#125;</span>* &amp;&gt;/dev/null</span><br><span class="line">  sgdisk --zap-all /dev/<span class="variable">$&#123;disk&#125;</span> &amp;&amp; sgdisk --clear /dev/<span class="variable">$&#123;disk&#125;</span> &amp;&amp; <span class="built_in">sync</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">rm</span> -rf /var/run/mdadm/* /var/lib/blkid/* &amp;&gt;/dev/null</span><br><span class="line">udevadm trigger &amp;&amp; udevadm settle &amp;&amp; partprobe &amp;&amp; <span class="built_in">sync</span></span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li><p>重启Unraid：<code>reboot</code>；</p></li>
+<li><p>批量分配阵列：重启后WebUI → 「Main」→
+将sdb/sdc/sdd分别分配到对应阵列插槽 →
+点击「Start」启动阵列，系统自动完成后续配置。</p></li>
+</ol>
+<h1
+id="五验证方法确认容量恢复正常">五、验证方法（确认容量恢复正常）</h1>
+<p>阵列启动完成后，执行以下命令验证，满足任一条件即为成功：</p>
+<ol type="1">
+<li><p>查看挂载容量+格式：
+<code>df -hT | grep -E 'disk1|disk2|disk3'</code>
+成功特征：容量显示490G左右，FSTYPE为xfs，Used仅几十MB；</p></li>
+<li><p>查看硬盘分区+容量： <code>lsblk -f</code>
+成功特征：sdb1/sdc1/sdd1均为单分区，容量490G左右，TYPE为xfs；</p></li>
+<li><p>WebUI可视化验证：「Main」页面阵列硬盘显示「Active」，Free空间≈490G，无报错。</p></li>
+</ol>
+<h1
+id="六永久避坑核心铁律unraid-7.2.2-专属">六、永久避坑核心铁律（Unraid
+7.2.2 专属）</h1>
+<ol type="1">
+<li><p>重启是缓存问题的终极解法：内存级缓存无法通过刷新命令清除，清盘后必须重启，否则容量锁死问题会复现；</p></li>
+<li><p>阵列盘清盘首选sgdisk：<code>sgdisk --zap-all</code>
+比dd命令更高效、无损耗，能彻底抹除所有元数据残留；</p></li>
+<li><p>阵列盘需为纯净裸盘：加入阵列Slots的硬盘禁止手动分区/格式化，由Unraid自动接管（创建分区+格式化+挂载），手动操作会触发容量异常；</p></li>
+<li><p>7.2.2无mdadm命令：系统阉割了mdadm用户权限，无需纠结该命令，所有操作可通过原生命令+WebUI完成。</p></li>
+</ol>
+<h1 id="七常用运维命令收藏备用">七、常用运维命令（收藏备用）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 1. 强制卸载硬盘/挂载点</span></span><br><span class="line">umount -lf /mnt/disk1</span><br><span class="line">fuser -km /dev/sdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 单盘彻底清盘（阵列盘首选）</span></span><br><span class="line">sgdisk --zap-all /dev/sdb &amp;&amp; sgdisk --clear /dev/sdb &amp;&amp; <span class="built_in">sync</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 磁盘识别刷新</span></span><br><span class="line">udevadm trigger &amp;&amp; udevadm settle &amp;&amp; partprobe</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看硬盘物理容量+分区</span></span><br><span class="line">lsblk /dev/sdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 查看所有硬盘挂载状态</span></span><br><span class="line"><span class="built_in">df</span> -hT</span><br></pre></td></tr></table></figure>
+<h1 id="八总结">八、总结</h1>
+<p>本方案针对Unraid
+7.2.2版本“硬盘加入阵列后容量锁死”问题，核心逻辑为「彻底清盘抹除残留+重启清空内存缓存+系统自动重建配置」，全程使用原生命令，无mdadm依赖，单盘/批量操作均适配。操作完成后，硬盘可稳定以满容状态工作，重启后自动挂载，无任何异常，可直接用于生产环境运维。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2026/01/28/单例模式会在什么场景下被破坏/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/01/07/少年心气是不可再生之物/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2026-01-19 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#unraid-7.2.2-%E7%A1%AC%E7%9B%98%E9%98%B5%E5%88%97%E5%AE%B9%E9%87%8F%E5%BC%82%E5%B8%B8465g%E6%98%BE147g%E7%BB%88%E6%9E%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93"><span class="toc-article-text">Unraid
+7.2.2 硬盘阵列容量异常（465G显147G）终极解决方案总结</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%80%E9%97%AE%E9%A2%98%E6%A6%82%E8%BF%B0"><span class="toc-article-text">一、问题概述</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9C%BA%E6%99%AF%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">场景描述</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C"><span class="toc-article-text">最终结果</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BA%8C%E6%A0%B8%E5%BF%83%E6%A0%B9%E5%9B%A0unraid-7.2.2-%E4%B8%93%E5%B1%9E%E7%89%B9%E6%80%A7"><span class="toc-article-text">二、核心根因（Unraid 7.2.2
+专属特性）</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%89%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E5%BF%85%E5%81%9A%E9%81%BF%E5%85%8D%E8%AF%AF%E6%93%8D%E4%BD%9C"><span class="toc-article-text">三、前置准备（必做，避免误操作）</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%9B%9B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%88%86%E5%8D%95%E7%9B%98%E4%BF%AE%E5%A4%8D%E6%89%B9%E9%87%8F%E4%BF%AE%E5%A4%8D%E5%9D%87%E5%AE%9E%E6%B5%8B%E5%8F%AF%E7%94%A8"><span class="toc-article-text">四、解决方案（分单盘修复、批量修复，均实测可用）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%95%E7%9B%98%E4%BF%AE%E5%A4%8D%E4%BB%A5devsdb%E4%B8%BA%E4%BE%8B%E9%80%82%E9%85%8D%E5%8D%95%E5%9D%97%E7%A1%AC%E7%9B%98"><span class="toc-article-text">4.1
+单盘修复（以&#x2F;dev&#x2F;sdb为例，适配单块硬盘）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%B9%E9%87%8F%E4%BF%AE%E5%A4%8D%E9%80%82%E9%85%8Dsdbsdcsdd%E4%B8%89%E5%9D%97%E7%A1%AC%E7%9B%98%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%BB"><span class="toc-article-text">4.2
+批量修复（适配sdb&#x2F;sdc&#x2F;sdd三块硬盘，一键复刻）</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%BA%94%E9%AA%8C%E8%AF%81%E6%96%B9%E6%B3%95%E7%A1%AE%E8%AE%A4%E5%AE%B9%E9%87%8F%E6%81%A2%E5%A4%8D%E6%AD%A3%E5%B8%B8"><span class="toc-article-text">五、验证方法（确认容量恢复正常）</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%85%AD%E6%B0%B8%E4%B9%85%E9%81%BF%E5%9D%91%E6%A0%B8%E5%BF%83%E9%93%81%E5%BE%8Bunraid-7.2.2-%E4%B8%93%E5%B1%9E"><span class="toc-article-text">六、永久避坑核心铁律（Unraid
+7.2.2 专属）</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E4%B8%83%E5%B8%B8%E7%94%A8%E8%BF%90%E7%BB%B4%E5%91%BD%E4%BB%A4%E6%94%B6%E8%97%8F%E5%A4%87%E7%94%A8"><span class="toc-article-text">七、常用运维命令（收藏备用）</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%85%AB%E6%80%BB%E7%BB%93"><span class="toc-article-text">八、总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2026 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

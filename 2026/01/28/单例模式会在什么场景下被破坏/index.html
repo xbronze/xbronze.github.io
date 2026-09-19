@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>单例模式会在什么场景下被破坏? | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="单例模式的核心是保证类的实例全局唯一，但在一些特殊场景下，这个约束会被突破，下面结合代码示例说明原因和解决办法。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="单例模式会在什么场景下被破坏?"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 单例模式会在什么场景下被破坏?</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>单例模式的核心是保证类的实例全局唯一，但在一些特殊场景下，这个约束会被突破，下面结合代码示例说明原因和解决办法。</p>
+<span id="more"></span>
+<h2 id="反射机制破坏单例">1. 反射机制破坏单例</h2>
+<p><strong>原因</strong>：单例模式通常会把构造方法私有化（<code>private</code>），但Java的反射机制可以强制访问私有构造方法，从而创建新的实例，直接破坏单例。
+<strong>代码示例（破坏过程）</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 经典的懒汉式单例（未做防反射处理）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LazySingleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LazySingleton instance;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 私有构造方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazySingleton</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> <span class="title class_">LazySingleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试反射破坏单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestReflect</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 获取正常的单例实例</span></span><br><span class="line">        <span class="type">LazySingleton</span> <span class="variable">instance1</span> <span class="operator">=</span> LazySingleton.getInstance();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 通过反射获取私有构造器，创建新实例</span></span><br><span class="line">        Class&lt;LazySingleton&gt; clazz = LazySingleton.class;</span><br><span class="line">        java.lang.reflect.Constructor&lt;LazySingleton&gt; constructor = clazz.getDeclaredConstructor();</span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>); <span class="comment">// 强制访问私有构造器</span></span><br><span class="line">        <span class="type">LazySingleton</span> <span class="variable">instance2</span> <span class="operator">=</span> constructor.newInstance();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 结果：false，说明创建了两个不同的实例</span></span><br><span class="line">        System.out.println(instance1 == instance2); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>解决办法</strong>：在私有构造方法中添加校验，若已有实例则抛出异常，阻止反射创建新实例：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="title function_">LazySingleton</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 防反射：如果已有实例，直接抛异常</span></span><br><span class="line">    <span class="keyword">if</span> (instance != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;禁止通过反射创建多个实例&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="序列化反序列化破坏单例">2. 序列化/反序列化破坏单例</h2>
+<p><strong>原因</strong>：如果单例类实现了<code>Serializable</code>接口，当把单例对象序列化后写入文件，再反序列化读取时，会创建一个全新的实例（反序列化会绕过构造方法）。
+<strong>代码示例（破坏过程）</strong>： <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现Serializable的单例类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SerializableSingleton</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="comment">// 饿汉式单例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">SerializableSingleton</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SerializableSingleton</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">SerializableSingleton</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> SerializableSingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试序列化破坏单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSerialize</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">SerializableSingleton</span> <span class="variable">instance1</span> <span class="operator">=</span> SerializableSingleton.getInstance();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 序列化到文件</span></span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;singleton.txt&quot;</span>));</span><br><span class="line">        oos.writeObject(instance1);</span><br><span class="line">        oos.close();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 反序列化读取</span></span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;singleton.txt&quot;</span>));</span><br><span class="line">        <span class="type">SerializableSingleton</span> <span class="variable">instance2</span> <span class="operator">=</span> (SerializableSingleton) ois.readObject();</span><br><span class="line">        ois.close();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 结果：false，反序列化创建了新实例</span></span><br><span class="line">        System.out.println(instance1 == instance2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<strong>解决办法</strong>：在单例类中添加<code>readResolve()</code>方法，该方法会在反序列化时被调用，返回已有的单例实例：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 反序列化时调用此方法，返回已有实例</span></span><br><span class="line"><span class="keyword">private</span> Object <span class="title function_">readResolve</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="克隆clone方法破坏单例">3. 克隆（clone）方法破坏单例</h2>
+<p><strong>原因</strong>：如果单例类实现了<code>Cloneable</code>接口，调用<code>clone()</code>方法会创建新的实例（<code>clone()</code>默认是浅拷贝，不会调用构造方法）。
+<strong>代码示例（破坏过程）</strong>： <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实现Cloneable的单例类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CloneableSingleton</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">CloneableSingleton</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CloneableSingleton</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">CloneableSingleton</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> CloneableSingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 重写clone方法（默认继承自Object，protected修饰）</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.clone(); <span class="comment">// 调用父类的clone，创建新实例</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试克隆破坏单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestClone</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">CloneableSingleton</span> <span class="variable">instance1</span> <span class="operator">=</span> CloneableSingleton.getInstance();</span><br><span class="line">        <span class="type">CloneableSingleton</span> <span class="variable">instance2</span> <span class="operator">=</span> (CloneableSingleton) instance1.clone();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 结果：false，克隆创建了新实例</span></span><br><span class="line">        System.out.println(instance1 == instance2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<strong>解决办法</strong>：重写<code>clone()</code>方法，直接返回已有的单例实例，而非创建新实例：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">    <span class="keyword">return</span> instance; <span class="comment">// 返回已有单例，不创建新实例</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="多线程环境下懒汉式未正确同步">4.
+多线程环境下（懒汉式未正确同步）</h2>
+<p><strong>原因</strong>：简单的懒汉式单例未加锁或锁粒度不当，多线程并发调用<code>getInstance()</code>时，可能同时进入“实例为空”的判断逻辑，导致多个线程各自创建实例。
+<strong>代码示例（破坏过程）</strong>： <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 未加锁的懒汉式单例（线程不安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UnsafeLazySingleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> UnsafeLazySingleton instance;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">UnsafeLazySingleton</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> UnsafeLazySingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 多线程并发时，多个线程可能同时进入这里</span></span><br><span class="line">            instance = <span class="keyword">new</span> <span class="title class_">UnsafeLazySingleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试多线程破坏</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestMultiThread</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 启动10个线程，获取实例并打印哈希值</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">                System.out.println(UnsafeLazySingleton.getInstance().hashCode());</span><br><span class="line">            &#125;).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出：会出现多个不同的哈希值，说明创建了多个实例</span></span><br></pre></td></tr></table></figure>
+<strong>解决办法</strong>：使用<strong>双重检查锁（DCL）+
+volatile</strong> 保证线程安全（推荐），或改用静态内部类/饿汉式实现：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SafeLazySingleton</span> &#123;</span><br><span class="line">    <span class="comment">// volatile防止指令重排，保证实例初始化完成后才被其他线程可见</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SafeLazySingleton instance;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">SafeLazySingleton</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> SafeLazySingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 第一层检查：避免每次获取实例都加锁</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 加锁：保证同一时间只有一个线程进入</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SafeLazySingleton.class) &#123;</span><br><span class="line">                <span class="comment">// 第二层检查：防止多个线程等待锁后重复创建</span></span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">SafeLazySingleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="多个类加载器加载同一个单例类">5.
+多个类加载器加载同一个单例类</h2>
+<p><strong>原因</strong>：Java中“类的唯一性”由“类加载器 +
+全类名”共同决定，不同的类加载器加载同一个单例类时，会生成不同的<code>Class</code>对象，每个<code>Class</code>对象对应一个实例，导致多个单例。
+<strong>典型场景</strong>：Web应用中，不同的Web模块（如WAR包）使用各自的类加载器，加载同一个单例类，会产生多个实例。
+<strong>解决办法</strong>：指定统一的类加载器加载单例类（如使用JVM的系统类加载器），或通过上下文类加载器统一管理。</p>
+<h2 id="多jvm多进程环境">6. 多JVM/多进程环境</h2>
+<p><strong>原因</strong>：单例模式的作用域是<strong>单个JVM进程</strong>，在分布式系统、多进程部署的场景下，每个JVM进程都会创建自己的单例实例，全局来看就有多个实例。
+<strong>说明</strong>：这不是“单例被破坏”，而是单例的作用域限制，若需全局唯一，需借助分布式锁（如Redis、Zookeeper）或中心化存储来保证。</p>
+<h2 id="总结">总结</h2>
+<ol type="1">
+<li><strong>核心破坏原因</strong>：反射/序列化/克隆是通过“绕过私有构造方法”创建新实例；多线程是“并发创建”；多类加载器是“类元信息不唯一”；多JVM是“单例作用域受限”。</li>
+<li><strong>关键解决思路</strong>：防反射需在构造方法加校验，防序列化需重写<code>readResolve()</code>，防克隆需重写<code>clone()</code>，多线程需用DCL+volatile，多类加载器需统一加载器，多JVM需分布式锁。</li>
+<li><strong>最佳实践</strong>：优先使用“静态内部类”或“枚举单例”（枚举天然防反射、序列化，是最安全的单例实现）。</li>
+</ol>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2026/09/19/RFID系统之激活RC522/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/01/19/Unraid7-2-2硬盘阵列容量异常（465G显147G）终极解决方案总结/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2026-01-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/代码人生/">代码人生<span>19</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/单例模式/">单例模式<span>2</span></a> <a href="/tags/设计模式/">设计模式<span>4</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%A0%B4%E5%9D%8F%E5%8D%95%E4%BE%8B"><span class="toc-article-text">1. 反射机制破坏单例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%A0%B4%E5%9D%8F%E5%8D%95%E4%BE%8B"><span class="toc-article-text">2. 序列化&#x2F;反序列化破坏单例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%8B%E9%9A%86clone%E6%96%B9%E6%B3%95%E7%A0%B4%E5%9D%8F%E5%8D%95%E4%BE%8B"><span class="toc-article-text">3. 克隆（clone）方法破坏单例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%8E%AF%E5%A2%83%E4%B8%8B%E6%87%92%E6%B1%89%E5%BC%8F%E6%9C%AA%E6%AD%A3%E7%A1%AE%E5%90%8C%E6%AD%A5"><span class="toc-article-text">4.
+多线程环境下（懒汉式未正确同步）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%9A%E4%B8%AA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8A%A0%E8%BD%BD%E5%90%8C%E4%B8%80%E4%B8%AA%E5%8D%95%E4%BE%8B%E7%B1%BB"><span class="toc-article-text">5.
+多个类加载器加载同一个单例类</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A4%9Ajvm%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83"><span class="toc-article-text">6. 多JVM&#x2F;多进程环境</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2026 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

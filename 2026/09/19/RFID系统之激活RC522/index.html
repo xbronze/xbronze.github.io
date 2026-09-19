@@ -1,0 +1,509 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>RFID系统之激活RC522 | 徐子辉的个人站点</title>
+  <meta name="author" content="xuzh">
+  
+  <meta name="description" content="STM32+RC522实现一个简单的读IC的唯一识别号的功能，使用的时STM32F103C8T6和RC522两块板子，使用STM32CubeMX创建项目，Keil 5编辑项目。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="RFID系统之激活RC522"/>
+  <meta property="og:site_name" content="徐子辉的个人站点"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?5d4268fe3f695d6111d5659760d4d452";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="徐子辉的个人站点" type="application/atom+xml">
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">徐子辉的个人站点</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> RFID系统之激活RC522</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>STM32+RC522实现一个简单的读IC的唯一识别号的功能，使用的时<code>STM32F103C8T6</code>和<code>RC522</code>两块板子，使用<code>STM32CubeMX</code>创建项目，<code>Keil 5</code>编辑项目。</p>
+<span id="more"></span>
+<h2 id="一stm32cubemx-配置清单">一、STM32CubeMX 配置清单</h2>
+<h3 id="新建工程">1. 新建工程</h3>
+<ul>
+<li>芯片选择 <strong>STM32F103C8Tx</strong>（LQFP48 封装）</li>
+</ul>
+<p></br></p>
+<h3 id="system-core">2. System Core</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>配置项</th>
+<th>值</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SYS → Debug</strong></td>
+<td><code>Serial Wire</code></td>
+<td>⚠️ 必选！否则 ST-Link 烧录一次后芯片被锁</td>
+</tr>
+<tr class="even">
+<td><strong>RCC → HSE</strong></td>
+<td><code>Crystal/Ceramic Resonator</code></td>
+<td>使用板载 8MHz 晶振</td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<h3 id="时钟树clock-configuration-页">3. 时钟树（Clock Configuration
+页）</h3>
+<ul>
+<li>HSE = 8MHz → PLL Source = HSE → <strong>×9</strong> → SYSCLK =
+<strong>72MHz</strong></li>
+<li>AHB = 72MHz、APB1 = <strong>36MHz</strong>（÷2）、APB2 =
+<strong>72MHz</strong></li>
+</ul>
+<p></br></p>
+<h3 id="connectivity-spi1full-duplex-master">4. Connectivity →
+SPI1（Full-Duplex Master）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>参数</th>
+<th>值</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Frame Format</td>
+<td>Motorola</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Data Size</td>
+<td>8 Bits</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>First Bit</strong></td>
+<td>MSB First</td>
+<td>RC522 寄存器地址高位在前</td>
+</tr>
+<tr class="even">
+<td><strong>Prescaler</strong></td>
+<td>32（APB2 72MHz÷32 = <strong>2.25MHz</strong>）</td>
+<td>RC522 手册上限 10MHz，调试期保守些更稳</td>
+</tr>
+<tr class="odd">
+<td><strong>CPOL</strong></td>
+<td>Low</td>
+<td>模式 0</td>
+</tr>
+<tr class="even">
+<td><strong>CPHA</strong></td>
+<td>1 Edge</td>
+<td>模式 0</td>
+</tr>
+<tr class="odd">
+<td><strong>NSS</strong></td>
+<td>Software</td>
+<td>片选必须手动拉低/拉高，不能用硬件 NSS</td>
+</tr>
+<tr class="even">
+<td>CRC</td>
+<td>Disabled</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<h3 id="gpio-手动配置在芯片图上点引脚">5. GPIO
+手动配置（在芯片图上点引脚）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>引脚</th>
+<th>配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PA3 → <code>GPIO_Output</code></td>
+<td>上电默认 <strong>High</strong></td>
+<td>接 RC522 的 <strong>RST</strong>（驱动里会主动复位）</td>
+</tr>
+<tr class="even">
+<td>PA4 → <code>GPIO_Output</code></td>
+<td>上电默认 <strong>High</strong></td>
+<td>接 RC522 的 <strong>SDA/NSS</strong>，高电平=不选中</td>
+</tr>
+<tr class="odd">
+<td>PA5/PA6/PA7</td>
+<td>SPI1 自动分配（SCK/MISO/MOSI）</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>PA9/PA10</td>
+<td>USART1 自动分配（TX/RX）</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<h3 id="connectivity-usart1">6. Connectivity → USART1</h3>
+<ul>
+<li>Connectivity → USART1 → Mode 选 Asynchronous</li>
+</ul>
+<p>Parameter Settings：</p>
+<ul>
+<li>Baud Rate：115200</li>
+<li>Word Length：8 Bits</li>
+<li>Parity：None</li>
+<li>Stop Bits：1</li>
+</ul>
+<p></br></p>
+<h3 id="project-manager">7. Project Manager</h3>
+<ul>
+<li><strong>Toolchain/IDE</strong> = <code>MDK-ARM V5</code></li>
+<li>Code Generator 页：勾选 <em>"Generate peripheral initialization as a
+pair of .c/.h files"</em>（推荐，spi.c/usart.c 分开便于阅读）</li>
+<li>Minimal Heap Size = <code>0x200</code>，Stack =
+<code>0x400</code>（printf 需要一定栈空间）</li>
+</ul>
+<p>点击 <strong>GENERATE CODE</strong>。</p>
+<p></br></p>
+<hr />
+<h2 id="二keil5-打开后添加文件">二、Keil5 打开后：添加文件</h2>
+<p></br></p>
+<h3 id="创建驱动文件rc522.c和rc522.h">1.
+创建驱动文件<code>rc522.c</code>和<code>rc522.h</code></h3>
+<p><code>rc522.h</code>文件 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __RC522_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __RC522_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;main.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Pin Definitions ==================== */</span></span><br><span class="line"><span class="comment">/* Modify these to match your CubeMX GPIO configuration */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_CS_PORT       GPIOA</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_CS_PIN        GPIO_PIN_4</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_RST_PORT      GPIOA</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_RST_PIN       GPIO_PIN_3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== RC522 Register Addresses ==================== */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_COMMAND       0x01</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_COMIEN        0x02</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_DIVIEN        0x03</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_COMIRQ        0x04</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_DIVIRQ        0x05</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_ERROR         0x06</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_STATUS1       0x07</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_STATUS2       0x08</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_FIFODATA      0x09</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_FIFOLEVEL     0x0A</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_WATERLEVEL    0x0B</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_CONTROL       0x0C</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_BITFRAMING    0x0D</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_COLL          0x0E</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_MODE          0x11</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TXCONTROL     0x14</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TXASK         0x15</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TXSEL         0x16</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_RXSEL         0x17</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_RXTHRESHOLD   0x18</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_DEMOD         0x19</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_RFCFG         0x26</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TMOD          0x2A</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TPRESCALER    0x2B</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TReloadRegH   0x2C</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_TReloadRegL   0x2D</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_VERSION       0x37</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_CRCRESULT_M   0x21</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> RC522_REG_CRCRESULT_L   0x22</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== PCD Commands ==================== */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD_IDLE                0x00</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD_CALCCRC             0x03</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD_TRANSCEIVE          0x0C</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD_RESETPHASE          0x0F</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== PICC Commands ==================== */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PICC_REQIDL             0x26    <span class="comment">/* REQ-A: query cards in IDLE state */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PICC_REQALL             0x52    <span class="comment">/* WUP-A: query cards in IDLE/READY state */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PICC_ANTICOLL           0x93    <span class="comment">/* Anti-collision level 1 */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PICC_HALT               0x50    <span class="comment">/* Halt card */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Function Declarations ==================== */</span></span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_Init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ReadUID</span><span class="params">(<span class="type">uint8_t</span> *uid)</span>;</span><br><span class="line"><span class="comment">/* Low-level functions; may be useful during debugging */</span></span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_WriteReg</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> value)</span>;</span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ReadReg</span><span class="params">(<span class="type">uint8_t</span> addr)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_SetBitMask</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> mask)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_ClearBitMask</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> mask)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_AntennaOn</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_AntennaOff</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_Reset</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ToCard</span><span class="params">(<span class="type">uint8_t</span> command, <span class="type">uint8_t</span> *sendData, <span class="type">uint8_t</span> sendLen,</span></span><br><span class="line"><span class="params">                     <span class="type">uint8_t</span> *recvData, <span class="type">uint16_t</span> *recvLen)</span>;</span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_Request</span><span class="params">(<span class="type">uint8_t</span> reqMode, <span class="type">uint8_t</span> *tagType)</span>;</span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_Anticoll</span><span class="params">(<span class="type">uint8_t</span> *uid)</span>;</span><br><span class="line"><span class="type">void</span>    <span class="title function_">RC522_CalcCRC</span><span class="params">(<span class="type">uint8_t</span> *data, <span class="type">uint8_t</span> len, <span class="type">uint8_t</span> *crcOut)</span>;</span><br><span class="line"><span class="comment">/* Single-shot WUPA probe; always drains FIFO. rx[8] out, returns status */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_DebugRequest</span><span class="params">(<span class="type">uint8_t</span> *rx, <span class="type">uint8_t</span> *err, <span class="type">uint8_t</span> *lastBits, <span class="type">uint8_t</span> *level)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __RC522_H */</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p><code>rc522.c</code>文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;rc522.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;spi.h&quot;</span>        <span class="comment">/* SPI handle from CubeMX-generated spi.c */</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> SPI_HandleTypeDef hspi1;   <span class="comment">/* SPI instance used by this driver */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Low-level SPI Read/Write ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Write one byte to an RC522 register</span></span><br><span class="line"><span class="comment"> * @param  addr  Register address (0x00 ~ 0x3F)</span></span><br><span class="line"><span class="comment"> * @param  value Data to write</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_WriteReg</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> value)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> txBuf[<span class="number">2</span>];</span><br><span class="line">    <span class="comment">/* RC522 write frame: address shifted left 1 bit, LSB = 0 */</span></span><br><span class="line">    txBuf[<span class="number">0</span>] = (addr &lt;&lt; <span class="number">1</span>) &amp; <span class="number">0x7E</span>;</span><br><span class="line">    txBuf[<span class="number">1</span>] = value;</span><br><span class="line"></span><br><span class="line">    HAL_GPIO_WritePin(RC522_CS_PORT, RC522_CS_PIN, GPIO_PIN_RESET);</span><br><span class="line">    HAL_SPI_Transmit(&amp;hspi1, txBuf, <span class="number">2</span>, <span class="number">100</span>);</span><br><span class="line">    HAL_GPIO_WritePin(RC522_CS_PORT, RC522_CS_PIN, GPIO_PIN_SET);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Read one byte from an RC522 register</span></span><br><span class="line"><span class="comment"> * @param  addr  Register address</span></span><br><span class="line"><span class="comment"> * @retval Read data byte</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ReadReg</span><span class="params">(<span class="type">uint8_t</span> addr)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> txBuf[<span class="number">2</span>], rxBuf[<span class="number">2</span>];</span><br><span class="line">    <span class="comment">/* RC522 read frame: address shifted left 1 bit, LSB = 1 */</span></span><br><span class="line">    txBuf[<span class="number">0</span>] = ((addr &lt;&lt; <span class="number">1</span>) &amp; <span class="number">0x7E</span>) | <span class="number">0x80</span>;</span><br><span class="line">    txBuf[<span class="number">1</span>] = <span class="number">0x00</span>;</span><br><span class="line"></span><br><span class="line">    HAL_GPIO_WritePin(RC522_CS_PORT, RC522_CS_PIN, GPIO_PIN_RESET);</span><br><span class="line">    HAL_SPI_TransmitReceive(&amp;hspi1, txBuf, rxBuf, <span class="number">2</span>, <span class="number">100</span>);</span><br><span class="line">    HAL_GPIO_WritePin(RC522_CS_PORT, RC522_CS_PIN, GPIO_PIN_SET);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> rxBuf[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Set specific bits in a register</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_SetBitMask</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> mask)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> temp = RC522_ReadReg(addr);</span><br><span class="line">    RC522_WriteReg(addr, temp | mask);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Clear specific bits in a register</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_ClearBitMask</span><span class="params">(<span class="type">uint8_t</span> addr, <span class="type">uint8_t</span> mask)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> temp = RC522_ReadReg(addr);</span><br><span class="line">    RC522_WriteReg(addr, temp &amp; (~mask));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Antenna Control ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Turn on antenna (TX1 + TX2)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_AntennaOn</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    RC522_SetBitMask(RC522_REG_TXCONTROL, <span class="number">0x03</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Turn off antenna</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_AntennaOff</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    RC522_ClearBitMask(RC522_REG_TXCONTROL, <span class="number">0x03</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Reset ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Hardware reset RC522 via RST pin</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_Reset</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    HAL_GPIO_WritePin(RC522_RST_PORT, RC522_RST_PIN, GPIO_PIN_RESET);</span><br><span class="line">    HAL_Delay(<span class="number">10</span>);</span><br><span class="line">    HAL_GPIO_WritePin(RC522_RST_PORT, RC522_RST_PIN, GPIO_PIN_SET);</span><br><span class="line">    HAL_Delay(<span class="number">50</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Initialization ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Initialize RC522</span></span><br><span class="line"><span class="comment"> * @note   Call after SPI peripheral is initialized</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_Init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* 1. Hardware reset */</span></span><br><span class="line">    RC522_Reset();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 2. Soft reset */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_RESETPHASE);</span><br><span class="line">    HAL_Delay(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Safety-critical registers */</span></span><br><span class="line">    RC522_WriteReg(<span class="number">0x10</span>, <span class="number">0x00</span>);          <span class="comment">/* TxModeReg: 106 kbps */</span></span><br><span class="line">    RC522_WriteReg(<span class="number">0x12</span>, <span class="number">0x00</span>);          <span class="comment">/* RxModeReg: 106 kbps */</span></span><br><span class="line">    RC522_WriteReg(<span class="number">0x24</span>, <span class="number">0x26</span>);          <span class="comment">/* ModWidthReg: modulation width */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 3. Timer configuration */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_TMOD, <span class="number">0x8D</span>);           <span class="comment">/* Timer: auto restart, clk = fOSC/16 */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_TPRESCALER, <span class="number">0x3E</span>);     <span class="comment">/* Prescaler = 62 */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_TReloadRegL, <span class="number">30</span>);      <span class="comment">/* Reload value low byte */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_TReloadRegH, <span class="number">0</span>);       <span class="comment">/* Reload value high byte */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 4. TX/RX mode: 106 kbps, NRZ encoding */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_TXASK, <span class="number">0x40</span>);</span><br><span class="line">    RC522_WriteReg(RC522_REG_MODE, <span class="number">0x3D</span>);           <span class="comment">/* CRC preset 0x6363 */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_RFCFG, <span class="number">0x40</span>);          <span class="comment">/* RxGain 33dB (safe default) */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 5. Turn on antenna */</span></span><br><span class="line">    RC522_AntennaOn();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Card Communication ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Transceive: send command to card and receive response</span></span><br><span class="line"><span class="comment"> * @param  command   PCD command (e.g. PCD_TRANSCEIVE)</span></span><br><span class="line"><span class="comment"> * @param  sendData  Data to send</span></span><br><span class="line"><span class="comment"> * @param  sendLen   Number of bytes to send</span></span><br><span class="line"><span class="comment"> * @param  recvData  Receive buffer</span></span><br><span class="line"><span class="comment"> * @param  recvLen   Input: max buffer size; Output: actual received byte count</span></span><br><span class="line"><span class="comment"> * @retval 0 = success, non-zero = failure</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ToCard</span><span class="params">(<span class="type">uint8_t</span> command, <span class="type">uint8_t</span> *sendData, <span class="type">uint8_t</span> sendLen,</span></span><br><span class="line"><span class="params">                     <span class="type">uint8_t</span> *recvData, <span class="type">uint16_t</span> *recvLen)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> status = <span class="number">1</span>;     <span class="comment">/* default: failure */</span></span><br><span class="line">    <span class="type">uint8_t</span> irqEn = <span class="number">0x00</span>;</span><br><span class="line">    <span class="type">uint8_t</span> waitIRq = <span class="number">0x00</span>;</span><br><span class="line">    <span class="type">uint16_t</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (command == PCD_TRANSCEIVE) &#123;</span><br><span class="line">        irqEn = <span class="number">0x77</span>;       <span class="comment">/* Enable RxIrq, TxIrq, IdleIrq */</span></span><br><span class="line">        waitIRq = <span class="number">0x30</span>;     <span class="comment">/* Wait for RxIrq or IdleIrq */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* enable &amp; clear IRQs */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMIEN, irqEn | <span class="number">0x80</span>);</span><br><span class="line">    <span class="comment">/* ComIrq bits are write-1-to-clear: write 0x7F to clear ALL pending</span></span><br><span class="line"><span class="comment">       flags. Writing 0x80 (reserved bit) leaves stale RxIrq/IdleIrq set,</span></span><br><span class="line"><span class="comment">       which makes the next transceive &quot;succeed&quot; immediately on garbage. */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMIRQ, <span class="number">0x7F</span>);</span><br><span class="line">    RC522_SetBitMask(RC522_REG_FIFOLEVEL, <span class="number">0x80</span>);    <span class="comment">/* Flush FIFO */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Set idle, write data to FIFO */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_IDLE);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; sendLen; i++) &#123;</span><br><span class="line">        RC522_WriteReg(RC522_REG_FIFODATA, sendData[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* Execute command */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, command);</span><br><span class="line">    <span class="keyword">if</span> (command == PCD_TRANSCEIVE) &#123;</span><br><span class="line">        RC522_SetBitMask(RC522_REG_BITFRAMING, <span class="number">0x80</span>); <span class="comment">/* StartSend */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Wait for completion */</span></span><br><span class="line">    i = <span class="number">2000</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="type">uint8_t</span> irq = RC522_ReadReg(RC522_REG_COMIRQ);</span><br><span class="line">        <span class="keyword">if</span> (irq &amp; waitIRq) &#123;</span><br><span class="line">            status = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (irq &amp; <span class="number">0x01</span>) &#123;   <span class="comment">/* TimerIrq */</span></span><br><span class="line">            status = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (--i);</span><br><span class="line"></span><br><span class="line">    RC522_ClearBitMask(RC522_REG_BITFRAMING, <span class="number">0x80</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">uint8_t</span> error = RC522_ReadReg(RC522_REG_ERROR);</span><br><span class="line">        <span class="keyword">if</span> (error &amp; <span class="number">0x1B</span>) &#123;     <span class="comment">/* Error bits set */</span></span><br><span class="line">            status = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status == <span class="number">0</span> &amp;&amp; recvData != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="type">uint8_t</span> fifoLevel = RC522_ReadReg(RC522_REG_FIFOLEVEL);</span><br><span class="line">        <span class="type">uint8_t</span> lastBits = RC522_ReadReg(RC522_REG_CONTROL) &amp; <span class="number">0x07</span>;</span><br><span class="line">        <span class="keyword">if</span> (lastBits) &#123;</span><br><span class="line">            *recvLen = (fifoLevel - <span class="number">1</span>) * <span class="number">8</span> + lastBits;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            *recvLen = fifoLevel * <span class="number">8</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (fifoLevel == <span class="number">0</span>) &#123;</span><br><span class="line">            fifoLevel = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (fifoLevel &gt; *recvLen / <span class="number">8</span>) &#123;</span><br><span class="line">            fifoLevel = *recvLen / <span class="number">8</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; fifoLevel; i++) &#123;</span><br><span class="line">            recvData[i] = RC522_ReadReg(RC522_REG_FIFODATA);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* <span class="doctag">NOTE:</span> on return *recvLen is in BYTES (see conversion below).</span></span><br><span class="line"><span class="comment">           Callers must compare 2 for ATQA and 5 for UID+BCC, not 16/40. */</span></span><br><span class="line">        *recvLen = (*recvLen + <span class="number">7</span>) / <span class="number">8</span>;   <span class="comment">/* Convert to byte count */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Request (寻卡) ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Request card type (REQA/WUPA)</span></span><br><span class="line"><span class="comment"> * @param  reqMode  Request mode (PICC_REQIDL or PICC_REQALL)</span></span><br><span class="line"><span class="comment"> * @param  tagType  Output: card type (2 bytes ATQA)</span></span><br><span class="line"><span class="comment"> * @retval 0 = success, non-zero = failure</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_Request</span><span class="params">(<span class="type">uint8_t</span> reqMode, <span class="type">uint8_t</span> *tagType)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> status;</span><br><span class="line">    <span class="type">uint16_t</span> backBits = <span class="number">0</span>;</span><br><span class="line">    <span class="type">uint8_t</span> retry;</span><br><span class="line">    <span class="type">uint8_t</span> txCmd;              <span class="comment">/* dedicated TX buffer, must NOT reuse tagType */</span></span><br><span class="line"></span><br><span class="line">    tagType[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    tagType[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    txCmd = reqMode;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (retry = <span class="number">0</span>; retry &lt; <span class="number">5</span>; retry++) &#123;</span><br><span class="line">        RC522_WriteReg(RC522_REG_BITFRAMING, <span class="number">0x07</span>);   <span class="comment">/* 7-bit short frame */</span></span><br><span class="line">        status = RC522_ToCard(PCD_TRANSCEIVE, &amp;txCmd, <span class="number">1</span>, tagType, &amp;backBits);</span><br><span class="line">        <span class="keyword">if</span> (status == <span class="number">0</span> &amp;&amp; backBits == <span class="number">2</span>) &#123;   <span class="comment">/* ToCard returns BYTES: 2-byte ATQA */</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        HAL_Delay(<span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Single-shot WUPA (0x52) diagnostic probe, self-contained (does NOT use</span></span><br><span class="line"><span class="comment"> * RC522_ToCard) so that error/lastBits/FIFOLevel are captured immediately</span></span><br><span class="line"><span class="comment"> * after the transceive and the raw FIFO is ALWAYS drained.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Success requires ALL of: RxIrq observed, no protocol/parity/collision/</span></span><br><span class="line"><span class="comment"> * overflow error, and exactly 2 full bytes (16-bit ATQA). This rejects</span></span><br><span class="line"><span class="comment"> * noise-triggered 1-bit phantom frames at high gain.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_DebugRequest</span><span class="params">(<span class="type">uint8_t</span> *rx, <span class="type">uint8_t</span> *err, <span class="type">uint8_t</span> *lastBits, <span class="type">uint8_t</span> *level)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> cmd = PICC_REQALL;    <span class="comment">/* WUPA: answered in IDLE and READY */</span></span><br><span class="line">    <span class="type">uint16_t</span> n;</span><br><span class="line">    <span class="type">uint8_t</span> irq;</span><br><span class="line">    <span class="type">uint8_t</span> i, got;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">        rx[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMIEN, <span class="number">0x77</span> | <span class="number">0x80</span>);   <span class="comment">/* Rx/Tx/Idle/Timer irq */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMIRQ, <span class="number">0x7F</span>);          <span class="comment">/* clear all (w1c) */</span></span><br><span class="line">    RC522_SetBitMask(RC522_REG_FIFOLEVEL, <span class="number">0x80</span>);     <span class="comment">/* flush FIFO */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_IDLE);</span><br><span class="line">    RC522_WriteReg(RC522_REG_BITFRAMING, <span class="number">0x07</span>);      <span class="comment">/* 7-bit short frame */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_FIFODATA, cmd);</span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_TRANSCEIVE);</span><br><span class="line">    RC522_SetBitMask(RC522_REG_BITFRAMING, <span class="number">0x80</span>);   <span class="comment">/* StartSend */</span></span><br><span class="line"></span><br><span class="line">    n = <span class="number">2000</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        irq = RC522_ReadReg(RC522_REG_COMIRQ);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!(irq &amp; <span class="number">0x30</span>) &amp;&amp; !(irq &amp; <span class="number">0x01</span>) &amp;&amp; --n);  <span class="comment">/* Rx/Idle or Timer */</span></span><br><span class="line"></span><br><span class="line">    RC522_ClearBitMask(RC522_REG_BITFRAMING, <span class="number">0x80</span>);</span><br><span class="line"></span><br><span class="line">    *err      = RC522_ReadReg(RC522_REG_ERROR);</span><br><span class="line">    *lastBits = RC522_ReadReg(RC522_REG_CONTROL) &amp; <span class="number">0x07</span>;</span><br><span class="line">    *level    = RC522_ReadReg(RC522_REG_FIFOLEVEL) &amp; <span class="number">0x3F</span>;</span><br><span class="line"></span><br><span class="line">    got = (*level &gt; <span class="number">8</span>) ? <span class="number">8</span> : *level;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; got; i++) &#123;</span><br><span class="line">        rx[i] = RC522_ReadReg(RC522_REG_FIFODATA);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((irq &amp; <span class="number">0x20</span>) &amp;&amp; (*err &amp; <span class="number">0x1B</span>) == <span class="number">0</span> &amp;&amp;</span><br><span class="line">        *level == <span class="number">2</span> &amp;&amp; *lastBits == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;   <span class="comment">/* valid 16-bit ATQA */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Anti-collision ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Anti-collision: read card UID</span></span><br><span class="line"><span class="comment"> * @param  uid  Output buffer (5 bytes: 4-byte UID + 1-byte BCC)</span></span><br><span class="line"><span class="comment"> * @retval 0 = success, 1 = failure, 2 = BCC check failed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_Anticoll</span><span class="params">(<span class="type">uint8_t</span> *uid)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> status;</span><br><span class="line">    <span class="type">uint8_t</span> sendData[<span class="number">2</span>];</span><br><span class="line">    <span class="type">uint16_t</span> recvBits = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    RC522_WriteReg(RC522_REG_BITFRAMING, <span class="number">0x00</span>);     <span class="comment">/* 8-bit frame */</span></span><br><span class="line">    sendData[<span class="number">0</span>] = PICC_ANTICOLL;</span><br><span class="line">    sendData[<span class="number">1</span>] = <span class="number">0x20</span>;                             <span class="comment">/* Anti-collision NVB */</span></span><br><span class="line"></span><br><span class="line">    status = RC522_ToCard(PCD_TRANSCEIVE, sendData, <span class="number">2</span>, uid, &amp;recvBits);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (status == <span class="number">0</span> &amp;&amp; recvBits == <span class="number">5</span>) &#123;            <span class="comment">/* 5 bytes = 40 bits */</span></span><br><span class="line">        <span class="comment">/* Verify BCC checksum */</span></span><br><span class="line">        <span class="type">uint8_t</span> check = uid[<span class="number">0</span>] ^ uid[<span class="number">1</span>] ^ uid[<span class="number">2</span>] ^ uid[<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">if</span> (check != uid[<span class="number">4</span>]) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;   <span class="comment">/* BCC check failed */</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ==================== Read UID (main interface) ==================== */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Calculate ISO14443 CRC-A using the RC522 hardware CRC unit. */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RC522_CalcCRC</span><span class="params">(<span class="type">uint8_t</span> *data, <span class="type">uint8_t</span> len, <span class="type">uint8_t</span> *crcOut)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> i;</span><br><span class="line">    <span class="type">uint16_t</span> wait = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_IDLE);</span><br><span class="line">    RC522_WriteReg(RC522_REG_DIVIRQ, <span class="number">0x04</span>);         <span class="comment">/* clear CRCIRq (w1c) */</span></span><br><span class="line">    RC522_SetBitMask(RC522_REG_FIFOLEVEL, <span class="number">0x80</span>);    <span class="comment">/* flush FIFO */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">        RC522_WriteReg(RC522_REG_FIFODATA, data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_CALCCRC);</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">    &#125; <span class="keyword">while</span> (!(RC522_ReadReg(RC522_REG_DIVIRQ) &amp; <span class="number">0x04</span>) &amp;&amp; --wait);</span><br><span class="line"></span><br><span class="line">    crcOut[<span class="number">0</span>] = RC522_ReadReg(RC522_REG_CRCRESULT_L);   <span class="comment">/* LSB @0x22 */</span></span><br><span class="line">    crcOut[<span class="number">1</span>] = RC522_ReadReg(RC522_REG_CRCRESULT_M);   <span class="comment">/* MSB @0x21 */</span></span><br><span class="line">    RC522_WriteReg(RC522_REG_COMMAND, PCD_IDLE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_ReadUID</span><span class="params">(<span class="type">uint8_t</span> *uid)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> tagType[<span class="number">2</span>];</span><br><span class="line">    <span class="type">uint8_t</span> uidBuf[<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 1. Request (WUPA) */</span></span><br><span class="line">    <span class="keyword">if</span> (RC522_Request(PICC_REQALL, tagType) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;   <span class="comment">/* Request failed */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 2. Anti-collision to get UID */</span></span><br><span class="line">    <span class="keyword">if</span> (RC522_Anticoll(uidBuf) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;   <span class="comment">/* Anti-collision failed */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 3. Copy 4-byte UID to output */</span></span><br><span class="line">    uid[<span class="number">0</span>] = uidBuf[<span class="number">0</span>];</span><br><span class="line">    uid[<span class="number">1</span>] = uidBuf[<span class="number">1</span>];</span><br><span class="line">    uid[<span class="number">2</span>] = uidBuf[<span class="number">2</span>];</span><br><span class="line">    uid[<span class="number">3</span>] = uidBuf[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 4. Halt card to prevent repeated reads */</span></span><br><span class="line">    <span class="type">uint8_t</span> haltCmd[<span class="number">4</span>];</span><br><span class="line">    haltCmd[<span class="number">0</span>] = PICC_HALT;</span><br><span class="line">    haltCmd[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    RC522_CalcCRC(haltCmd, <span class="number">2</span>, &amp;haltCmd[<span class="number">2</span>]);   <span class="comment">/* append CRC-A over 50 00 */</span></span><br><span class="line">    <span class="type">uint16_t</span> haltLen = <span class="number">0</span>;</span><br><span class="line">    RC522_ToCard(PCD_TRANSCEIVE, haltCmd, <span class="number">4</span>, <span class="literal">NULL</span>, &amp;haltLen);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="添加驱动组">2. 添加驱动组</h3>
+<p>把驱动文件夹拷进工程（在项目根目录的<code>MDK-ARM\</code>目录创建<code>rc522_driver\</code>文件夹并进入，创建两个文件
+<code>rc522.c</code> / <code>rc522.h</code>），然后： - Project 窗口 →
+右键 Target → <em>Add Group</em> → 命名 <code>rc522_driver</code> → 组内
+<strong>Add Existing Files</strong> 加入 <code>rc522.c</code></p>
+<p></br></p>
+<h3 id="添加头文件搜索路径">3. 添加头文件搜索路径</h3>
+<ul>
+<li>魔法棒 → <strong>C/C++</strong> → <strong>Include Paths</strong> →
+添加
+<code>..\MDK-ARM\rc522_driver</code>（相对路径按工程文件位置写）</li>
+</ul>
+<p></br></p>
+<h3 id="勾选-microlib">4. 勾选 MicroLIB</h3>
+<ul>
+<li>魔法棒 → <strong>Target</strong> → 勾选 ✅ <strong>Use
+MicroLIB</strong></li>
+<li>因为我们用自定义 <code>fputc</code> 重定向 printf，MicroLIB
+可避免标准库半主机（semihosting）导致的卡死</li>
+</ul>
+<p></br></p>
+<hr />
+<h2 id="三需要修改的文件只有-main.c">三、需要修改的文件（只有
+main.c）</h2>
+<p></br></p>
+<h3 id="printf-重定向user-code-0-区main.c62">1. printf 重定向（USER CODE
+0 区，<a
+href="file:///d:/RFID_Projects/stm32f103c8t6_project/rc522_1/Core/Src/main.c#L62">main.c:62</a>）</h3>
+<p></br></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *f)</span></span><br><span class="line">&#123;</span><br><span class="line">    HAL_UART_Transmit(&amp;huart1, (<span class="type">uint8_t</span> *)&amp;ch, <span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br></pre></td></tr></table></figure>
+<p></br></p>
+<h3 id="初始化user-code-2-区">2. 初始化（USER CODE 2 区）</h3>
+<p>⚠️ <strong>重点</strong>：所有用户初始化代码必须写在
+<code>/* USER CODE BEGIN 2 */</code> 和
+<code>/* USER CODE END 2 */</code> <strong>之间</strong>。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">RC522_Init();</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Version: 0x%02X\r\n&quot;</span>, RC522_ReadReg(RC522_REG_VERSION));</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Waiting for 13.56MHz ISO14443A tag...\r\n&quot;</span>);</span><br><span class="line"><span class="comment">/* USER CODE END 2 */</span></span><br></pre></td></tr></table></figure></p>
+<p></br></p>
+<h3 id="主循环user-code-while-区当前-main.c123-的最终形态">3.
+主循环（USER CODE WHILE 区，当前 <a
+href="file:///d:/RFID_Projects/stm32f103c8t6_project/rc522_1/Core/Src/main.c#L123">main.c:123</a>
+的最终形态）</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">uint8_t</span> uid[<span class="number">5</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  <span class="keyword">if</span> (RC522_ReadUID(uid) == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;Card found  UID: %02X %02X %02X %02X\r\n&quot;</span>,</span><br><span class="line">             uid[<span class="number">0</span>], uid[<span class="number">1</span>], uid[<span class="number">2</span>], uid[<span class="number">3</span>]);</span><br><span class="line">      HAL_Delay(<span class="number">800</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  HAL_Delay(<span class="number">100</span>);</span><br><span class="line">  <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<code>RC522_Init()</code> 的调用、RC522
+的头文件引用等，<strong>都必须套在 <code>USER CODE BEGIN/END</code>
+注释对内</strong>，CubeMX 重新生成时只保留这些区内的内容。</p>
+</blockquote>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2026/01/28/单例模式会在什么场景下被破坏/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <script src="https://giscus.app/client.js"
+        data-repo="xbronze/giscus"
+        data-repo-id="R_kgDOJ4tM7g"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOJ4tM7s4CXvDw"
+        data-mapping="title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2026-09-19 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/代码人生/">代码人生<span>19</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <a href="/tags/RFID/">RFID<span>1</span></a> <a href="/tags/STM32/">STM32<span>1</span></a> <a href="/tags/RC522/">RC522<span>1</span></a>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80stm32cubemx-%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95"><span class="toc-article-text">一、STM32CubeMX 配置清单</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%96%B0%E5%BB%BA%E5%B7%A5%E7%A8%8B"><span class="toc-article-text">1. 新建工程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#system-core"><span class="toc-article-text">2. System Core</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%97%B6%E9%92%9F%E6%A0%91clock-configuration-%E9%A1%B5"><span class="toc-article-text">3. 时钟树（Clock Configuration
+页）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#connectivity-spi1full-duplex-master"><span class="toc-article-text">4. Connectivity →
+SPI1（Full-Duplex Master）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#gpio-%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%9C%A8%E8%8A%AF%E7%89%87%E5%9B%BE%E4%B8%8A%E7%82%B9%E5%BC%95%E8%84%9A"><span class="toc-article-text">5. GPIO
+手动配置（在芯片图上点引脚）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#connectivity-usart1"><span class="toc-article-text">6. Connectivity → USART1</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#project-manager"><span class="toc-article-text">7. Project Manager</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8Ckeil5-%E6%89%93%E5%BC%80%E5%90%8E%E6%B7%BB%E5%8A%A0%E6%96%87%E4%BB%B6"><span class="toc-article-text">二、Keil5 打开后：添加文件</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%9B%E5%BB%BA%E9%A9%B1%E5%8A%A8%E6%96%87%E4%BB%B6rc522.c%E5%92%8Crc522.h"><span class="toc-article-text">1.
+创建驱动文件rc522.c和rc522.h</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B7%BB%E5%8A%A0%E9%A9%B1%E5%8A%A8%E7%BB%84"><span class="toc-article-text">2. 添加驱动组</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B7%BB%E5%8A%A0%E5%A4%B4%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E8%B7%AF%E5%BE%84"><span class="toc-article-text">3. 添加头文件搜索路径</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8B%BE%E9%80%89-microlib"><span class="toc-article-text">4. 勾选 MicroLIB</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E9%9C%80%E8%A6%81%E4%BF%AE%E6%94%B9%E7%9A%84%E6%96%87%E4%BB%B6%E5%8F%AA%E6%9C%89-main.c"><span class="toc-article-text">三、需要修改的文件（只有
+main.c）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#printf-%E9%87%8D%E5%AE%9A%E5%90%91user-code-0-%E5%8C%BAmain.c62"><span class="toc-article-text">1. printf 重定向（USER CODE
+0 区，main.c:62）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96user-code-2-%E5%8C%BA"><span class="toc-article-text">2. 初始化（USER CODE 2 区）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BB%E5%BE%AA%E7%8E%AFuser-code-while-%E5%8C%BA%E5%BD%93%E5%89%8D-main.c123-%E7%9A%84%E6%9C%80%E7%BB%88%E5%BD%A2%E6%80%81"><span class="toc-article-text">3.
+主循环（USER CODE WHILE 区，当前 main.c:123
+的最终形态）</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2026 xuzh
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>,
+     <br> Theme by <a target="_blank" rel="noopener" href="https://github.com/blackshow/hexo-theme-freemind.386">Hexo-Theme-Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
