@@ -4321,11 +4321,62 @@ volatile</strong> 保证线程安全（推荐），或改用静态内部类/饿�
     <url>/2026/09/19/RFID%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%BF%80%E6%B4%BBRC522/</url>
     <content><![CDATA[<p>STM32+RC522实现一个简单的读IC的唯一识别号的功能，使用的时<code>STM32F103C8T6</code>和<code>RC522</code>两块板子，使用<code>STM32CubeMX</code>创建项目，<code>Keil 5</code>编辑项目。</p>
 <span id="more"></span>
-<h2 id="一stm32cubemx-配置清单">一、STM32CubeMX 配置清单</h2>
+<h2 id="一硬件连接">一、硬件连接</h2>
+<p>首先，将RC522模块与STM32开发板连接起来。RC522模块必须使用<strong>3.3V</strong>供电，连接5V会损坏模块。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">RC522引脚</th>
+<th style="text-align: left;">STM32F103C8T6引脚</th>
+<th style="text-align: left;">功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>SDA (NSS)</strong></td>
+<td style="text-align: left;"><strong>PA4</strong></td>
+<td style="text-align: left;">片选信号，低电平有效</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>SCK</strong></td>
+<td style="text-align: left;"><strong>PA5</strong></td>
+<td style="text-align: left;">SPI时钟线</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>MOSI</strong></td>
+<td style="text-align: left;"><strong>PA7</strong></td>
+<td style="text-align: left;">主设备输出，从设备输入</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>MISO</strong></td>
+<td style="text-align: left;"><strong>PA6</strong></td>
+<td style="text-align: left;">主设备输入，从设备输出</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>RST</strong></td>
+<td style="text-align: left;"><strong>PA3</strong></td>
+<td style="text-align: left;">复位信号（也可接其他GPIO）</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>3.3V</strong></td>
+<td style="text-align: left;"><strong>3.3V</strong></td>
+<td style="text-align: left;">电源正极</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>GND</strong></td>
+<td style="text-align: left;"><strong>GND</strong></td>
+<td style="text-align: left;">电源地</td>
+</tr>
+</tbody>
+</table>
+<h2 id="二stm32cubemx-配置清单">二、STM32CubeMX 配置清单</h2>
 <h3 id="新建工程">1. 新建工程</h3>
 <ul>
 <li>芯片选择 <strong>STM32F103C8Tx</strong>（LQFP48 封装）</li>
 </ul>
+<p>打开STM32CubeMX，点击“New
+Project”，在搜索框中输入<code>STM32F103C8</code>，选择<code>STM32F103C8Tx</code>，然后点击“Start
+Project”。</p>
 <p></br></p>
 <h3 id="system-core">2. System Core</h3>
 <table>
@@ -4485,7 +4536,7 @@ pair of .c/.h files"</em>（推荐，spi.c/usart.c 分开便于阅读）</li>
 <p>点击 <strong>GENERATE CODE</strong>。</p>
 <p></br></p>
 <hr />
-<h2 id="二keil5-打开后添加文件">二、Keil5 打开后：添加文件</h2>
+<h2 id="三keil5-打开后添加文件">三、Keil5 打开后：添加文件</h2>
 <p></br></p>
 <h3 id="创建驱动文件rc522.c和rc522.h">1.
 创建驱动文件<code>rc522.c</code>和<code>rc522.h</code></h3>
@@ -4514,7 +4565,7 @@ MicroLIB</strong></li>
 </ul>
 <p></br></p>
 <hr />
-<h2 id="三需要修改的文件只有-main.c">三、需要修改的文件（只有
+<h2 id="四需要修改的文件只有-main.c">四、需要修改的文件（只有
 main.c）</h2>
 <p></br></p>
 <h3 id="printf-重定向user-code-0-区main.c62">1. printf 重定向（USER CODE
