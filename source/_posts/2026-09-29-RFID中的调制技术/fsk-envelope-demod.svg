@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" width="720" height="340">
+<style>
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.th { fill: #171717; font: 500 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.arr { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+g.c-neutral > rect { fill: #F7F7F8; stroke: rgba(23,23,23,0.12); }
+g.c-brand > circle { fill: #E5FFF2; stroke: #0FDC78; }
+.c-brand > .th { fill: #004D26; }
+.rule-pill { fill: #EFEFF2; }
+</style>
+<rect width="720" height="340" fill="#FFFFFF"/>
+<defs>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+<g class="c-neutral">
+<rect x="40" y="138" width="88" height="44" rx="22"/>
+<text class="t" x="84" y="165" text-anchor="middle">FSK信号</text>
+</g>
+<path class="arr" d="M128,160 L172,160"/>
+<path class="arr" d="M172,160 L172,92 Q172,84 180,84 L194,84" marker-end="url(#arr)"/>
+<path class="arr" d="M172,160 L172,228 Q172,236 180,236 L194,236" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="196" y="62" width="104" height="44" rx="8"/>
+<text class="th" x="248" y="80" text-anchor="middle">带通滤波器</text>
+<text class="ts" x="248" y="98" text-anchor="middle">中心频率 f₁</text>
+</g>
+<path class="arr" d="M300,84 L368,84" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="372" y="62" width="104" height="44" rx="8"/>
+<text class="th" x="424" y="80" text-anchor="middle">包络检波器</text>
+<text class="ts" x="424" y="98" text-anchor="middle">整流 + 低通</text>
+</g>
+<g class="c-neutral">
+<rect x="196" y="214" width="104" height="44" rx="8"/>
+<text class="th" x="248" y="232" text-anchor="middle">带通滤波器</text>
+<text class="ts" x="248" y="248" text-anchor="middle">中心频率 f₂</text>
+</g>
+<path class="arr" d="M300,236 L368,236" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="372" y="214" width="104" height="44" rx="8"/>
+<text class="th" x="424" y="232" text-anchor="middle">包络检波器</text>
+<text class="ts" x="424" y="248" text-anchor="middle">整流 + 低通</text>
+</g>
+<path class="arr" d="M476,84 L530,134" marker-end="url(#arr)"/>
+<path class="arr" d="M476,236 L530,186" marker-end="url(#arr)"/>
+<g class="c-brand">
+<circle cx="556" cy="160" r="34"/>
+<text class="th" x="556" y="165" text-anchor="middle">比较判决</text>
+</g>
+<path class="arr" d="M590,160 L646,160" marker-end="url(#arr)"/>
+<text class="t" x="618" y="142" text-anchor="middle">NRZ 输出</text>
+<rect class="rule-pill" x="246" y="296" width="228" height="26" rx="13"/>
+<text class="ts" x="360" y="313" text-anchor="middle">u₁ &gt; u₂ → 输出 1，反之输出 0</text>
+</svg>

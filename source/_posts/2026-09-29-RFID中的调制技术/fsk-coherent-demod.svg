@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" width="720" height="380">
+<style>
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.th { fill: #171717; font: 500 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.arr { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+g.c-neutral > rect, g.c-neutral > circle { fill: #F7F7F8; stroke: rgba(23,23,23,0.12); }
+g.c-brand > rect { fill: #E5FFF2; stroke: #0FDC78; }
+.c-brand > .th, .c-brand > .ts { fill: #004D26; }
+.rule-pill { fill: #EFEFF2; }
+</style>
+<rect width="720" height="380" fill="#FFFFFF"/>
+<defs>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+<g class="c-neutral">
+<rect x="40" y="158" width="88" height="44" rx="22"/>
+<text class="t" x="84" y="185" text-anchor="middle">FSK信号</text>
+</g>
+<path class="arr" d="M128,180 L158,180"/>
+<path class="arr" d="M158,180 L158,92 Q158,84 166,84 L172,84" marker-end="url(#arr)"/>
+<path class="arr" d="M158,180 L158,268 Q158,276 166,276 L172,276" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="176" y="62" width="96" height="44" rx="8"/>
+<text class="th" x="224" y="80" text-anchor="middle">带通滤波器</text>
+<text class="ts" x="224" y="96" text-anchor="middle">中心 f₁</text>
+</g>
+<path class="arr" d="M272,84 L296,84" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<circle cx="318" cy="84" r="18"/>
+<text class="th" x="318" y="89" text-anchor="middle">×</text>
+</g>
+<path class="arr" d="M336,84 L378,84" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="382" y="62" width="96" height="44" rx="8"/>
+<text class="th" x="430" y="80" text-anchor="middle">低通滤波器</text>
+<text class="ts" x="430" y="96" text-anchor="middle">滤除高频</text>
+</g>
+<g class="c-neutral">
+<rect x="176" y="254" width="96" height="44" rx="8"/>
+<text class="th" x="224" y="272" text-anchor="middle">带通滤波器</text>
+<text class="ts" x="224" y="288" text-anchor="middle">中心 f₂</text>
+</g>
+<path class="arr" d="M272,276 L296,276" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<circle cx="318" cy="276" r="18"/>
+<text class="th" x="318" y="281" text-anchor="middle">×</text>
+</g>
+<path class="arr" d="M336,276 L378,276" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="382" y="254" width="96" height="44" rx="8"/>
+<text class="th" x="430" y="272" text-anchor="middle">低通滤波器</text>
+<text class="ts" x="430" y="288" text-anchor="middle">滤除高频</text>
+</g>
+<g class="c-brand">
+<rect x="228" y="162" width="180" height="40" rx="8"/>
+<text class="th" x="318" y="180" text-anchor="middle">本地相干载波</text>
+<text class="ts" x="318" y="196" text-anchor="middle">cosω₁t · cosω₂t</text>
+</g>
+<path class="arr" d="M318,162 L318,108" marker-end="url(#arr)"/>
+<path class="arr" d="M318,202 L318,250" marker-end="url(#arr)"/>
+<path class="arr" d="M478,84 L528,151" marker-end="url(#arr)"/>
+<path class="arr" d="M478,276 L528,209" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<circle cx="556" cy="180" r="34"/>
+<text class="th" x="556" y="185" text-anchor="middle">抽样判决</text>
+</g>
+<text class="ts" x="556" y="230" text-anchor="middle">码元定时抽样</text>
+<path class="arr" d="M590,180 L646,180" marker-end="url(#arr)"/>
+<text class="t" x="618" y="164" text-anchor="middle">NRZ 输出</text>
+<rect class="rule-pill" x="246" y="334" width="228" height="26" rx="13"/>
+<text class="ts" x="360" y="351" text-anchor="middle">u₁ &gt; u₂ → 判 1，反之判 0</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" width="720" height="430">
+<style>
+.th { fill: #171717; font: 500 16px/24px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ripple { stroke: #171717; stroke-width: 1.2; fill: none; }
+.dcline { stroke: #02743B; stroke-width: 2.5; }
+.zline { stroke: #52525B; stroke-width: 1; stroke-dasharray: 4 4; }
+.uline { stroke: #0FDC78; stroke-width: 2.5; }
+.arr { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; fill: none; }
+.ulab { fill: #004D26; font: 500 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.warn { fill: #E8463A; }
+</style>
+<rect width="720" height="430" fill="#FFFFFF"/>
+<defs>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+<text class="th" x="380" y="28" text-anchor="middle">单路相乘：乘积 = 直流 + 高频，低通后只剩直流</text>
+<text class="ts" x="380" y="48" text-anchor="middle">以 A=1、θ=60° 为例：s(t)·cos(ω₁t) = 0.25 + 0.5·cos(2ω₁t+60°)</text>
+
+<line class="zline" x1="70" y1="190" x2="690" y2="190"/>
+<text class="ts" x="60" y="194" text-anchor="end">0</text>
+<path class="ripple" d="M70,110L74,148.3L78,187.1L82,216.6L86,229.7L90,223.1L94,198.4L98,161.7L102,122.1L106,89.4L110,71.7L114,73.4L118,94.0L122,128.5L126,168.3L130,203.5L134,225.6L138,228.9L142,212.7L146,181.0L150,141.6L154,104.3L158,78.3L162,70.1L166,81.6L170,110.0L174,148.3L178,187.1L182,216.6L186,229.7L190,223.1L194,198.4L198,161.7L202,122.1L206,89.4L210,71.7L214,73.4L218,94.0L222,128.5L226,168.3L230,203.5L234,225.6L238,228.9L242,212.7L246,181.0L250,141.6L254,104.3L258,78.3L262,70.1L266,81.6L270,110.0L274,148.3L278,187.1L282,216.6L286,229.7L290,223.1L294,198.4L298,161.7L302,122.1L306,89.4L310,71.7L314,73.4L318,94.0L322,128.5L326,168.3L330,203.5L334,225.6L338,228.9L342,212.7L346,181.0L350,141.6L354,104.3L358,78.3L362,70.1L366,81.6L370,110.0L374,148.3L378,187.1L382,216.6L386,229.7L390,223.1L394,198.4L398,161.7L402,122.1L406,89.4L410,71.7L414,73.4L418,94.0L422,128.5L426,168.3L430,203.5L434,225.6L438,228.9L442,212.7L446,181.0L450,141.6L454,104.3L458,78.3L462,70.1L466,81.6L470,110.0L474,148.3L478,187.1L482,216.6L486,229.7L490,223.1L494,198.4L498,161.7L502,122.1L506,89.4L510,71.7L514,73.4L518,94.0L522,128.5L526,168.3L530,203.5L534,225.6L538,228.9L542,212.7L546,181.0L550,141.6L554,104.3L558,78.3L562,70.1L566,81.6L570,110.0L574,148.3L578,187.1L582,216.6L586,229.7L590,223.1L594,198.4L598,161.7L602,122.1L606,89.4L610,71.7L614,73.4L618,94.0L622,128.5L626,168.3L630,203.5L634,225.6L638,228.9L642,212.7L646,181.0L650,141.6L654,104.3L658,78.3L662,70.1L666,81.6L670,110.0L674,148.3L678,187.1L682,216.6L686,229.7L690,223.1"/>
+<line class="dcline" x1="70" y1="150" x2="690" y2="150"/>
+
+<line class="ripple" x1="70" y1="258" x2="92" y2="258"/>
+<text class="ts" x="98" y="262">乘积波形（直流+高频）</text>
+<line class="dcline" x1="280" y1="258" x2="302" y2="258"/>
+<text class="ts" x="308" y="262">直流分量 (A/2)·cosθ = 0.25</text>
+<line class="zline" x1="560" y1="258" x2="582" y2="258"/>
+<text class="ts" x="588" y="262">零电平</text>
+
+<line class="arr" x1="380" y1="284" x2="380" y2="310" marker-end="url(#arr)"/>
+<text class="ts" x="380" y="330" text-anchor="middle">低通滤波器：滤掉 2ω₁ 高频，留下直流</text>
+
+<line class="zline" x1="70" y1="384" x2="690" y2="384"/>
+<text class="ts" x="60" y="388" text-anchor="end">0</text>
+<line class="uline" x1="70" y1="344" x2="690" y2="344"/>
+<text class="ulab" x="688" y="336" text-anchor="end">u = (A/2)·cos60° = 0.25</text>
+
+<text class="ts warn" x="380" y="418" text-anchor="middle">θ 随信道随机变化：θ=0° 时输出 A/2，θ=90° 时输出 0 —— 单路输出不可靠</text>
+</svg>

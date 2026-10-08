@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360">
+<style>
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.th { fill: #171717; font: 500 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.coil { fill: none; stroke: #52525B; stroke-width: 1.4; }
+.flow { fill: none; stroke: #0FDC78; stroke-width: 1.5; stroke-dasharray: 6 7; stroke-linecap: round; }
+.wire { stroke: #52525B; stroke-width: 1.4; fill: none; stroke-linecap: round; }
+.box { fill: #F7F7F8; stroke: rgba(23,23,23,0.12); stroke-width: 1.2; }
+.carrier { fill: none; stroke: #0FDC78; stroke-width: 1.6; stroke-linejoin: round; }
+.env { stroke: #52525B; stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+.nrz { stroke: #171717; stroke-width: 2; fill: none; }
+</style>
+<rect width="720" height="360" fill="#FFFFFF"/>
+<defs>
+<marker id="garr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#0FDC78"/>
+</marker>
+<marker id="narr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+
+<text class="th" x="40" y="34">负载调制：标签不发射，靠改变负载让阅读器电压产生起伏</text>
+
+<ellipse class="coil" cx="110" cy="150" rx="48" ry="72"/>
+<ellipse class="coil" cx="110" cy="150" rx="39" ry="58"/>
+<ellipse class="coil" cx="110" cy="150" rx="30" ry="44"/>
+<ellipse class="coil" cx="300" cy="150" rx="24" ry="40"/>
+<ellipse class="coil" cx="300" cy="150" rx="18" ry="30"/>
+<ellipse class="coil" cx="300" cy="150" rx="12" ry="20"/>
+
+<path class="flow" d="M155,100 C 190,70 230,82 258,110" marker-end="url(#garr)"/>
+<path class="flow" d="M155,200 C 190,230 230,218 258,190" marker-end="url(#garr)"/>
+<text class="ts" x="207" y="155" text-anchor="middle">互感 M</text>
+
+<text class="t" x="110" y="242" text-anchor="middle">阅读器天线 L₁</text>
+<text class="ts" x="110" y="260" text-anchor="middle">载波源 13.56MHz</text>
+<text class="t" x="340" y="155">标签天线 L₂</text>
+
+<line class="wire" x1="300" y1="192" x2="300" y2="266" marker-end="url(#narr)"/>
+<text class="ts" x="216" y="300" text-anchor="end">NRZ</text>
+<line class="wire" x1="222" y1="295" x2="250" y2="295" marker-end="url(#narr)"/>
+<rect class="box" x="256" y="272" width="130" height="46" rx="8"/>
+<text class="t" x="321" y="292" text-anchor="middle">整流取电</text>
+<text class="t" x="321" y="310" text-anchor="middle">负载开关 Z_L</text>
+
+<text class="ts" x="200" y="345" text-anchor="middle">开关闭合 → Z_L接入 → 反射阻抗增大 → 电压幅度下降；断开 → 回升</text>
+
+<text class="th" x="545" y="64" text-anchor="middle">阅读器线圈电压（局部放大）</text>
+<text class="ts" x="398" y="92" text-anchor="end">NRZ</text>
+<path class="nrz" d="M410,82 H472 V96 H544 V82 H688"/>
+<path class="carrier" d="M410,150 Q414,137 418,150 T426,150 T434,150 T442,150 T450,150 T458,150 T466,150 T472,150"/>
+<path class="carrier" d="M472,150 Q476,126 480,150 T488,150 T496,150 T504,150 T512,150 T520,150 T528,150 T536,150 T544,150"/>
+<path class="carrier" d="M544,150 Q548,137 552,150 T560,150 T568,150 T576,150 T584,150 T592,150 T600,150 T608,150 T616,150"/>
+<path class="carrier" d="M616,150 Q620,137 624,150 T632,150 T640,150 T648,150 T656,150 T664,150 T672,150 T680,150 T688,150"/>
+<path class="env" d="M410,137 H472 V126 H544 V137 H688"/>
+<path class="env" d="M410,163 H472 V174 H544 V163 H688"/>
+<text class="t" x="441" y="196" text-anchor="middle">1</text>
+<text class="t" x="508" y="196" text-anchor="middle">0</text>
+<text class="t" x="580" y="196" text-anchor="middle">1</text>
+<text class="t" x="652" y="196" text-anchor="middle">1</text>
+<text class="ts" x="549" y="218" text-anchor="middle">开关通 → 幅度小；开关断 → 幅度大（虚线为包络）</text>
+</svg>
