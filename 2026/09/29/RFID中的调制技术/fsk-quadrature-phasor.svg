@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" width="720" height="340">
+<style>
+.th { fill: #171717; font: 500 16px/24px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.tb { fill: #004D26; font: 500 16px/24px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.guide { fill: none; stroke: rgba(23,23,23,0.12); stroke-width: 1; }
+.dash { stroke: #52525B; stroke-width: 1; stroke-dasharray: 4 4; }
+.ibar { stroke: #02743B; stroke-width: 3; stroke-linecap: round; }
+.qbar { stroke: #80C1FF; stroke-width: 3; stroke-linecap: round; }
+.vec { stroke: #0FDC78; stroke-width: 2.5; stroke-linecap: round; }
+.arc { fill: none; stroke: #52525B; stroke-width: 1; }
+.capsule { fill: #EFEFF2; }
+</style>
+<rect width="720" height="340" fill="#FFFFFF"/>
+<defs>
+<marker id="varr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#0FDC78"/>
+</marker>
+</defs>
+
+<circle class="guide" cx="155" cy="180" r="95"/>
+<line class="dash" x1="222.2" y1="112.8" x2="222.2" y2="180"/>
+<line class="dash" x1="222.2" y1="112.8" x2="155" y2="112.8"/>
+<line class="ibar" x1="155" y1="180" x2="222.2" y2="180"/>
+<line class="qbar" x1="155" y1="180" x2="155" y2="112.8"/>
+<path class="arc" d="M183,180 A28,28 0 0 0 174.8,160.2"/>
+<text class="ts" x="204" y="172">θ</text>
+<line class="vec" x1="155" y1="180" x2="222.2" y2="112.8" marker-end="url(#varr)"/>
+<text class="t" x="232" y="108">r = A/2</text>
+<rect class="capsule" x="82" y="130" width="70" height="22" rx="11"/>
+<text class="ts" x="117" y="145" text-anchor="middle">Q = r·sinθ</text>
+<rect class="capsule" x="150" y="186" width="76" height="22" rx="11"/>
+<text class="ts" x="188" y="201" text-anchor="middle">I = r·cosθ</text>
+
+<text class="th" x="380" y="70">勾股合成：相位 θ 被消去</text>
+<text class="t" x="380" y="110">I 路 = (A/2)·cosθ</text>
+<text class="t" x="380" y="140">Q 路 = (A/2)·sinθ</text>
+<text class="tb" x="380" y="190">u₁ = √(I² + Q²)</text>
+<text class="tb" x="380" y="218">= A/2·√(cos²θ + sin²θ) = A/2</text>
+<text class="ts" x="380" y="252">I、Q 单独随 θ 变化，合成后恒定</text>
+
+<text class="ts" x="380" y="310" text-anchor="middle">无论 θ 为何值，u₁ 恒为 A/2 —— 平方相加消去了随机相位 θ</text>
+</svg>

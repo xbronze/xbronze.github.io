@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" width="720" height="440">
+<style>
+.t { fill: #171717; font: 400 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.th { fill: #171717; font: 500 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.arr { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.dash { stroke: #52525B; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 4 4; }
+g.c-neutral > rect, g.c-neutral > circle { fill: #F7F7F8; stroke: rgba(23,23,23,0.12); }
+g.c-brand > rect { fill: #E5FFF2; stroke: #0FDC78; }
+.c-brand > .th, .c-brand > .ts { fill: #004D26; }
+.rule-pill { fill: #EFEFF2; }
+.dot { fill: #52525B; }
+</style>
+<rect width="720" height="440" fill="#FFFFFF"/>
+<defs>
+<marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+
+<text class="ts" x="40" y="38">发送端</text>
+<g class="c-neutral">
+<rect x="40" y="48" width="88" height="44" rx="22"/>
+<text class="t" x="84" y="75" text-anchor="middle">绝对码 aₖ</text>
+</g>
+<path class="arr" d="M128,70 L152,70" marker-end="url(#arr)"/>
+<g class="c-brand">
+<rect x="156" y="48" width="124" height="44" rx="8"/>
+<text class="th" x="218" y="66" text-anchor="middle">差分编码</text>
+<text class="ts" x="218" y="82" text-anchor="middle">bₖ = bₖ₋₁ ⊕ aₖ</text>
+</g>
+<path class="arr" d="M280,70 L300,70" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="304" y="48" width="110" height="44" rx="8"/>
+<text class="th" x="359" y="66" text-anchor="middle">相位调制</text>
+<text class="ts" x="359" y="82" text-anchor="middle">0° 或 180°</text>
+</g>
+<path class="arr" d="M414,70 L438,70" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="442" y="48" width="88" height="44" rx="22"/>
+<text class="t" x="486" y="75" text-anchor="middle">已调信号</text>
+</g>
+<path class="dash" d="M486,92 V232 Q486,240 478,240 H92 Q84,240 84,248 V258" marker-end="url(#arr)"/>
+<text class="ts" x="285" y="232" text-anchor="middle">经信道传输</text>
+
+<text class="ts" x="40" y="254">接收端（相位比较法）</text>
+<g class="c-neutral">
+<rect x="40" y="262" width="88" height="44" rx="22"/>
+<text class="t" x="84" y="289" text-anchor="middle">接收信号</text>
+</g>
+<path class="arr" d="M128,284 H158"/>
+<circle class="dot" cx="158" cy="284" r="3"/>
+<path class="arr" d="M158,284 H322" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<circle cx="340" cy="284" r="18"/>
+<text class="th" x="340" y="289" text-anchor="middle">×</text>
+</g>
+<path class="arr" d="M158,284 V324 Q158,332 166,332 L196,332" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="200" y="310" width="88" height="44" rx="8"/>
+<text class="th" x="244" y="328" text-anchor="middle">延迟 Tₛ</text>
+<text class="ts" x="244" y="344" text-anchor="middle">一个码元</text>
+</g>
+<path class="arr" d="M288,332 H340 V302" marker-end="url(#arr)"/>
+<path class="arr" d="M358,284 L398,284" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<rect x="402" y="262" width="96" height="44" rx="8"/>
+<text class="th" x="450" y="280" text-anchor="middle">低通滤波器</text>
+<text class="ts" x="450" y="296" text-anchor="middle">取乘积极性</text>
+</g>
+<path class="arr" d="M498,284 L556,284" marker-end="url(#arr)"/>
+<g class="c-neutral">
+<circle cx="594" cy="284" r="34"/>
+<text class="th" x="594" y="289" text-anchor="middle">抽样判决</text>
+</g>
+<text class="ts" x="594" y="338" text-anchor="middle">码元定时抽样</text>
+<text class="ts" x="594" y="356" text-anchor="middle">u＞0 判 0，u＜0 判 1</text>
+<path class="arr" d="M628,284 L664,284" marker-end="url(#arr)"/>
+<text class="t" x="646" y="266" text-anchor="middle">绝对码 aₖ</text>
+
+<rect class="rule-pill" x="150" y="398" width="420" height="26" rx="13"/>
+<text class="ts" x="360" y="415" text-anchor="middle">以前一码元为参考 → 无需载波同步、无相位模糊；代价：误码率差约2.3dB</text>
+</svg>

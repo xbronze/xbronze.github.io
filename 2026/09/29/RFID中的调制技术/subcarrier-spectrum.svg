@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" width="720" height="430">
+<style>
+.th { fill: #171717; font: 500 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.warn { fill: #B45309; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.good { fill: #047857; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.axis { stroke: #52525B; stroke-width: 1.2; fill: none; }
+.carrier { stroke: #171717; stroke-width: 3; }
+.carmut { stroke: #52525B; stroke-width: 3; }
+.sb { stroke: #D97706; stroke-width: 2; }
+.gsb { stroke: #059669; stroke-width: 3; }
+.gsb2 { stroke: #059669; stroke-width: 2; opacity: 0.65; }
+.zone { fill: #D97706; fill-opacity: 0.08; stroke: #D97706; stroke-width: 1; stroke-dasharray: 3 3; }
+.gap { stroke: #52525B; stroke-width: 1.2; fill: none; }
+</style>
+<rect width="720" height="430" fill="#FFFFFF"/>
+<defs>
+<marker id="sarr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+</marker>
+</defs>
+
+<text class="th" x="360" y="32" text-anchor="middle">接收信号频谱：直接负载调制 vs 副载波负载调制</text>
+
+<text class="th" x="60" y="64">直接负载调制</text>
+<line class="carrier" x1="360" y1="170" x2="360" y2="84"/>
+<line class="sb" x1="345" y1="170" x2="345" y2="152"/>
+<line class="sb" x1="375" y1="170" x2="375" y2="152"/>
+<rect class="zone" x="334" y="78" width="52" height="92" rx="4"/>
+<text class="ts" x="360" y="72" text-anchor="middle">载波 f_c（瓦级）</text>
+<text class="warn" x="390" y="156">边带（微瓦级）</text>
+<path class="axis" d="M60,170 H650" marker-end="url(#sarr)"/>
+<text class="ts" x="360" y="188" text-anchor="middle">f_c</text>
+<text class="ts" x="345" y="188" text-anchor="middle">−f_d</text>
+<text class="ts" x="375" y="188" text-anchor="middle">+f_d</text>
+<text class="ts" x="660" y="188" text-anchor="end">→ 频率</text>
+<text class="warn" x="360" y="216" text-anchor="middle">边带紧贴载波，与载波功率相差60dB以上，被载波泄漏淹没，无法滤波分离</text>
+
+<text class="th" x="60" y="272">副载波负载调制</text>
+<text class="good" x="360" y="244" text-anchor="middle">边带搬移到 f_c±f_s：间隔848kHz，陷波滤除f_c后可干净放大边带；BPSK时长连1也有持续副载波</text>
+<line class="carmut" x1="360" y1="380" x2="360" y2="296"/>
+<line class="gsb" x1="240" y1="380" x2="240" y2="318"/>
+<line class="gsb" x1="480" y1="380" x2="480" y2="318"/>
+<line class="gsb2" x1="120" y1="380" x2="120" y2="352"/>
+<line class="gsb2" x1="600" y1="380" x2="600" y2="352"/>
+<text class="good" x="360" y="282" text-anchor="middle">f_s = f_c/16 ≈ 848kHz</text>
+<path class="gap" d="M300,306 L246,306" marker-end="url(#sarr)"/>
+<path class="gap" d="M420,306 L474,306" marker-end="url(#sarr)"/>
+<path class="axis" d="M60,380 H650" marker-end="url(#sarr)"/>
+<text class="ts" x="120" y="398" text-anchor="middle">f_c−2f_s</text>
+<text class="ts" x="240" y="398" text-anchor="middle">f_c−f_s</text>
+<text class="ts" x="360" y="398" text-anchor="middle">f_c</text>
+<text class="ts" x="480" y="398" text-anchor="middle">f_c+f_s</text>
+<text class="ts" x="600" y="398" text-anchor="middle">f_c+2f_s</text>
+<text class="ts" x="660" y="398" text-anchor="end">→ 频率</text>
+</svg>
