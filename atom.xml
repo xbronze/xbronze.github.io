@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2026-10-08T14:22:12.406Z</updated>
+  <updated>2026-10-26T01:20:26.329Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>曼彻斯特码编码和译码</title>
+    <link href="http://yoursite.com/2026/10/19/%E6%9B%BC%E5%BD%BB%E6%96%AF%E7%89%B9%E7%A0%81%E7%BC%96%E7%A0%81%E5%92%8C%E8%AF%91%E7%A0%81/"/>
+    <id>http://yoursite.com/2026/10/19/%E6%9B%BC%E5%BD%BB%E6%96%AF%E7%89%B9%E7%A0%81%E7%BC%96%E7%A0%81%E5%92%8C%E8%AF%91%E7%A0%81/</id>
+    <published>2026-10-19T01:14:45.000Z</published>
+    <updated>2026-10-26T01:20:26.329Z</updated>
+    
+    <content type="html"><![CDATA[<p>曼彻斯特码（ManchesterCode）是一种将时钟信息嵌入到数据流中的自同步编码方式，广泛应用于RFID、以太网、磁条卡等领域。本文从最基本的"异或编码法"出发，重点分析这种方法因信号边沿不理想而产生尖峰脉冲的问题，以及如何用D 触发器改造电路来消除尖峰。</p><span id="more"></span><h1 id="一曼彻斯特码的基本概念">一、曼彻斯特码的基本概念</h1><p>不归零码（NRZ）用高电平表示"1"、低电平表示"0"，它本身不携带时钟信息，接收端需要额外的时钟同步信号才能正确采样。曼彻斯特码则规定：<strong>每个码元的中间时刻必定发生一次电平跳变</strong>，接收端只需检测这个跳变就能同时恢复数据和时钟，因此是一种"自同步码"。</p><p>常见的编码约定（G.E. Thomas 约定，也是本文采用的约定）为：</p><ul><li>码元"1"：前半周期高电平、后半周期低电平，即码元中间出现<strong>下降沿</strong>（记作<code>10</code>）；</li><li>码元"0"：前半周期低电平、后半周期高电平，即码元中间出现<strong>上升沿</strong>（记作<code>01</code>）。</li></ul><p>由于每个码元中间都有跳变，曼彻斯特码不存在长时间的连续高电平或低电平，接收端始终能从跳变中提取同步信息。</p><h1id="二最简单的编码方法数据与时钟异或">二、最简单的编码方法：数据与时钟异或</h1><p>从 NRZ 码到曼彻斯特码，最直观的方法是把 NRZ数据与数据时钟做异或运算：</p><p><span class="math display">\[\text{Manchester} = \text{NRZ} \oplus\text{CLK}\]</span></p><p>其中时钟 CLK 的频率等于码元速率，且每个码元周期内 CLK前半周期为低、后半周期为高。此时：</p><ul><li>当 NRZ = 1 时，输出 = <code>1 ⊕ CLK</code> =<code>\overline&#123;CLK&#125;</code>，即前高后低，对应码元"1"；</li><li>当 NRZ = 0 时，输出 = <code>0 ⊕ CLK</code> =<code>CLK</code>，即前低后高，对应码元"0"。</li></ul><p>这种方法只用一个异或门就能实现，看似简单，但在实际电路中存在严重缺陷。</p><h1 id="三异或法的缺陷尖峰脉冲">三、异或法的缺陷：尖峰脉冲</h1><p>理想情况下，时钟和数据的跳变沿都是垂直的方波，异或输出干净利落。但实际电路中，任何电平跳变都有<strong>有限的上升/下降时间</strong>，而且时钟沿与数据沿之间还存在<strong>时间偏移（skew）</strong>。当NRZ数据恰好在时钟跳变的同一时刻发生翻转时，异或门的两个输入会在极短的时间内经过一系列中间电平组合，从而在输出端产生一个很窄的尖峰脉冲（Glitch，记作P）。</p><figure><img src="manchester-xor-defect.svg" alt="异或编码产生尖峰脉冲" /><figcaption aria-hidden="true">异或编码产生尖峰脉冲</figcaption></figure><p>以上图为例，数据序列为<code>0 1 0 1</code>，在每个码元边界处数据都发生翻转，而时钟也恰好在码元边界跳变：</p><ul><li>在 x ≈ 270 处：数据由 0→1，时钟由 1→0。理想异或结果在跳变前后都为1，但由于两个沿并非完全同步，中间会短暂出现"CLK=1、DATA=1"或"CLK=0、DATA=0"的状态，使异或输出瞬间跌到低电平，形成一个<strong>负向尖峰</strong>；</li><li>在 x ≈ 420 处：数据由 1→0，时钟由 1→0，理想输出前后都为0，中间却短暂出现"CLK=1、DATA=0"或"CLK=0、DATA=1"的状态，使输出瞬间冲到高电平，形成一个<strong>正向尖峰</strong>。</li></ul><p>这些尖峰脉冲宽度极窄（往往只有纳秒级），但幅度足以达到逻辑电平阈值，会被后级电路误认为是有效的码元跳变，导致编码错误。因此简单异或法不能直接用于实际的曼彻斯特编码电路。</p><h1 id="四改进电路加入-d-触发器消除尖峰">四、改进电路：加入 D触发器消除尖峰</h1><p>解决思路非常经典：<strong>用一个 D触发器在"安全时刻"对异或输出重新采样</strong>。只要采样时刻避开尖峰出现的时间窗口，触发器输出的就是干净的曼彻斯特码。</p><h2 id="电路结构">4.1 电路结构</h2><figure><img src="manchester-encoder-circuit.svg" alt="改进后的编码电路" /><figcaption aria-hidden="true">改进后的编码电路</figcaption></figure><p>电路由三块芯片组成：</p><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr class="header"><th>器件</th><th>作用</th></tr></thead><tbody><tr class="odd"><td>7486（异或门）</td><td>完成 NRZ 数据与 CLK 的异或，输出带尖峰的曼彻斯特码，送至 D 端</td></tr><tr class="even"><td>7404（非门）</td><td>将 2CLK 反相后送入 D 触发器的时钟端</td></tr><tr class="odd"><td>74HC74（D 触发器）</td><td>上升沿触发，在反相 2CLK 的安全沿对 D 端采样，从 Q̄端输出干净的曼彻斯特码</td></tr></tbody></table><p>关键点在于：需要一个<strong>频率为数据时钟 2 倍的 2CLK信号</strong>（可由载波分频得到）。74HC74是上升沿触发的触发器，其时钟端接的是经过 7404 反相后的2CLK，因此触发器实际在 <strong>2CLK 的下降沿</strong> 采样 D 端。</p><p>为什么要把 2CLK 反相？关键在于相位关系：CLK 本身就是 2CLK二分频得到的，两者边沿天然对齐——<strong>2CLK的上升沿恰好落在码元边界和码元中点</strong>，而不是 1/4、3/4处。这两个位置都不能采样：边界正是尖峰 P出现的时间窗口；中点则是曼彻斯特码正常的中间跳变、异或输出正在翻转的时刻，在这里采样同样不可靠。距离所有跳变最远的安全点是每个码元的1/4 和 3/4 处，恰好对应 <strong>2CLK 的下降沿</strong>。74HC74只认上升沿，所以用 7404 把 2CLK反相，"下降沿"就变成了触发器时钟端的"上升沿"。可见反相的本质是把采样时刻平移1/4个码元周期，从"与跳变对齐"挪到"两次跳变的正中间"，留出最大的建立/保持裕量。</p><figure><img src="manchester-2clk-invert.svg" alt="2CLK 反相的相位关系" /><figcaption aria-hidden="true">2CLK 反相的相位关系</figcaption></figure><h2 id="为什么能消除尖峰">4.2 为什么能消除尖峰</h2><p>尖峰 P 出现在码元边界处（数据与时钟同时翻转的时刻），而 2CLK的下降沿出现在每个码元周期的 1/4 和 3/4位置——也就是<strong>远离码元边界的中间区域</strong>。此时异或输出已经稳定，触发器采样到的就是正确的电平，尖峰被自然滤除。</p><figure><img src="manchester-improved-waveform.svg"alt="改进后电路的输出波形" /><figcaption aria-hidden="true">改进后电路的输出波形</figcaption></figure><p>以上图（起始位=1，数据=00）为例说明：</p><ol type="1"><li><strong>使能（PR）端</strong>：初始为低电平，把 74HC74 异步预置为Q=1；使能拉高后，触发器正常工作。</li><li><strong>异或输出（D 端）</strong>：在码元边界 x≈300 处仍然存在尖峰P，但在采样时刻（紫色虚线）D 端电平已经稳定。</li><li><strong>74HC74Q</strong>：触发器在 <strong>2CLK的下降沿</strong>（图中紫色虚线，位于每个码元的 1/4 和 3/4 位置）对 D端采样，每次采样后<strong>保持该值直到下一个采样点</strong>——也就是说，Q的每个电平都"从当前采样点开始、保持到下一个采样点"，持续半个码元。依次采样得到序列<code>1 0 0 1 0 1</code>，正是"起始位 1、数据 00"对应的曼彻斯特码<code>10 | 01 | 01</code>（见波形图 Q下方的绿色数字，每个数字对应半个码元）。</li><li><strong>Q̄（输出）</strong>：取 Q 的反相作为最终输出，信息与 Q完全等价，只是极性相反。</li></ol><p>可以看到，虽然 D 端在 x≈300 处有尖峰，但最近的采样点在 x=255 和x=345，都远离尖峰，所以触发器完全不会采到错误电平。</p><p><strong>关于末位"0"为什么有三段电平。</strong> 由于采样点位于码元的1/4、3/4 处，Q 的输出实际上是理想曼彻斯特码<strong>整体延迟 1/4个码元周期</strong>后的结果。因此在输入数据的某个码元区间内，Q的波形会同时包含前后两个码元的信息：区间的前 1/4是上一码元后半段的"残留"，中间是当前码元前半段，后 1/4是当前码元后半段。当相邻两个码元相同（例如此处的0、0）时，上一码元后半段为高、当前码元前半段为低，二者不同，于是呈现出"高-低-高"三段电平；当相邻码元相反时，这两段电平恰好相同而合并，看上去就只有两段。这只是固定延迟带来的视觉表现，并不改变"每个码元正中间必有一次跳变"的曼彻斯特码本质，接收端据此仍能正确解码。注意Q 与 Q̄ 互为反相，所以 Q̄ 的末位呈现"低-高-低"。</p><h2 id="小结">4.3 小结</h2><p>改进电路的本质是：<strong>异或门负责"生成"曼彻斯特码，D触发器负责"整形"</strong>。用一个 2倍频时钟在安全位置采样，以极小的硬件代价消除了组合逻辑的竞争冒险（尖峰脉冲）。这也是数字电路中消除毛刺的通用方法——"寄存器打一拍"。</p><h1 id="五曼彻斯特码的译码">五、曼彻斯特码的译码</h1><p>译码的任务是把接收到的曼彻斯特码还原为编码前的 NRZ 基带信号。在 RFID读写器中，译码通常由 MCU完成。为此引入<strong>起始位、信息位、结束位</strong>的概念：</p><ul><li>起始位采用"1"码；</li><li>信息位的 1 用 <code>10</code> 表示，0 用 <code>01</code> 表示；</li><li>结束位采用<strong>无跳变的低电平</strong>，即 <code>00</code>。</li></ul><p>由此得到完整的码表：</p><table><thead><tr class="header"><th>数字组合</th><th>比特值</th></tr></thead><tbody><tr class="odd"><td>00</td><td>结束位</td></tr><tr class="even"><td>01</td><td>0</td></tr><tr class="odd"><td>10</td><td>1</td></tr><tr class="even"><td>11</td><td>非法码</td></tr></tbody></table><h2 id="译码步骤">5.1 译码步骤</h2><p>MCU 用 <strong>2倍数据时钟频率</strong>对输入的曼彻斯特码进行采样（即每个码元采两个样点），然后按以下规则译码：</p><ol type="1"><li><strong>判断起始位</strong>：检测到 <code>10</code>组合，说明一帧数据开始；</li><li><strong>转换信息位</strong>：把读到的 <code>10</code>译为"1"，<code>01</code> 译为"0"，还原出 NRZ 数据；</li><li><strong>判断结束位</strong>：若读到 <code>00</code>组合，表示本帧数据结束；</li><li><strong>冲突检测</strong>：<code>11</code>是非法码，正常编码不会出现。一旦出现<code>11</code>，说明发生了传输错误或多标签同时响应的<strong>碰撞冲突</strong>。</li></ol><p>曼彻斯特码能用于碰撞检测，而 NRZ 码不具备这一特性——这也是曼彻斯特码在RFID 等多址接入场景中被广泛采用的重要原因。</p><h1 id="六总结">六、总结</h1><ul><li>曼彻斯特码通过码元中间的固定跳变实现自同步，1 对应下降沿、0对应上升沿；</li><li>直接用"NRZ ⊕CLK"编码会因信号边沿不理想产生尖峰脉冲，不可直接使用；</li><li>在异或门后级联一个由 2CLK 驱动的 D 触发器，利用 2CLK下降沿在远离码元边界的安全时刻采样，即可滤除尖峰；</li><li>译码时用 2 倍频采样，按<code>10</code>→1、<code>01</code>→0、<code>00</code>→结束、<code>11</code>→非法的规则还原数据，同时可实现碰撞检测。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;曼彻斯特码（Manchester
+Code）是一种将时钟信息嵌入到数据流中的自同步编码方式，广泛应用于
+RFID、以太网、磁条卡等领域。本文从最基本的&quot;异或编码法&quot;出发，重点分析这种方法因信号边沿不理想而产生尖峰脉冲的问题，以及如何用
+D 触发器改造电路来消除尖峰。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="物联网技术" scheme="http://yoursite.com/categories/%E7%89%A9%E8%81%94%E7%BD%91%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="RFID" scheme="http://yoursite.com/tags/RFID/"/>
+    
+      <category term="数据通信" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1/"/>
+    
+      <category term="曼彻斯特码" scheme="http://yoursite.com/tags/%E6%9B%BC%E5%BD%BB%E6%96%AF%E7%89%B9%E7%A0%81/"/>
+    
+  </entry>
   
   <entry>
     <title>RFID中的调制技术</title>
@@ -535,39 +565,6 @@ id=&quot;springboot的自动配置是如何实现的&quot;&gt;SpringBoot的自�
       <category term="SpringCloud" scheme="http://yoursite.com/tags/SpringCloud/"/>
     
       <category term="SpringBoot" scheme="http://yoursite.com/tags/SpringBoot/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatis配置allowMultiQueries=true允许使用foreach标签批量插入或更新数据</title>
-    <link href="http://yoursite.com/2023/06/30/MyBatis%E9%85%8D%E7%BD%AEallowMultiQueries-true%E5%85%81%E8%AE%B8%E4%BD%BF%E7%94%A8foreach%E6%A0%87%E7%AD%BE%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5%E6%88%96%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE/"/>
-    <id>http://yoursite.com/2023/06/30/MyBatis%E9%85%8D%E7%BD%AEallowMultiQueries-true%E5%85%81%E8%AE%B8%E4%BD%BF%E7%94%A8foreach%E6%A0%87%E7%AD%BE%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5%E6%88%96%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE/</id>
-    <published>2023-06-30T04:59:35.000Z</published>
-    <updated>2023-06-30T05:01:00.437Z</updated>
-    
-    <content type="html"><![CDATA[<p>执行update更新操作</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;batchUpdate&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;java.util.List&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;list&quot;</span> <span class="attr">item</span>=<span class="string">&quot;item&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;;&quot;</span> <span class="attr">open</span>=<span class="string">&quot;&quot;</span> <span class="attr">close</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">        update test_table</span><br><span class="line">        <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.a != null&quot;</span>&gt;</span>output_amount = #&#123;item.a&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.b!= null&quot;</span>&gt;</span>invoice_amount = #&#123;item.b&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;item.c!= null&quot;</span>&gt;</span>payment_amount = #&#123;item.c&#125;,<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        where id = #&#123;item.id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure><p>执行报错： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error updating database.  </span><br><span class="line">Cause: java.sql.SQLSyntaxErrorException: </span><br><span class="line">You have an error in your SQL syntax; </span><br><span class="line">check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;update test_table set a = 1, &#x27; at line 14</span><br></pre></td></tr></table></figure></p><p>刚开始出现这个错误，以为是update语句写的有问题，但是检查了很多遍都没有问题。奇怪的是，同样的代码，同样的数据，本地启的环境不行，测试环境却可以。经过同事提醒了一下，于是检查了一下配置文件，果然发现配置文件上的jdbc配置，测试环境比开发环境多了个<code>allowMultiQueries=true</code>。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=true&amp;serverTimezone=GMT%2B8&amp;nullCatalogMeansCurrent=true</span><br></pre></td></tr></table></figure><p>MyBatis默认情况下不允许批量插入或更新数据的原因是出于安全考虑。在许多情况下，数据的插入和更新都需要经过验证和控制，以确保数据的完整性和一致性。如果允许默认的批量操作，可能会导致不正确的数据插入或更新，从而影响应用程序的正常运行。</p><p>通过配置<code>allowMultiQueries=true</code>可以开启MyBatis的批量操作功能。这个配置项告诉MyBatis允许在单个数据库连接中执行多个SQL语句，从而实现批量插入或更新数据的功能。但是要注意，在开启批量操作之前，确保你已经了解并理解了可能引发的安全风险，并且在使用批量操作时要进行适当的验证和控制，以确保数据的完整性和安全性。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;执行update更新操作&lt;/p&gt;
-&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/s
-      
-    
-    </summary>
-    
-    
-      <category term="MySQL" scheme="http://yoursite.com/categories/MySQL/"/>
-    
-      <category term="代码人生" scheme="http://yoursite.com/categories/MySQL/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/"/>
-    
-      <category term="数据库" scheme="http://yoursite.com/categories/MySQL/%E4%BB%A3%E7%A0%81%E4%BA%BA%E7%94%9F/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
-    
-      <category term="allowMultiQueries" scheme="http://yoursite.com/tags/allowMultiQueries/"/>
     
   </entry>
   

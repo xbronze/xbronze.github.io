@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 580" width="760" height="580">
+<style>
+.th { fill: #171717; font: 600 14px/20px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.sig { stroke: #171717; stroke-width: 1.8; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.sig2 { stroke: #2563EB; stroke-width: 1.8; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.sig3 { stroke: #DC2626; stroke-width: 1.8; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.sig4 { stroke: #16A34A; stroke-width: 1.8; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.spike { stroke: #DC2626; stroke-width: 1.8; fill: #FEE2E2; stroke-linejoin: round; }
+.leader { stroke: #A1A1AA; stroke-width: .6; stroke-dasharray: 4 4; fill: none; }
+.sample { stroke: #9333EA; stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+.bitbox { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
+.bittxt { fill: #52525B; font: 500 11px/16px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.plbl { fill: #DC2626; font: 700 12px/17px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.splbl { fill: #9333EA; font: 500 10px/14px "PingFang SC", "Microsoft YaHei", sans-serif; }
+</style>
+<rect width="760" height="580" fill="#FFFFFF"/>
+
+<text class="th" x="380" y="24" text-anchor="middle">改进后编码电路波形（起始位=1，数据=00）</text>
+
+<!-- bit boxes -->
+<rect class="bitbox" x="120" y="44" width="180" height="520"/>
+<rect class="bitbox" x="300" y="44" width="180" height="520"/>
+<rect class="bitbox" x="480" y="44" width="180" height="520"/>
+<text class="bittxt" x="210" y="60" text-anchor="middle">起始位 1</text>
+<text class="bittxt" x="390" y="60" text-anchor="middle">数据 0</text>
+<text class="bittxt" x="570" y="60" text-anchor="middle">数据 0</text>
+
+<!-- leaders at bit boundaries -->
+<line class="leader" x1="300" y1="44" x2="300" y2="564"/>
+<line class="leader" x1="480" y1="44" x2="480" y2="564"/>
+
+<!-- sample lines at falling edges of 2CLK: 165,255,345,435,525,615 -->
+<line class="sample" x1="165" y1="64" x2="165" y2="564"/>
+<line class="sample" x1="255" y1="64" x2="255" y2="564"/>
+<line class="sample" x1="345" y1="64" x2="345" y2="564"/>
+<line class="sample" x1="435" y1="64" x2="435" y2="564"/>
+<line class="sample" x1="525" y1="64" x2="525" y2="564"/>
+<line class="sample" x1="615" y1="64" x2="615" y2="564"/>
+<text class="splbl" x="165" y="74" text-anchor="middle">采样</text>
+<text class="splbl" x="345" y="74" text-anchor="middle">采样</text>
+<text class="splbl" x="525" y="74" text-anchor="middle">采样</text>
+
+<!-- 1. 使能 PR: low before 120, high after. high=70, low=95 -->
+<text class="ts" x="108" y="88" text-anchor="end">使能(PR)</text>
+<path class="sig" d="M100,95 L120,95 L120,70 L660,70"/>
+
+<!-- 2. 2CLK: high=145, low=170. rising at 120,210,300,390,480,570; falling at 165,255,345,435,525,615 -->
+<text class="ts" x="108" y="163" text-anchor="end">2CLK</text>
+<path class="sig" d="M100,170 L120,170 L120,145 L165,145 L165,170 L210,170 L210,145 L255,145 L255,170 L300,170 L300,145 L345,145 L345,170 L390,170 L390,145 L435,145 L435,170 L480,170 L480,145 L525,145 L525,170 L570,170 L570,145 L615,145 L615,170 L660,170"/>
+
+<!-- 3. CLK: high=220, low=245. low first half, high second half. rising 210,390,570; falling 300,480,660 -->
+<text class="ts" x="108" y="238" text-anchor="end">CLK</text>
+<path class="sig" d="M100,245 L120,245 L210,245 L210,220 L300,220 L300,245 L390,245 L390,220 L480,220 L480,245 L570,245 L570,220 L660,220"/>
+
+<!-- 4. DATA: high=295, low=320. 1,0,0. transition at 300 with slope -->
+<text class="ts" x="108" y="313" text-anchor="end">DATA</text>
+<path class="sig2" d="M100,295 L292,295 L300,320 L308,320 L660,320"/>
+
+<!-- 5. XOR output D: high=370, low=395. 
+     bit1: high 120-210, low 210-300 (spike at ~300)
+     bit2: low 300-390, high 390-480
+     bit3: low 480-570, high 570-660 -->
+<text class="ts" x="108" y="388" text-anchor="end">异或输出(D)</text>
+<path class="sig3" d="M100,370 L120,370 L210,370 L210,395 L292,395"/>
+<path class="spike" d="M292,395 L297,372 L303,372 L308,395"/>
+<path class="sig3" d="M308,395 L390,395 L390,370 L480,370 L480,395 L570,395 L570,370 L660,370"/>
+<text class="plbl" x="300" y="412" text-anchor="middle">P</text>
+
+<!-- 6. 74HC74Q: high=445, low=470.
+     120-255: high (preset + sample D=1)
+     255-435: low (sample D=0 at 255, D=0 at 345)
+     435-525: high (sample D=1 at 435)
+     525-615: low (sample D=0 at 525)
+     615-660: high (sample D=1 at 615) -->
+<text class="ts" x="108" y="463" text-anchor="end">74HC74Q</text>
+<path class="sig4" d="M100,445 L255,445 L255,470 L435,470 L435,445 L525,445 L525,470 L615,470 L615,445 L660,445"/>
+
+<!-- 7. 74HC74Qbar (output): inverse of Q. high=520, low=545 -->
+<text class="ts" x="108" y="538" text-anchor="end">Q̄(输出)</text>
+<path class="sig4" d="M100,545 L255,545 L255,520 L435,520 L435,545 L525,545 L525,520 L615,520 L615,545 L660,545"/>
+
+<!-- Q 采样并保持：每个采样点更新一次，保持到下一个采样点（每格一个数字＝半个码元） -->
+<text class="bittxt" x="210" y="490" text-anchor="middle" fill="#16A34A">1</text>
+<text class="bittxt" x="285" y="490" text-anchor="middle" fill="#16A34A">0</text>
+<text class="bittxt" x="390" y="490" text-anchor="middle" fill="#16A34A">0</text>
+<text class="bittxt" x="495" y="490" text-anchor="middle" fill="#16A34A">1</text>
+<text class="bittxt" x="570" y="490" text-anchor="middle" fill="#16A34A">0</text>
+<text class="bittxt" x="637" y="490" text-anchor="middle" fill="#16A34A">1</text>
+
+<!-- annotation -->
+<text class="ts" x="380" y="576" text-anchor="middle">Q 在每个采样点被更新为 D 的值并保持到下一个采样点，因此输出是曼彻斯特码整体延迟 1/4 码元后的波形</text>
+<text class="ts" x="380" y="598" text-anchor="middle">末位"0"呈 高-低-高：延迟使前一码元后半段(1)落到本码元前段，与前半段(0)、后半段(1)构成三段，非编码错误</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 456" width="760" height="456">
+<style>
+.th { fill: #171717; font: 600 15px/22px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 13px/19px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.wv { stroke: #171717; stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.xor { stroke: #DC2626; stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.spike { stroke: #DC2626; stroke-width: 2; fill: #FEE2E2; stroke-linejoin: round; }
+.leader { stroke: #A1A1AA; stroke-width: .6; stroke-dasharray: 4 4; fill: none; }
+.bitbox { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
+.bittxt { fill: #52525B; font: 500 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.edge-ok { stroke: #16A34A; stroke-width: 3; fill: none; stroke-linecap: round; }
+.edge-bad { stroke: #DC2626; stroke-width: 3; fill: none; stroke-linecap: round; }
+.b-ok circle { fill: #DCFCE7; stroke: #16A34A; stroke-width: 1.5; }
+.b-ok text { fill: #16A34A; font: 700 12px/16px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.b-bad circle { fill: #FEE2E2; stroke: #DC2626; stroke-width: 1.5; }
+.b-bad text { fill: #DC2626; font: 700 12px/16px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.plbl { fill: #DC2626; font: 700 13px/19px "PingFang SC", "Microsoft YaHei", sans-serif; }
+</style>
+<rect width="760" height="456" fill="#FFFFFF"/>
+
+<text class="th" x="380" y="26" text-anchor="middle">2CLK 反相的意义：把采样沿移到安全窗口（一个码元周期 T）</text>
+
+<rect class="bitbox" x="120" y="44" width="540" height="372"/>
+<text class="bittxt" x="390" y="60" text-anchor="middle">一个码元周期 T（CLK 由 2CLK 二分频得到，边沿天然对齐）</text>
+
+<!-- badges -->
+<g class="b-bad"><circle cx="120" cy="82" r="10"/><text x="120" y="86" text-anchor="middle">✗</text></g>
+<g class="b-ok"><circle cx="255" cy="82" r="10"/><text x="255" y="86" text-anchor="middle">✓</text></g>
+<g class="b-bad"><circle cx="390" cy="82" r="10"/><text x="390" y="86" text-anchor="middle">✗</text></g>
+<g class="b-ok"><circle cx="525" cy="82" r="10"/><text x="525" y="86" text-anchor="middle">✓</text></g>
+<g class="b-bad"><circle cx="660" cy="82" r="10"/><text x="660" y="86" text-anchor="middle">✗</text></g>
+
+<!-- leaders -->
+<line class="leader" x1="120" y1="94" x2="120" y2="400"/>
+<line class="leader" x1="255" y1="94" x2="255" y2="400"/>
+<line class="leader" x1="390" y1="94" x2="390" y2="400"/>
+<line class="leader" x1="525" y1="94" x2="525" y2="400"/>
+<line class="leader" x1="660" y1="94" x2="660" y2="400"/>
+
+<!-- CLK: high=130, low=164 -->
+<text class="ts" x="108" y="152" text-anchor="end">CLK</text>
+<path class="wv" d="M112,130 L120,130 L120,164 L390,164 L390,130 L660,130 L660,164 L668,164"/>
+
+<!-- 2CLK: high=196, low=230; rising at 120/390 (boundary & center), falling at 255/525 (T/4, 3T/4) -->
+<text class="ts" x="108" y="218" text-anchor="end">2CLK</text>
+<path class="wv" d="M120,230 L120,196 L255,196 L255,230 L390,230 L390,196 L525,196 L525,230 L660,230"/>
+<path class="edge-bad" d="M120,230 L120,196"/>
+<path class="edge-bad" d="M390,230 L390,196"/>
+<path class="edge-ok" d="M255,196 L255,230"/>
+<path class="edge-ok" d="M525,196 L525,230"/>
+
+<!-- XOR D: high=262, low=296; data=0 -> follows CLK; spikes at boundaries -->
+<text class="ts" x="108" y="284" text-anchor="end">异或输出(D)</text>
+<path class="xor" d="M128,296 L384,296 L396,262 L652,262"/>
+<path class="spike" d="M112,296 L117,266 L123,266 L128,296"/>
+<path class="spike" d="M652,262 L657,292 L663,292 L668,262"/>
+<text class="plbl" x="120" y="314" text-anchor="middle">P</text>
+<text class="plbl" x="660" y="314" text-anchor="middle">P</text>
+
+<!-- inverted 2CLK: high=328, low=362; rising at 255/525 = 74HC74 trigger edges -->
+<text class="ts" x="108" y="350" text-anchor="end">反相2CLK</text>
+<path class="wv" d="M120,362 L255,362 L255,328 L390,328 L390,362 L525,362 L525,328 L660,328"/>
+<path class="edge-ok" d="M255,362 L255,328"/>
+<path class="edge-ok" d="M525,362 L525,328"/>
+
+<!-- axis labels -->
+<text class="bittxt" x="120" y="392" text-anchor="middle">0</text>
+<text class="bittxt" x="255" y="392" text-anchor="middle">T/4</text>
+<text class="bittxt" x="390" y="392" text-anchor="middle">T/2</text>
+<text class="bittxt" x="525" y="392" text-anchor="middle">3T/4</text>
+<text class="bittxt" x="660" y="392" text-anchor="middle">T</text>
+
+<!-- annotations -->
+<text class="ts" x="380" y="432" text-anchor="middle">2CLK 上升沿落在码元边界（有尖峰 P）和码元中点（D 正在跳变），均不可采样</text>
+<text class="ts" x="380" y="450" text-anchor="middle">反相后 74HC74 在 2CLK 下降沿（T/4、3T/4 处）采样，距一切跳变最远，建立/保持裕量最大</text>
+</svg>
