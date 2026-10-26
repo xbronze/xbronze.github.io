@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" width="760" height="430">
+<style>
+.th { fill: #171717; font: 600 15px/22px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.ts { fill: #52525B; font: 400 13px/19px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.clk { stroke: #171717; stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.data { stroke: #2563EB; stroke-width: 2.2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.xor { stroke: #DC2626; stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.spike { stroke: #DC2626; stroke-width: 2; fill: #FEE2E2; stroke-linejoin: round; }
+.leader { stroke: #A1A1AA; stroke-width: .6; stroke-dasharray: 4 4; fill: none; }
+.bitbox { fill: #F4F4F5; stroke: #D4D4D8; stroke-width: 1; }
+.bittxt { fill: #52525B; font: 500 12px/18px "PingFang SC", "Microsoft YaHei", sans-serif; }
+.plbl { fill: #DC2626; font: 700 13px/19px "PingFang SC", "Microsoft YaHei", sans-serif; }
+</style>
+<rect width="760" height="430" fill="#FFFFFF"/>
+
+<text class="th" x="380" y="26" text-anchor="middle">不归零码与数据时钟异或编码的缺陷：边沿不理想产生尖峰脉冲</text>
+
+<!-- bit period boxes -->
+<rect class="bitbox" x="120" y="44" width="150" height="370"/>
+<rect class="bitbox" x="270" y="44" width="150" height="370"/>
+<rect class="bitbox" x="420" y="44" width="150" height="370"/>
+<rect class="bitbox" x="570" y="44" width="150" height="370"/>
+<text class="bittxt" x="195" y="60" text-anchor="middle">位 1</text>
+<text class="bittxt" x="345" y="60" text-anchor="middle">位 2</text>
+<text class="bittxt" x="495" y="60" text-anchor="middle">位 3</text>
+<text class="bittxt" x="645" y="60" text-anchor="middle">位 4</text>
+
+<!-- leaders at boundaries -->
+<line class="leader" x1="270" y1="44" x2="270" y2="414"/>
+<line class="leader" x1="420" y1="44" x2="420" y2="414"/>
+<line class="leader" x1="570" y1="44" x2="570" y2="414"/>
+
+<!-- CLK: high=92, low=130; 前半周期低、后半周期高 -->
+<text class="ts" x="108" y="116" text-anchor="end">CLK</text>
+<path class="clk" d="M120,130 L195,130 L195,92 L270,92 L270,130 L345,130 L345,92 L420,92 L420,130 L495,130 L495,92 L570,92 L570,130 L645,130 L645,92 L720,92"/>
+
+<!-- DATA NRZ: high=222, low=260; data = 0,1,0,1 with sloped edges -->
+<text class="ts" x="108" y="248" text-anchor="end">数据 (NRZ)</text>
+<path class="data" d="M120,260 L262,260 L270,222 L278,222 L412,222 L420,260 L428,260 L562,260 L570,222 L578,222 L720,222"/>
+
+<!-- XOR output: high=338, low=376; with spikes -->
+<text class="ts" x="108" y="364" text-anchor="end">异或输出</text>
+<!-- bit1: data=0, xor=clk: low 120-195, high 195-270 -->
+<path class="xor" d="M120,376 L195,376 L195,338 L262,338"/>
+<!-- negative spike at x~270: high->low->high -->
+<path class="spike" d="M262,338 L267,374 L273,374 L278,338"/>
+<path class="xor" d="M278,338 L345,338 L345,376 L412,376"/>
+<!-- positive spike at x~420: low->high->low -->
+<path class="spike" d="M412,376 L417,340 L423,340 L428,376"/>
+<path class="xor" d="M428,376 L495,376 L495,338 L562,338"/>
+<!-- negative spike at x~570 -->
+<path class="spike" d="M562,338 L567,374 L573,374 L578,338"/>
+<path class="xor" d="M578,338 L645,338 L645,376 L720,376"/>
+
+<!-- spike labels P -->
+<text class="plbl" x="270" y="396" text-anchor="middle">P</text>
+<text class="plbl" x="420" y="396" text-anchor="middle">P</text>
+<text class="plbl" x="570" y="396" text-anchor="middle">P</text>
+
+<!-- annotation -->
+<text class="ts" x="380" y="422" text-anchor="middle">数据跳变沿与时钟沿存在有限斜率和时间偏移，导致异或输出出现窄尖峰 P</text>
+</svg>
