@@ -5444,4 +5444,120 @@ CLK"编码会因信号边沿不理想产生尖峰脉冲，不可直接使用；<
         <tag>曼彻斯特码</tag>
       </tags>
   </entry>
+  <entry>
+    <title>STM32+RC522读取MIFARE1K卡排坑实录</title>
+    <url>/2026/11/03/STM32-RC522%E8%AF%BB%E5%8F%96MIFARE1K%E5%8D%A1%E6%8E%92%E5%9D%91%E5%AE%9E%E5%BD%95/</url>
+    <content><![CDATA[<p>这里为你整理了一篇结构清晰、技术干货满满，且非常符合开发者阅读习惯的博客文章。你可以直接复制到
+CSDN、知乎、博客园或简书等平台发布。</p>
+<hr />
+<h1
+id="stm32rc522读取mifare-1k卡从uid到加密读写的排坑实录">STM32+RC522读取MIFARE
+1K卡：从UID到加密读写的“排坑”实录</h1>
+<h2 id="前言">前言</h2>
+<p>最近在做一个基于STM32F103C8T6和RC522的RFID门禁系统项目。由于使用现成的封装库，本以为读取UID、完成扇区密码认证和读写是分分钟的事，结果却在“认证失败”和“写块只写进一个字节”的泥潭里挣扎了好久。</p>
+<p>本文将复盘整个调试过程，重点解析 <strong>ISO14443A
+协议的状态机流转</strong>、<strong>硬件CRC的陷阱</strong> 以及
+<strong>底层收发时序截断</strong> 这三个经典大坑。如果你也在用 RC522 调
+MIFARE 1K (M1) 卡，希望这篇避坑指南能帮你节省几个小时。</p>
+<span id="more"></span>
+<hr />
+<h2 id="实验现象与硬件环境">实验现象与硬件环境</h2>
+<ul>
+<li><strong>硬件</strong>：STM32F103C8T6 最小系统板、RC522
+模块（3.3V供电）、MIFARE Classic 1K 白卡。</li>
+<li><strong>软件</strong>：STM32CubeMX + Keil HAL库，串口波特率
+115200。</li>
+<li><strong>目标</strong>：读取卡号 UID -&gt; 使用默认密钥
+<code>FFFFFFFFFFFF</code> 认证 -&gt; 读块 -&gt; 写块 -&gt;
+读回验证。</li>
+</ul>
+<hr />
+<h2
+id="坑点一uid能读出但死活认证不过auth-failed">坑点一：UID能读出，但死活认证不过（Auth
+Failed）</h2>
+<p><strong>现象</strong>：寻卡、防冲突获取 UID 一切正常，但调用
+<code>MIFARE_Auth</code> 时始终返回失败。起初怀疑是卡被加密了，用手机
+NFC 软件（MCT）一测，发现卡确实出厂默认密钥
+<code>FFFFFFFFFFFF</code>，根本没加密！</p>
+<p><strong>原因与解决</strong>： 根据 ISO14443A
+协议，卡片的状态机是严格递进的： 1. <code>REQA</code> (寻卡) -&gt;
+卡片进入 <strong>READY</strong> 态。 2. <code>Anticoll</code> (防冲突)
+-&gt; 获取 4 字节 UID，卡片<strong>依然停留在 READY 态</strong>。 3.
+<code>SELECT</code> (选卡) -&gt; 发送 UID 给卡片校验，卡片进入
+<strong>ACTIVE</strong> 态。 4. <code>AUTHENT</code> (认证) -&gt;
+<strong>只有进入 ACTIVE 态后，卡片才接受密码认证！</strong></p>
+<p>很多简陋的开源库省去了 <code>SELECT</code> 步骤，导致卡片一直处于
+READY 态，你发认证指令它当然不理你。我们需要补上选卡逻辑：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 选卡函数</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">RC522_Select</span><span class="params">(<span class="type">uint8_t</span> *serNum)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> status;</span><br><span class="line">    <span class="type">uint16_t</span> unLen;</span><br><span class="line">    <span class="type">uint8_t</span> buffer[<span class="number">7</span>];</span><br><span class="line">    <span class="type">uint8_t</span> i;</span><br><span class="line"></span><br><span class="line">    buffer[<span class="number">0</span>] = <span class="number">0x93</span>;       <span class="comment">/* Select 指令 */</span></span><br><span class="line">    buffer[<span class="number">1</span>] = <span class="number">0x70</span>;       <span class="comment">/* 选卡 */</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        buffer[<span class="number">2</span> + i] = serNum[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 计算 BCC（UID 4字节异或） */</span></span><br><span class="line">    buffer[<span class="number">6</span>] = serNum[<span class="number">0</span>] ^ serNum[<span class="number">1</span>] ^ serNum[<span class="number">2</span>] ^ serNum[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    RC522_WriteReg(BitFramingReg, <span class="number">0x00</span>);</span><br><span class="line">    status = RC522_ToCard(PCD_TRANSCEIVE, buffer, <span class="number">7</span>, buffer, &amp;unLen);</span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2
+id="坑点二加上选卡后程序彻底卡死或通信超时">坑点二：加上选卡后，程序彻底卡死或通信超时</h2>
+<p><strong>现象</strong>：加上 <code>Select</code>
+指令后，不仅认证没过，连串口都不打印信息了，或者打印
+<code>Select failed</code>。</p>
+<p><strong>原因与解决</strong>：
+这涉及两个致命细节：<strong>CRC校验的开启时机</strong> 与
+<strong>SPI通信速率</strong>。</p>
+<ol type="1">
+<li><strong>硬件 CRC 陷阱</strong>：在 ISO14443A
+中，寻卡（0x52）和防冲突（0x9320）是不带 CRC
+的；但是选卡（0x9370）、认证（0x0E）、读写（0x30/0xA0）<strong>必须带
+CRC</strong>。如果你的代码全局开启或关闭 CRC，都会导致通信失败。</li>
+<li><strong>SPI 速率过高</strong>：用面包板和杜邦线连接时，如果 SPI
+速率跑到 9MHz，在带加密和 CRC
+的复杂数据交换中极易发生时序错位（丢帧）。</li>
+</ol>
+<p><strong>解决思路</strong>： * <strong>降低 SPI 速率</strong>：在
+CubeMX 中，将 SPI1 的 Baud Rate Prescaler 从 8 改为 <strong>64 或
+128</strong>（降至 1MHz 左右，非常稳定）。 * <strong>动态控制
+CRC</strong>：在底层发送函数 <code>RC522_ToCard</code>
+中，根据指令动态修改 <code>TxModeReg</code> 和
+<code>RxModeReg</code>。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RC522_ToCard 函数中的 CRC 动态判断</span></span><br><span class="line"><span class="keyword">if</span> (command == PCD_AUTHENT) &#123;</span><br><span class="line">    RC522_WriteReg(TxModeReg, <span class="number">0x80</span>); <span class="comment">// 认证开启发送 CRC</span></span><br><span class="line">    RC522_WriteReg(RxModeReg, <span class="number">0x80</span>); <span class="comment">// 认证开启接收 CRC</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (command == PCD_TRANSCEIVE) &#123;</span><br><span class="line">    <span class="comment">// 寻卡和防冲突不需要 CRC</span></span><br><span class="line">    <span class="keyword">if</span> ((sendData[<span class="number">0</span>] == <span class="number">0x93</span> &amp;&amp; sendData[<span class="number">1</span>] == <span class="number">0x20</span>) || sendData[<span class="number">0</span>] == <span class="number">0x52</span> || sendData[<span class="number">0</span>] == <span class="number">0x26</span>) &#123;</span><br><span class="line">        RC522_WriteReg(TxModeReg, <span class="number">0x00</span>);</span><br><span class="line">        RC522_WriteReg(RxModeReg, <span class="number">0x00</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 选卡和读写需要 CRC</span></span><br><span class="line">        RC522_WriteReg(TxModeReg, <span class="number">0x80</span>);</span><br><span class="line">        RC522_WriteReg(RxModeReg, <span class="number">0x80</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2
+id="坑点三认证和读块成功但写块只写进了第一个字节">坑点三：认证和读块成功，但写块只写进了第一个字节</h2>
+<p><strong>现象</strong>：认证通过，读块数据全 <code>00</code>
+正常；调用写块函数返回成功，但读回的数据却只有首字节变成了
+<code>32</code>，后面全是 <code>00</code>（例如写入
+<code>32 30 32 33...</code>，读回 <code>32 00 00 00...</code>）。</p>
+<p><strong>原因与解决</strong>： 这是 RC522
+硬件底层的一个“时序截断”Bug。 MIFARE 卡的写块协议是半双工的： 1. 主机发
+<code>0xA0</code> + <code>块地址</code> (2字节)。 2. 卡片回复
+<code>ACK</code>。 3. 主机紧接着发 <code>16字节数据</code>。 4. 卡片回复
+<code>ACK</code>。</p>
+<p>当我们用底层函数一次性把 18 字节全部塞进 FIFO 时，RC522 在发完前 2
+个字节后收到了卡片的 <code>ACK</code>，此时中断标志位 <code>RxIRq</code>
+置位。代码误以为发送已经结束，提前打断了发送过程，导致后面的 15
+个数据字节全被丢弃。</p>
+<p><strong>解决思路</strong>：
+在底层等待中断的逻辑中“打个补丁”：如果是写块指令，不等待接收中断，而是强等待发送完成中断（<code>IdleIRq = 0x10</code>），确保
+18
+字节全部吐完。或者，<strong>最稳妥的做法</strong>是将写块拆分为两次发送：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 最稳妥的写块函数实现（拆分法）</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">MIFARE_WriteBlock</span><span class="params">(<span class="type">uint8_t</span> blockAddr, <span class="type">uint8_t</span> *data)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint8_t</span> status;</span><br><span class="line">    <span class="type">uint16_t</span> unLen;</span><br><span class="line">    <span class="type">uint8_t</span> buffer[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 发送写块指令和地址 (0xA0 + Addr)</span></span><br><span class="line">    buffer[<span class="number">0</span>] = <span class="number">0xA0</span>;</span><br><span class="line">    buffer[<span class="number">1</span>] = blockAddr;</span><br><span class="line">    RC522_WriteReg(BitFramingReg, <span class="number">0x00</span>);</span><br><span class="line">    status = RC522_ToCard(PCD_TRANSCEIVE, buffer, <span class="number">2</span>, <span class="literal">NULL</span>, &amp;unLen);</span><br><span class="line">    <span class="keyword">if</span> (status != MI_OK) <span class="keyword">return</span> status;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 发送 16 字节数据</span></span><br><span class="line">    status = RC522_ToCard(PCD_TRANSCEIVE, data, <span class="number">16</span>, <span class="literal">NULL</span>, &amp;unLen);</span><br><span class="line">    <span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="最终的完美输出">最终的完美输出</h2>
+<p>经过上述三道“手术”，重新编译烧录。刷卡后，串口终于打出了令人极其舒适的完美回显：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">UART Direct Test OK</span><br><span class="line">RC522 Version: 0x92</span><br><span class="line">MFRC522 Version 2.0 detected.</span><br><span class="line"></span><br><span class="line">--- New Card Detected ---</span><br><span class="line">Card UID: 02 5B 0E 9E</span><br><span class="line">--- 1. Read Test ---</span><br><span class="line">Auth(default key FFFFFFFFFFFF) OK</span><br><span class="line">Block 4 raw data: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 </span><br><span class="line">--- 2. Write Test ---</span><br><span class="line">Write block 4 OK</span><br><span class="line">Read back block 4: 32 30 32 33 30 30 30 31 5A 68 61 6E 67 00 00 00 </span><br><span class="line">--- 3. Wrong Key Test ---</span><br><span class="line">Wrong key rejected, auth failed as expected</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="总结与思考">总结与思考</h2>
+<p>在使用 RC522 等 RFID
+模块时，往往“能读出UID”只是个开始，真正的挑战在于： 1.
+<strong>吃透协议规范</strong>：ISO14443A 的状态机流转（READY -&gt;
+ACTIVE）是死规定，不能省步骤。 2.
+<strong>硬件调试需降速</strong>：面包板长线连接时，SPI 降速往往能解决
+90% 的玄学问题。 3. <strong>注意芯片特性</strong>：RC522
+在收发非对称长度数据（如写块）时的中断打断问题，需要仔细查阅芯片手册（FIFO
+与 中断控制）。</p>
+<p>希望这篇踩坑记录能帮到正在与 RC522 和 MIFARE
+卡“斗智斗勇”的你。欢迎在评论区交流讨论！</p>
+]]></content>
+      <categories>
+        <category>代码人生</category>
+      </categories>
+      <tags>
+        <tag>STM32</tag>
+        <tag>RC522</tag>
+      </tags>
+  </entry>
 </search>
