@@ -1780,180 +1780,6 @@ modified 的初始值 false;
       </tags>
   </entry>
   <entry>
-    <title>程序猿三部曲之白银时代</title>
-    <url>/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/</url>
-    <content><![CDATA[<p>之前在某篇<a
-href="https://mp.weixin.qq.com/s/CfBwk0dttd1eb2PvOvGvuQ">公众号文章</a>中，看到工资10K、15K、20K的Java程序员应该掌握的技术。大致对应着初、中、高级开发人员，所以我打算针对这三个阶段，写三篇文章，一边学习，一边总结。</p>
-<p>曾经读过王小波的时代三部曲，分别是《青铜时代》、《白银时代》、《黄金时代》，遂借用来类比程序员的三个阶段。</p>
-<span id="more"></span>
-<h1 id="hashmap和concurrenthashmap有什么区别">1
-HashMap和ConcurrentHashMap有什么区别？</h1>
-<p>HashMap是传统集合下的类，ConcurrentHashMap是并发集合下的类。除此之外，它们之间还有各种不同之处：</p>
-<ul>
-<li>HashMap本质上是非同步的，即HashMap不是线程安全的，而ConcurrentHashMap是线程安全的。</li>
-<li>HashMap性能比较高，因为它是非同步的，任意数量的线程都可以同时访问它。而ConcurrentHashMap性能比较低，因为有时候线程需要在ConcurrentHashMap上等待请求。</li>
-<li>当一个线程正在迭代HashMap时，如果有另外一个线程试图对这个HashMap的元素进行新增或者修改，我们将得到运行时异常
-ConcurrentModificationException。然而，我们在迭代ConcurrentHashMap时执行任何修改都不会出现任何异常。</li>
-<li>HashMap的key和value可以为null，ConcurrentHashMap不允许，否则会报运行时异常NullPointerException.</li>
-<li>HashMap 是在 JDK 1.2 中引入的，而 ConcurrentHashMap 是由 SUN
-Microsystem 在 JDK 1.5 中引入的</li>
-</ul>
-<h1 id="synchronized关键字">2 synchronized关键字</h1>
-<p>synchronized是Java中的关键字，是一种同步锁。它修饰的对象有以下几种：</p>
-<ol type="1">
-<li>修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象；</li>
-<li>修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象；</li>
-<li>修饰一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象。</li>
-<li>修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。</li>
-</ol>
-<p>资料：<a
-href="https://www.cnblogs.com/weibanggang/p/9470718.html">Java中Synchronized的用法（简单介绍）</a></p>
-<h1 id="volatile关键字">3 volatile关键字</h1>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NoVisibility</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> number;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ReaderThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready) &#123;</span><br><span class="line">                Thread.<span class="keyword">yield</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ReaderThread</span>().start();</span><br><span class="line">        number = <span class="number">42</span>;</span><br><span class="line">        ready = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>NoVisibility可能会持续循环下去，因为读线程可能永远都看不到ready的值。甚至NoVisibility可能会输出0，因为读线程可能看到了写入ready的值，但却没有看到之后写入number的值，这种现象被称为“重排序”。只要在某个线程中无法检测到重排序情况（即使在其他线程中可以明显地看到该线程中的重排序），那么就无法确保线程中的操作将按照程序中指定的顺序来执行。当主线程首先写入number，然后在没有同步的情况下写入ready，那么读线程看到的顺序可能与写入的顺序完全相反。</p>
-<h2 id="volatile原理">3.1 volatile原理</h2>
-<p>Java语言提供了一种稍弱的同步机制，即volatile变量，用来确保将变量的更新操作通知到其他线程。当把变量声明为volatile类型后，编译器与运行时都会注意到这个变量是共享的，因此不会将该变量上的操作与其他内存操作一起重排序。volatile变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取volatile类型的变量时总会返回最新写入的值。</p>
-<p>在访问volatile变量时不会执行加锁操作，因此也就不会使执行线程阻塞，因此volatile变量是一种比sychronized关键字更轻量级的同步机制。</p>
-<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/cpu_read_memory.png" class="">
-<p>当对非 volatile
-变量进行读写的时候，每个线程先从内存拷贝变量到CPU缓存中。如果计算机有多个CPU，每个线程可能在不同的CPU上被处理，这意味着每个线程可以拷贝到不同的
-CPU cache 中。</p>
-<p>而声明变量是 volatile 的，JVM 保证了每次读变量都从内存中读，跳过 CPU
-cache 这一步。</p>
-<h2 id="当一个变量定义为volatile之后将具备两种特性">3.2
-当一个变量定义为volatile之后，将具备两种特性</h2>
-<ol type="1">
-<li>保证此变量对所有的线程的可见性，这里的“可见性”，如本文开头所述，当一个线程修改了这个变量的值，volatile
-保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，普通变量的值在线程间传递均需要通过主内存（详见：Java内存模型）来完成。</li>
-<li>禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load
-addl $0x0,
-(%esp)”操作，这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），只有一个CPU访问内存时，并不需要内存屏障；（什么是指令重排序：是指CPU采用了允许将多条指令不按程序规定的顺序分开发送给各相应电路单元处理）。</li>
-</ol>
-<h2 id="volatile-性能">3.3 volatile 性能：</h2>
-<p>volatile
-的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
-<p>资料：<a
-href="https://www.cnblogs.com/zhengbin/p/5654805.html">Java中Volatile关键字详解</a></p>
-<h1 id="堆和栈的区别堆中存放的是什么栈中存放的是什么">4
-堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</h1>
-<h2 id="堆空间">4.1 堆空间</h2>
-<p>Java堆空间被Java运行时用来为对象和JRE类分配内存。每当我们创建一个对象时，它总是创建在Heap空间中。垃圾收集在堆内存上运行，以释放没有任何引用的对象所使用的内存。在堆空间中创建的任何对象都具有全局访问权，并且可以从应用程序的任何地方引用。</p>
-<h2 id="栈内存">4.2 栈内存</h2>
-<p>Java
-Stack内存用于线程的执行。它们包含特定于方法的值，这些值存在时间很短，并引用从该方法引用的堆中其他对象。堆栈内存总是按照后进先出(LIFO)的顺序引用。每当调用一个方法时，就会在堆栈内存中为该方法创建一个新的块，用于保存本地原语值并引用该方法中的其他对象。方法一结束，该块就变为未使用的，并可用于下一个方法。与堆内存相比，堆栈内存大小要小得多。</p>
-<h2 id="栈和堆申请空间后系统的响应">4.3 栈和堆申请空间后系统的响应</h2>
-<ul>
-<li>栈：只要栈的剩余空间大于所申请的空间，系统将为程序提供内存，否则将报异常提示栈溢出。</li>
-<li>堆：操作系统有一个记录空间内存地址的链表，当系统收到程序的申请时，会遍历链表，寻找第一个空间大于所申请空间的堆节点，然后将节点从内存空闲节点链表中删除，并将该节点的空间分配给程序。对于大多数操作系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的对节点的大小不一定正好等于申请的大小，系统会自动地将多余的那部分重新放入到链表中。</li>
-</ul>
-<h2 id="java-程序中的堆和栈内存">4.4 Java 程序中的堆和栈内存</h2>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Memory</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; <span class="comment">// Line 1</span></span><br><span class="line">		<span class="type">int</span> i=<span class="number">1</span>; <span class="comment">// Line 2</span></span><br><span class="line">		<span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>(); <span class="comment">// Line 3</span></span><br><span class="line">		<span class="type">Memory</span> <span class="variable">mem</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Memory</span>(); <span class="comment">// Line 4</span></span><br><span class="line">		mem.foo(obj); <span class="comment">// Line 5</span></span><br><span class="line">	&#125; <span class="comment">// Line 9</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">(Object param)</span> &#123; <span class="comment">// Line 6</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> param.toString(); <span class="comment">//// Line 7</span></span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125; <span class="comment">// Line 8</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>下图显示了程序运行中堆空间和堆内存的引用，以及它们如何用于存储基元、对象和引用变量。</p>
-<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/Java-Heap-Stack-Memory.png" class="">
-<ol type="1">
-<li>当我们运行该程序，系统会将所有运行时类加载到堆空间中。当在第一步执行main()方法时，Java
-Runtime会创建栈内存以供main()方法线程使用。</li>
-<li>Line 2定义局部变量，它会被创建并存储到main()方法的栈内存中。</li>
-<li>Line 3
-new了一个Object对象，Object对象会在堆空间创建，而栈内存保存对象的引用obj，同理，Line
-4也是一样的过程。</li>
-<li>当我们在Line
-5调用foo()方法时，栈内存会在顶部创建一个块以供foo()方法使用。</li>
-<li>由于Java是按值传递的，因此在Line
-6处的栈内存块中创建了对Object的新引用。</li>
-<li>在Line
-7创建一个字符串，它进入堆空间中的字符串池，并在foo()堆空间中为它创建一个引用。</li>
-<li>foo()方法在Line 8终止，此时分配给foo()的堆栈内存块变为空闲。</li>
-<li>在Line
-9，main()方法终止，为main()方法创建的堆栈内存被销毁。此外，程序在此行结束，因此Java
-Runtime释放所有内存并结束程序的执行。</li>
-</ol>
-<h2 id="java堆空间和栈内存的区别">4.5 Java堆空间和栈内存的区别</h2>
-<p>基于上面的解释，我们可以很容易的得出以下Heap和Stack内存的区别。</p>
-<ol type="1">
-<li>栈内存仅能被一个线程执行，堆空间可以被程序中所有部分使用；</li>
-<li>每当创建一个对象时，它总是存储在堆空间中，栈内存包含对它的引用。栈内存只包含本地原始变量和堆空间中对象的引用变量；</li>
-<li>存储在堆中的对象是全局可访问的，而堆栈内存不能被其他线程访问；</li>
-<li>Memory management in stack is done in LIFO manner whereas it’s more
-complex in Heap memory because it’s used globally. Heap memory is
-divided into Young-Generation, Old-Generation etc, more details at <a
-href="https://www.digitalocean.com/community/tutorials/java-jvm-memory-model-memory-management-in-java">Java
-Garbage Collection</a>；</li>
-<li>堆栈内存是短暂的，而堆内存从应用程序执行开始到结束都存在；</li>
-<li>我们可以使用JVM的<code>-Xms</code>和<code>-Xmx</code>选项来定义堆内存的启动内存和最大内存。我们可以使用<code>-Xss</code>来定义栈内存大小；</li>
-<li>当堆栈内存已满时，Java 运行时会抛出
-java.lang.StackOverFlowError，而如果堆内存已满，则会抛出
-java.lang.OutOfMemoryError: Java Heap Space 错误;</li>
-<li>与堆内存相比，堆栈内存非常小。由于内存分配
-(LIFO)的简单性，与堆内存相比，堆栈内存非常快。</li>
-</ol>
-<p>资料：<a
-href="https://www.digitalocean.com/community/tutorials/java-heap-space-vs-stack-memory">Java
-Heap Space vs Stack - Memory Allocation in Java</a></p>
-<h1 id="字符串池">5 字符串池</h1>
-<p>顾名思义，java中的String Pool就是一个存储在Java Heap
-Memory中的Strings池。我们知道 String 是 java
-中的一个特殊类，我们可以使用 new 运算符创建 String
-对象，也可以在双引号中提供值。</p>
-<h2 id="java中的字符串池">5.1 Java中的字符串池</h2>
-<p>下面这张图很清楚的解释了String
-Pool在java堆空间中是如何维护的，以及当我们使用不同的方式创建String时会发生什么</p>
-<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/String-Pool-Java.png" class="">
-<p>当我们使用双引号创建一个字符串时，它首先在字符串池中寻找具有相同值的字符串，如果找到则返回引用，否则在池中创建一个新的字符串，然后返回引用。但是使用new运算符，我们强制String类在堆空间中创建一个新的String对象。我们可以使用
-intern() 方法将其放入池中，或者从字符串池中引用另一个具有相同值的 String
-对象。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Java String Pool example</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s2 :&quot;</span>+(s1==s2));</span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s3 :&quot;</span>+(s1==s3));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">s1 == s2 :true</span><br><span class="line">s1 == s3 :false</span><br></pre></td></tr></table></figure>
-<h2 id="在字符串池中创建了多少字符串对象">5.2
-在字符串池中创建了多少字符串对象？</h2>
-<p>有时候在java面试中，你会被问到一个关于String
-pool的问题。例如，在下面的语句中创建了多少个字符串对象？</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>首先在堆空间创建一个“Cat”对象，在栈内存创建str，并指向堆空间的“Cat”对象;然后检查堆空间中的字符串池中查看是否存在“Cat”对象，如果存在，则将new出来的“Cat”对象与字符串池中的“Cat”对象联系起来。若不存在，则在字符串池中创建“Cat”对象，并将堆中的“Cat”对象与之关联起来。</p>
-<p>资料：<a
-href="https://www.digitalocean.com/community/tutorials/what-is-java-string-pool">What
-is Java String Pool?</a></p>
-<h1 id="io和nio的区别">6. IO和NIO的区别</h1>
-<p>NIO是为了弥补IO操作的不足而诞生的，NIO的特性包括：非阻塞I/O，选择器，缓冲以及管道。其中管道（Channel）、缓冲（Buffer）、选择器（Selector）是NIO的三大主要特征。</p>
-<ul>
-<li><p>管道（Channel）：它就像传统IO中的流，到任何目的地（或来自任何地方）的所有数据都必须通过一个Channel对象。</p></li>
-<li><p>缓存（Buffer）：一个Buffer实际上就是一个容器对象。Java的每一种基本类型都有一种缓冲区类型：</p></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">byte----ByteBuffer</span><br><span class="line">char----CharBuffer</span><br><span class="line">shotr----ShortBuffer</span><br><span class="line">int----IntBuffer</span><br><span class="line">long----LongBuffer</span><br><span class="line">float----FloatBuffer</span><br><span class="line">double----DoubleBuffer</span><br></pre></td></tr></table></figure>
-<ul>
-<li>选择器（Selector）：用于监听多个管道（Channel）的事件，使用传统的阻塞IO时我们可以方便的知道什么时候可以进行读写，而使用NIO非阻塞通道，我们需要一些方法来知道什么时候通道准备好了，选择器证实为这个需要而诞生的。</li>
-</ul>
-<p>IO和NIO的主要区别：</p>
-<ol type="1">
-<li>IO是面向流的，NIO是面向快（缓冲区）的。</li>
-</ol>
-<p>IO面向流的操作是一次一个字节的处理数据。一个输入流产生一个字节，一个输出流消耗一个字节，这样的操作就导致了IO对数据的读取和写入效率低下。</p>
-<p>NIO面向块的操作是一次产生或消耗一个数据块。这样按照数据块进行数据处理就明显比按照字节处理数据快得多，同时数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性。总的来说，NIO采取了“预读”的方式，当你读取某一部分数据时，他就会猜测你下一步可能会读取的数据而预先缓冲下来。</p>
-<ol start="2" type="1">
-<li>IO是阻塞的，NIO是非阻塞的。</li>
-</ol>
-<p>传统的IO中一个线程调用read()或write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再做任何事情。</p>
-<p>而NIO使用的是一个线程发送读取数据请求，没有得到响应之前，线程是空闲的，此时的线程可以去执行别的任务，不会像IO中的线程那样只能等待响应完。</p>
-<p>虽然从上面可以看出NIO是为了弥补IO读取数据效率慢这个缺点而诞生的，但是NIO也有其自身的缺陷，NIO是面向缓冲区的操作，这样的话就必须考虑一个问题，NIO在对缓冲区的数据进行处理之前必须对缓冲区数据的完整性进行判断，如果数据不完整的话，NIO的读取就不存在任何意义，因此NIO每次数据处理之前都要检测缓冲区数据的完整性。</p>
-<blockquote>
-<p>如果管理的是成千上万个连接，但是这些连接每次只是发送少量的数据，例如我们常用的聊天服务器，这时候选择NIO处理数据可能是个很好的选择;
-如果是少量连接，而这些连接每次都要发送大量的数据，这时候就应该选择IO对数据进行操作。</p>
-</blockquote>
-<hr />
-<p>未完，待续...</p>
-]]></content>
-      <categories>
-        <category>代码人生</category>
-      </categories>
-      <tags>
-        <tag>HashMap</tag>
-        <tag>ConcurrentHashMap</tag>
-        <tag>synchronized</tag>
-        <tag>volatile</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>程序猿三部曲之青铜时代</title>
     <url>/2023/03/14/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E9%9D%92%E9%93%9C%E6%97%B6%E4%BB%A3/</url>
     <content><![CDATA[<p>之前在某篇<a
@@ -2604,6 +2430,180 @@ href="https://www.cnblogs.com/sunli0205/p/5226716.html">https://www.cnblogs.com/
         <tag>SpringCloud</tag>
         <tag>序列化</tag>
         <tag>RocketMQ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>程序猿三部曲之白银时代</title>
+    <url>/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/</url>
+    <content><![CDATA[<p>之前在某篇<a
+href="https://mp.weixin.qq.com/s/CfBwk0dttd1eb2PvOvGvuQ">公众号文章</a>中，看到工资10K、15K、20K的Java程序员应该掌握的技术。大致对应着初、中、高级开发人员，所以我打算针对这三个阶段，写三篇文章，一边学习，一边总结。</p>
+<p>曾经读过王小波的时代三部曲，分别是《青铜时代》、《白银时代》、《黄金时代》，遂借用来类比程序员的三个阶段。</p>
+<span id="more"></span>
+<h1 id="hashmap和concurrenthashmap有什么区别">1
+HashMap和ConcurrentHashMap有什么区别？</h1>
+<p>HashMap是传统集合下的类，ConcurrentHashMap是并发集合下的类。除此之外，它们之间还有各种不同之处：</p>
+<ul>
+<li>HashMap本质上是非同步的，即HashMap不是线程安全的，而ConcurrentHashMap是线程安全的。</li>
+<li>HashMap性能比较高，因为它是非同步的，任意数量的线程都可以同时访问它。而ConcurrentHashMap性能比较低，因为有时候线程需要在ConcurrentHashMap上等待请求。</li>
+<li>当一个线程正在迭代HashMap时，如果有另外一个线程试图对这个HashMap的元素进行新增或者修改，我们将得到运行时异常
+ConcurrentModificationException。然而，我们在迭代ConcurrentHashMap时执行任何修改都不会出现任何异常。</li>
+<li>HashMap的key和value可以为null，ConcurrentHashMap不允许，否则会报运行时异常NullPointerException.</li>
+<li>HashMap 是在 JDK 1.2 中引入的，而 ConcurrentHashMap 是由 SUN
+Microsystem 在 JDK 1.5 中引入的</li>
+</ul>
+<h1 id="synchronized关键字">2 synchronized关键字</h1>
+<p>synchronized是Java中的关键字，是一种同步锁。它修饰的对象有以下几种：</p>
+<ol type="1">
+<li>修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象；</li>
+<li>修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象；</li>
+<li>修饰一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象。</li>
+<li>修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用的对象是这个类的所有对象。</li>
+</ol>
+<p>资料：<a
+href="https://www.cnblogs.com/weibanggang/p/9470718.html">Java中Synchronized的用法（简单介绍）</a></p>
+<h1 id="volatile关键字">3 volatile关键字</h1>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NoVisibility</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> ready;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> number;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ReaderThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span>(!ready) &#123;</span><br><span class="line">                Thread.<span class="keyword">yield</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ReaderThread</span>().start();</span><br><span class="line">        number = <span class="number">42</span>;</span><br><span class="line">        ready = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>NoVisibility可能会持续循环下去，因为读线程可能永远都看不到ready的值。甚至NoVisibility可能会输出0，因为读线程可能看到了写入ready的值，但却没有看到之后写入number的值，这种现象被称为“重排序”。只要在某个线程中无法检测到重排序情况（即使在其他线程中可以明显地看到该线程中的重排序），那么就无法确保线程中的操作将按照程序中指定的顺序来执行。当主线程首先写入number，然后在没有同步的情况下写入ready，那么读线程看到的顺序可能与写入的顺序完全相反。</p>
+<h2 id="volatile原理">3.1 volatile原理</h2>
+<p>Java语言提供了一种稍弱的同步机制，即volatile变量，用来确保将变量的更新操作通知到其他线程。当把变量声明为volatile类型后，编译器与运行时都会注意到这个变量是共享的，因此不会将该变量上的操作与其他内存操作一起重排序。volatile变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取volatile类型的变量时总会返回最新写入的值。</p>
+<p>在访问volatile变量时不会执行加锁操作，因此也就不会使执行线程阻塞，因此volatile变量是一种比sychronized关键字更轻量级的同步机制。</p>
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/cpu_read_memory.png" class="">
+<p>当对非 volatile
+变量进行读写的时候，每个线程先从内存拷贝变量到CPU缓存中。如果计算机有多个CPU，每个线程可能在不同的CPU上被处理，这意味着每个线程可以拷贝到不同的
+CPU cache 中。</p>
+<p>而声明变量是 volatile 的，JVM 保证了每次读变量都从内存中读，跳过 CPU
+cache 这一步。</p>
+<h2 id="当一个变量定义为volatile之后将具备两种特性">3.2
+当一个变量定义为volatile之后，将具备两种特性</h2>
+<ol type="1">
+<li>保证此变量对所有的线程的可见性，这里的“可见性”，如本文开头所述，当一个线程修改了这个变量的值，volatile
+保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，普通变量的值在线程间传递均需要通过主内存（详见：Java内存模型）来完成。</li>
+<li>禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load
+addl $0x0,
+(%esp)”操作，这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），只有一个CPU访问内存时，并不需要内存屏障；（什么是指令重排序：是指CPU采用了允许将多条指令不按程序规定的顺序分开发送给各相应电路单元处理）。</li>
+</ol>
+<h2 id="volatile-性能">3.3 volatile 性能：</h2>
+<p>volatile
+的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
+<p>资料：<a
+href="https://www.cnblogs.com/zhengbin/p/5654805.html">Java中Volatile关键字详解</a></p>
+<h1 id="堆和栈的区别堆中存放的是什么栈中存放的是什么">4
+堆和栈的区别，堆中存放的是什么，栈中存放的是什么？</h1>
+<h2 id="堆空间">4.1 堆空间</h2>
+<p>Java堆空间被Java运行时用来为对象和JRE类分配内存。每当我们创建一个对象时，它总是创建在Heap空间中。垃圾收集在堆内存上运行，以释放没有任何引用的对象所使用的内存。在堆空间中创建的任何对象都具有全局访问权，并且可以从应用程序的任何地方引用。</p>
+<h2 id="栈内存">4.2 栈内存</h2>
+<p>Java
+Stack内存用于线程的执行。它们包含特定于方法的值，这些值存在时间很短，并引用从该方法引用的堆中其他对象。堆栈内存总是按照后进先出(LIFO)的顺序引用。每当调用一个方法时，就会在堆栈内存中为该方法创建一个新的块，用于保存本地原语值并引用该方法中的其他对象。方法一结束，该块就变为未使用的，并可用于下一个方法。与堆内存相比，堆栈内存大小要小得多。</p>
+<h2 id="栈和堆申请空间后系统的响应">4.3 栈和堆申请空间后系统的响应</h2>
+<ul>
+<li>栈：只要栈的剩余空间大于所申请的空间，系统将为程序提供内存，否则将报异常提示栈溢出。</li>
+<li>堆：操作系统有一个记录空间内存地址的链表，当系统收到程序的申请时，会遍历链表，寻找第一个空间大于所申请空间的堆节点，然后将节点从内存空闲节点链表中删除，并将该节点的空间分配给程序。对于大多数操作系统，会在这块内存空间中的首地址处记录本次分配的大小，这样，代码中的delete语句才能正确的释放本内存空间。另外，由于找到的对节点的大小不一定正好等于申请的大小，系统会自动地将多余的那部分重新放入到链表中。</li>
+</ul>
+<h2 id="java-程序中的堆和栈内存">4.4 Java 程序中的堆和栈内存</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Memory</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; <span class="comment">// Line 1</span></span><br><span class="line">		<span class="type">int</span> i=<span class="number">1</span>; <span class="comment">// Line 2</span></span><br><span class="line">		<span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>(); <span class="comment">// Line 3</span></span><br><span class="line">		<span class="type">Memory</span> <span class="variable">mem</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Memory</span>(); <span class="comment">// Line 4</span></span><br><span class="line">		mem.foo(obj); <span class="comment">// Line 5</span></span><br><span class="line">	&#125; <span class="comment">// Line 9</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">(Object param)</span> &#123; <span class="comment">// Line 6</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> param.toString(); <span class="comment">//// Line 7</span></span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125; <span class="comment">// Line 8</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下图显示了程序运行中堆空间和堆内存的引用，以及它们如何用于存储基元、对象和引用变量。</p>
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/Java-Heap-Stack-Memory.png" class="">
+<ol type="1">
+<li>当我们运行该程序，系统会将所有运行时类加载到堆空间中。当在第一步执行main()方法时，Java
+Runtime会创建栈内存以供main()方法线程使用。</li>
+<li>Line 2定义局部变量，它会被创建并存储到main()方法的栈内存中。</li>
+<li>Line 3
+new了一个Object对象，Object对象会在堆空间创建，而栈内存保存对象的引用obj，同理，Line
+4也是一样的过程。</li>
+<li>当我们在Line
+5调用foo()方法时，栈内存会在顶部创建一个块以供foo()方法使用。</li>
+<li>由于Java是按值传递的，因此在Line
+6处的栈内存块中创建了对Object的新引用。</li>
+<li>在Line
+7创建一个字符串，它进入堆空间中的字符串池，并在foo()堆空间中为它创建一个引用。</li>
+<li>foo()方法在Line 8终止，此时分配给foo()的堆栈内存块变为空闲。</li>
+<li>在Line
+9，main()方法终止，为main()方法创建的堆栈内存被销毁。此外，程序在此行结束，因此Java
+Runtime释放所有内存并结束程序的执行。</li>
+</ol>
+<h2 id="java堆空间和栈内存的区别">4.5 Java堆空间和栈内存的区别</h2>
+<p>基于上面的解释，我们可以很容易的得出以下Heap和Stack内存的区别。</p>
+<ol type="1">
+<li>栈内存仅能被一个线程执行，堆空间可以被程序中所有部分使用；</li>
+<li>每当创建一个对象时，它总是存储在堆空间中，栈内存包含对它的引用。栈内存只包含本地原始变量和堆空间中对象的引用变量；</li>
+<li>存储在堆中的对象是全局可访问的，而堆栈内存不能被其他线程访问；</li>
+<li>Memory management in stack is done in LIFO manner whereas it’s more
+complex in Heap memory because it’s used globally. Heap memory is
+divided into Young-Generation, Old-Generation etc, more details at <a
+href="https://www.digitalocean.com/community/tutorials/java-jvm-memory-model-memory-management-in-java">Java
+Garbage Collection</a>；</li>
+<li>堆栈内存是短暂的，而堆内存从应用程序执行开始到结束都存在；</li>
+<li>我们可以使用JVM的<code>-Xms</code>和<code>-Xmx</code>选项来定义堆内存的启动内存和最大内存。我们可以使用<code>-Xss</code>来定义栈内存大小；</li>
+<li>当堆栈内存已满时，Java 运行时会抛出
+java.lang.StackOverFlowError，而如果堆内存已满，则会抛出
+java.lang.OutOfMemoryError: Java Heap Space 错误;</li>
+<li>与堆内存相比，堆栈内存非常小。由于内存分配
+(LIFO)的简单性，与堆内存相比，堆栈内存非常快。</li>
+</ol>
+<p>资料：<a
+href="https://www.digitalocean.com/community/tutorials/java-heap-space-vs-stack-memory">Java
+Heap Space vs Stack - Memory Allocation in Java</a></p>
+<h1 id="字符串池">5 字符串池</h1>
+<p>顾名思义，java中的String Pool就是一个存储在Java Heap
+Memory中的Strings池。我们知道 String 是 java
+中的一个特殊类，我们可以使用 new 运算符创建 String
+对象，也可以在双引号中提供值。</p>
+<h2 id="java中的字符串池">5.1 Java中的字符串池</h2>
+<p>下面这张图很清楚的解释了String
+Pool在java堆空间中是如何维护的，以及当我们使用不同的方式创建String时会发生什么</p>
+<img src="/2023/04/04/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E7%99%BD%E9%93%B6%E6%97%B6%E4%BB%A3/String-Pool-Java.png" class="">
+<p>当我们使用双引号创建一个字符串时，它首先在字符串池中寻找具有相同值的字符串，如果找到则返回引用，否则在池中创建一个新的字符串，然后返回引用。但是使用new运算符，我们强制String类在堆空间中创建一个新的String对象。我们可以使用
+intern() 方法将其放入池中，或者从字符串池中引用另一个具有相同值的 String
+对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.journaldev.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Java String Pool example</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;Cat&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s2 :&quot;</span>+(s1==s2));</span><br><span class="line">        System.out.println(<span class="string">&quot;s1 == s3 :&quot;</span>+(s1==s3));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">s1 == s2 :true</span><br><span class="line">s1 == s3 :false</span><br></pre></td></tr></table></figure>
+<h2 id="在字符串池中创建了多少字符串对象">5.2
+在字符串池中创建了多少字符串对象？</h2>
+<p>有时候在java面试中，你会被问到一个关于String
+pool的问题。例如，在下面的语句中创建了多少个字符串对象？</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Cat&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>首先在堆空间创建一个“Cat”对象，在栈内存创建str，并指向堆空间的“Cat”对象;然后检查堆空间中的字符串池中查看是否存在“Cat”对象，如果存在，则将new出来的“Cat”对象与字符串池中的“Cat”对象联系起来。若不存在，则在字符串池中创建“Cat”对象，并将堆中的“Cat”对象与之关联起来。</p>
+<p>资料：<a
+href="https://www.digitalocean.com/community/tutorials/what-is-java-string-pool">What
+is Java String Pool?</a></p>
+<h1 id="io和nio的区别">6. IO和NIO的区别</h1>
+<p>NIO是为了弥补IO操作的不足而诞生的，NIO的特性包括：非阻塞I/O，选择器，缓冲以及管道。其中管道（Channel）、缓冲（Buffer）、选择器（Selector）是NIO的三大主要特征。</p>
+<ul>
+<li><p>管道（Channel）：它就像传统IO中的流，到任何目的地（或来自任何地方）的所有数据都必须通过一个Channel对象。</p></li>
+<li><p>缓存（Buffer）：一个Buffer实际上就是一个容器对象。Java的每一种基本类型都有一种缓冲区类型：</p></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">byte----ByteBuffer</span><br><span class="line">char----CharBuffer</span><br><span class="line">shotr----ShortBuffer</span><br><span class="line">int----IntBuffer</span><br><span class="line">long----LongBuffer</span><br><span class="line">float----FloatBuffer</span><br><span class="line">double----DoubleBuffer</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择器（Selector）：用于监听多个管道（Channel）的事件，使用传统的阻塞IO时我们可以方便的知道什么时候可以进行读写，而使用NIO非阻塞通道，我们需要一些方法来知道什么时候通道准备好了，选择器证实为这个需要而诞生的。</li>
+</ul>
+<p>IO和NIO的主要区别：</p>
+<ol type="1">
+<li>IO是面向流的，NIO是面向快（缓冲区）的。</li>
+</ol>
+<p>IO面向流的操作是一次一个字节的处理数据。一个输入流产生一个字节，一个输出流消耗一个字节，这样的操作就导致了IO对数据的读取和写入效率低下。</p>
+<p>NIO面向块的操作是一次产生或消耗一个数据块。这样按照数据块进行数据处理就明显比按照字节处理数据快得多，同时数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性。总的来说，NIO采取了“预读”的方式，当你读取某一部分数据时，他就会猜测你下一步可能会读取的数据而预先缓冲下来。</p>
+<ol start="2" type="1">
+<li>IO是阻塞的，NIO是非阻塞的。</li>
+</ol>
+<p>传统的IO中一个线程调用read()或write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再做任何事情。</p>
+<p>而NIO使用的是一个线程发送读取数据请求，没有得到响应之前，线程是空闲的，此时的线程可以去执行别的任务，不会像IO中的线程那样只能等待响应完。</p>
+<p>虽然从上面可以看出NIO是为了弥补IO读取数据效率慢这个缺点而诞生的，但是NIO也有其自身的缺陷，NIO是面向缓冲区的操作，这样的话就必须考虑一个问题，NIO在对缓冲区的数据进行处理之前必须对缓冲区数据的完整性进行判断，如果数据不完整的话，NIO的读取就不存在任何意义，因此NIO每次数据处理之前都要检测缓冲区数据的完整性。</p>
+<blockquote>
+<p>如果管理的是成千上万个连接，但是这些连接每次只是发送少量的数据，例如我们常用的聊天服务器，这时候选择NIO处理数据可能是个很好的选择;
+如果是少量连接，而这些连接每次都要发送大量的数据，这时候就应该选择IO对数据进行操作。</p>
+</blockquote>
+<hr />
+<p>未完，待续...</p>
+]]></content>
+      <categories>
+        <category>代码人生</category>
+      </categories>
+      <tags>
+        <tag>HashMap</tag>
+        <tag>ConcurrentHashMap</tag>
+        <tag>synchronized</tag>
+        <tag>volatile</tag>
       </tags>
   </entry>
   <entry>
@@ -5447,9 +5447,8 @@ CLK"编码会因信号边沿不理想产生尖峰脉冲，不可直接使用；<
   <entry>
     <title>STM32+RC522读取MIFARE1K卡排坑实录</title>
     <url>/2026/11/03/STM32-RC522%E8%AF%BB%E5%8F%96MIFARE1K%E5%8D%A1%E6%8E%92%E5%9D%91%E5%AE%9E%E5%BD%95/</url>
-    <content><![CDATA[<p>这里为你整理了一篇结构清晰、技术干货满满，且非常符合开发者阅读习惯的博客文章。你可以直接复制到
-CSDN、知乎、博客园或简书等平台发布。</p>
-<hr />
+    <content><![CDATA[<p>项目地址<a
+href="https://github.com/xbronze/rfid_physical_access_control/tree/main/chapter_04">https://github.com/xbronze/rfid_physical_access_control/tree/main/chapter_04</a></p>
 <h1
 id="stm32rc522读取mifare-1k卡从uid到加密读写的排坑实录">STM32+RC522读取MIFARE
 1K卡：从UID到加密读写的“排坑”实录</h1>
@@ -5558,6 +5557,249 @@ ACTIVE）是死规定，不能省步骤。 2.
       <tags>
         <tag>STM32</tag>
         <tag>RC522</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RFID密钥体系与Mifare_Classic实战:从原理到STM32+RC522操作</title>
+    <url>/2026/11/05/RFID%E5%AF%86%E9%92%A5%E4%BD%93%E7%B3%BB%E4%B8%8EMifare-Classic%E5%AE%9E%E6%88%98-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0STM32-RC522%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h2 id="引言">引言</h2>
+<p>在RFID开发中，密钥管理和认证机制是最容易产生困惑的部分。许多开发者会有这样的直觉性质疑：密钥总得在读写器和标签之间传吧？读写器凭什么能算出随机标签的密钥？空白卡认证到底用什么密钥？不同厂商的设备能不能互通？</p>
+<p>这些疑问的根源，往往是把"已部署系统的安全机制"和"空白卡的出厂状态"混为一谈，或者把"物理层通信"和"安全层认证"混为一谈。本文把这些常见困惑直接汇总，逐一阐述其背后的原理，并给出基于STM32+RC522操作Mifare
+Classic空白卡的完整实战指南。</p>
+<span id="more"></span>
+<hr />
+<h2 id="一三级密钥体系层级与职责">一、三级密钥体系：层级与职责</h2>
+<p>RFID系统的密钥通常分为三层：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    MK[&quot;主密钥（根密钥）&lt;br/&gt;保护二级密钥&quot;] --&gt; KEK[&quot;二级密钥（密钥加密密钥）&lt;br/&gt;保护初级密钥&quot;]</span><br><span class="line">    KEK --&gt; DK[&quot;初级密钥（会话密钥）&lt;br/&gt;加密保护数据&quot;]</span><br><span class="line">    DK --&gt; DATA[&quot;数据&quot;]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>层级</th>
+<th>名称</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>主密钥</td>
+<td>根密钥</td>
+<td>保护二级密钥，是整个安全域的根基</td>
+</tr>
+<tr class="even">
+<td>二级密钥</td>
+<td>密钥加密密钥（KEK）</td>
+<td>加密保护初级密钥</td>
+</tr>
+<tr class="odd">
+<td>初级密钥</td>
+<td>会话密钥/数据加密密钥</td>
+<td>对数据加解密，原则上一次一密</td>
+</tr>
+</tbody>
+</table>
+<p>初级密钥保护数据，二级密钥保护初级密钥，主密钥保护二级密钥——层层递进，构成完整的安全体系。</p>
+<hr />
+<h2
+id="二核心困惑一一次性密钥需要在读写器和标签之间传递吗">二、核心困惑一：一次性密钥需要在读写器和标签之间传递吗？</h2>
+<p><strong>结论：不需要。</strong>
+直接传输密钥本身会引入极大风险。实际机制是：</p>
+<blockquote>
+<p>双方利用预先共享的根密钥和公开的协商参数，在本地各自独立推导出完全相同的初级密钥，密钥本身不出现在空中接口上。</p>
+</blockquote>
+<h3 id="挑战-响应机制">挑战-响应机制</h3>
+<p>实现这一目标的核心是<strong>挑战-响应（Challenge-Response）</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant R as 读写器</span><br><span class="line">    participant T as 标签</span><br><span class="line">    R-&gt;&gt;T: ① 挑战：随机数 rR（明文）</span><br><span class="line">    Note over T: 用秘密密钥 K_T 计算&lt;br/&gt;Response = F(K_T, rR)</span><br><span class="line">    T-&gt;&gt;R: ② 响应：计算结果（明文）</span><br><span class="line">    Note over R: 用本地推导的 K_T 计算&lt;br/&gt;F(K_T, rR) 并比对</span><br><span class="line">    R-&gt;&gt;R: ③ 一致则认证成功</span><br></pre></td></tr></table></figure>
+<p>关键点： -
+标签只发送<strong>运算结果</strong>，秘密密钥从未离开标签； - 每次
+<code>rR</code> 不同，攻击者无法重放上一次的响应； -
+认证验证的是<strong>动态的、基于密码学的身份真实性</strong>，而非静态的"是否属于同一系统"。</p>
+<hr />
+<h2
+id="三核心困惑二读写器为什么能知道某个标签的密钥">三、核心困惑二：读写器为什么能"知道"某个标签的密钥？</h2>
+<p>这是最容易产生误解的地方。<strong>读写器并不是"凭空知道"某个随机标签的密钥，而是因为该标签的密钥在初始化时就是由同一个系统级主密钥派生出来并写入标签的。</strong></p>
+<h3 id="密钥分散机制">密钥分散机制</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    MK[&quot;系统主密钥 MK&lt;br/&gt;（安全域共享）&quot;] --&gt; KDF1[&quot;KDF(MK, UID_A)&quot;]</span><br><span class="line">    MK --&gt; KDF2[&quot;KDF(MK, UID_B)&quot;]</span><br><span class="line">    KDF1 --&gt; KA[&quot;标签A密钥 K_A&lt;br/&gt;写入标签A&quot;]</span><br><span class="line">    KDF2 --&gt; KB[&quot;标签B密钥 K_B&lt;br/&gt;写入标签B&quot;]</span><br><span class="line">    MK -.-&gt;|&quot;读写器持有MK&quot;| RW[&quot;读写器&lt;br/&gt;读到UID后实时计算&quot;]</span><br></pre></td></tr></table></figure>
+<p>公式表达：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">标签密钥 K_T = KDF(系统主密钥 MK, 标签唯一ID)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>标签内部</strong>只保存派生出的 K_T，不保存 MK；</li>
+<li><strong>读写器</strong>保存 MK，不保存所有标签的 K_T；</li>
+<li>读写器读到标签 UID 后，用同一个 MK 和同一个 KDF
+<strong>实时算出</strong> K_T，再用于挑战-响应认证。</li>
+</ul>
+<h3 id="举例">举例</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MK = 系统主密钥（所有合法读写器共享）</span><br><span class="line">标签A UID = 1001 → K_A = HMAC(MK, 1001)</span><br><span class="line">标签B UID = 1002 → K_B = HMAC(MK, 1002)</span><br><span class="line"></span><br><span class="line">标签A里只存 K_A；标签B里只存 K_B。</span><br><span class="line">读写器存 MK。读到 UID=1001，算出 K_A；读到 UID=1002，算出 K_B。</span><br></pre></td></tr></table></figure>
+<p>攻击者知道 UID=1001 也没用——不知道 MK，算不出 K_A，且 KDF
+是单向的。</p>
+<h3
+id="为什么标签是随机的不影响可推导性">为什么"标签是随机的"不影响可推导性？</h3>
+<p>要区分"什么随机"： - <strong>标签UID可以是随机或唯一的</strong>——KDF
+的输入就是 UID，UID 不同，派生出的 K_T 不同； - <strong>标签密钥 K_T
+不是标签自己随机生成的</strong>——它是在发行时由系统用 MK 和该标签 UID
+算出来再写入的。</p>
+<p>所以对每个标签来说 K_T
+独一无二；对系统来说它是<strong>可复现的</strong>：MK 和 UID
+相同，算出的 K_T 就相同。</p>
+<p><strong>真正让第三方无法推导的，是主密钥保密和KDF单向性，而非UID的随机性。</strong></p>
+<hr />
+<h2
+id="四核心困惑三主密钥是谁定义谁部署的">四、核心困惑三：主密钥是谁定义、谁部署的？</h2>
+<p>主密钥的<strong>定义者</strong>和<strong>部署者</strong>不是同一个单一角色：</p>
+<table>
+<thead>
+<tr class="header">
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>标准组织</td>
+<td>规定密钥管理框架（如要求建立密钥管理中心KMC）</td>
+</tr>
+<tr class="even">
+<td>系统集成商/方案商</td>
+<td>设计密钥体系，选择算法和分散规则</td>
+</tr>
+<tr class="odd">
+<td>芯片/标签制造商</td>
+<td>在特定模式下固定注入初始密钥</td>
+</tr>
+<tr class="even">
+<td>密钥管理中心（KMC）</td>
+<td>在HSM中生成并存储根密钥，向下游派发</td>
+</tr>
+<tr class="odd">
+<td>标签发行方（Issuer）</td>
+<td>在个人化阶段将派生密钥安全写入每枚标签</td>
+</tr>
+</tbody>
+</table>
+<p>最终，<strong>主密钥归属于控制特定"安全域"的实体</strong>——可以是一家银行（控制其支付卡）、一个政府机构（控制其电子证件），或一个大型企业（控制其内部资产标签）。<strong>谁控制了发行环节和密钥注入权，谁就是其安全域内主密钥的实际部署者和所有者。</strong></p>
+<hr />
+<h2
+id="五核心困惑四a厂商读写器能读b厂商标签吗">五、核心困惑四：A厂商读写器能读B厂商标签吗？</h2>
+<p>需要<strong>分层</strong>回答：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    subgraph 物理层[&quot;物理层：读取公开信息（TID/EPC）&quot;]</span><br><span class="line">        P1[&quot;遵循相同空中接口标准&lt;br/&gt;如 ISO/IEC 18000-6C / EPC Gen2&quot;]</span><br><span class="line">        P2[&quot;大概率可读，但受实现差异、&lt;br/&gt;私有协议、标准版本影响&quot;]</span><br><span class="line">        P3[&quot;经互操作性认证的产品&lt;br/&gt;可靠性更高&quot;]</span><br><span class="line">    end</span><br><span class="line">    subgraph 安全层[&quot;安全层：访问受保护数据&quot;]</span><br><span class="line">        S1[&quot;需要共享同一套密钥体系&lt;br/&gt;（同一安全域）&quot;]</span><br><span class="line">        S2[&quot;主密钥体系不同 → 认证失败&quot;]</span><br><span class="line">        S3[&quot;安全边界的实质是&lt;br/&gt;密钥管理体系，而非厂商品牌&quot;]</span><br><span class="line">    end</span><br><span class="line">    物理层 --&gt; 安全层</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>物理层</strong>：遵循同一标准（如EPC
+Gen2）的设备通常能完成基础通信，读取公开的TID/EPC。"能读到"是大概率事件，但"稳定可靠地读到"取决于是否经过兼容性验证。</li>
+<li><strong>安全层</strong>：即使物理信号通畅，若双方不属于同一安全域（不共享同一主密钥体系），A厂商读写器也无法解密或认证B厂商标签的受保护数据。</li>
+</ul>
+<hr />
+<h2
+id="六核心困惑五操作空白卡我不知道主密钥mk怎么办">六、核心困惑五：操作空白卡，我不知道主密钥MK怎么办？</h2>
+<p><strong>这是最关键的一个澄清：对于空白标签卡，根本不存在一个需要你去寻找的"系统主密钥MK"。</strong></p>
+<p>"主密钥派生标签密钥"的机制，针对的是<strong>已经由某个系统完成"个人化"的正式标签</strong>。而你手中的空白Mifare
+Classic卡处于<strong>出厂状态</strong>，使用的是公开的、统一的<strong>出厂默认密钥</strong>——目的就是让任何人都能方便地初始化和测试。</p>
+<h3 id="空白卡的默认密钥">空白卡的默认密钥</h3>
+<p>对于绝大多数空白/出厂状态的Mifare
+Classic卡，<strong>所有扇区使用的默认密钥完全相同</strong>：</p>
+<ul>
+<li><strong>Key A</strong> = <code>FF FF FF FF FF FF</code></li>
+<li><strong>Key B</strong> =
+<code>FF FF FF FF FF FF</code>（或未启用）</li>
+</ul>
+<blockquote>
+<p><strong>理解方式</strong>：每个扇区在硬件上独立存储密钥，但出厂时所有扇区的密钥存储区域被统一初始化为相同的值。可以类比为：每个扇区都有一把独立的"锁"，但出厂时所有"锁"都配了同一把公开的"万能钥匙"<code>FF FF FF FF FF FF</code>。</p>
+</blockquote>
+<p><strong>特殊情况</strong>：部分其他厂商兼容芯片或特定用途卡可能使用其他公开默认值（如
+<code>A0 A1 A2 A3 A4 A5</code> 或
+<code>D3 F7 D3 F7 D3 F7</code>），但对于全新购买的原始空白卡，全<code>FF</code>是最通用、最应首先尝试的。</p>
+<hr />
+<h2
+id="七实战stm32rc522操作mifare-classic空白卡">七、实战：STM32+RC522操作Mifare
+Classic空白卡</h2>
+<h3 id="完整流程">完整流程</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[&quot;① 寻卡 REQA&quot;] --&gt; B[&quot;② 防冲撞 Anticoll&quot;]</span><br><span class="line">    B --&gt; C[&quot;③ 选卡 Select&lt;br/&gt;获取4字节UID&quot;]</span><br><span class="line">    C --&gt; D[&quot;④ 用 FFFFFFFFFFFF 认证目标扇区&lt;br/&gt;（Key A 认证，命令0x60）&quot;]</span><br><span class="line">    D --&gt; E&#123;认证成功?&#125;</span><br><span class="line">    E --&gt;|是| F[&quot;⑤ 读块 0x30 / 写块 0xA0&quot;]</span><br><span class="line">    E --&gt;|否| G[&quot;检查是否漏掉选卡步骤&lt;br/&gt;或卡片非出厂状态&quot;]</span><br><span class="line">    F --&gt; H[&quot;⑥（可选）修改扇区密钥&lt;br/&gt;写入块3尾块&quot;]</span><br><span class="line">    H --&gt; I[&quot;完成个人化&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="分步说明">分步说明</h3>
+<p><strong>第1步：寻卡、防冲撞、选卡，获取UID</strong></p>
+<p>STM32通过SPI驱动RC522，依次发送寻卡（<code>REQA</code>）、防冲撞（<code>Anticoll</code>）和选卡（<code>Select</code>）指令，获取卡片的4字节UID。</p>
+<blockquote>
+<p>⚠️
+很多新手卡在"认证失败"，根源就是<strong>漏掉了"选卡"这一步</strong>，导致卡片没有进入可认证的状态。</p>
+</blockquote>
+<p><strong>第2步：用默认密钥进行扇区认证</strong></p>
+<p>拿到UID后，用默认密钥 <code>FF FF FF FF FF FF</code>（作为Key
+A）对目标扇区认证。例如对第1个扇区（块地址为4）操作，命令RC522使用<code>0x60</code>（Key
+A认证）和该默认密钥去认证块4。</p>
+<p><strong>第3步：读写数据</strong></p>
+<p>认证通过后，使用RC522的读块（<code>0x30</code>）和写块（<code>0xA0</code>）指令读写数据。Mifare
+Classic的认证以<strong>扇区</strong>为单位——认证了某个扇区，该扇区下所有数据块就都对你开放。</p>
+<p><strong>第4步（可选）：修改密钥，实现"个人化"</strong></p>
+<p>每个扇区的<strong>块3（尾块）</strong>存放密钥（Key A + 访问控制位 +
+Key B）。用默认密钥认证后，可向块3写入新密钥。</p>
+<blockquote>
+<p>⚠️
+<strong>警告</strong>：一旦写入新密钥并且忘记，或错误配置了访问控制位（AC
+Bits），这个扇区可能被<strong>永久锁定</strong>，再也无法修改或读取。修改前务必完整理解扇区尾块结构。</p>
+</blockquote>
+<h3 id="主密钥mk概念何时登场">"主密钥MK"概念何时登场？</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[&quot;空白卡阶段&lt;br/&gt;使用公开默认密钥 FFFFFFFFFFFF&quot;] --&gt; B[&quot;个人化阶段&lt;br/&gt;你修改密钥，扮演&#x27;发行方&#x27;&quot;]</span><br><span class="line">    B --&gt; C[&quot;此后你的系统&lt;br/&gt;才开始拥有&#x27;主密钥&#x27;概念&quot;]</span><br></pre></td></tr></table></figure>
+<p>在你<strong>开始修改密钥、部署自己的安全体系</strong>（即个人化）时，"主密钥MK"的概念才真正引入。从那时起，你（或你的系统）就扮演了"发行方"的角色，由你来定义新的密钥规则。</p>
+<hr />
+<h2 id="八常见困惑汇总表">八、常见困惑汇总表</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>困惑</th>
+<th>澄清</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>一次性初级密钥需要传输吗？</td>
+<td>不需要，双方利用共享根密钥和公开参数<strong>本地推导</strong></td>
+</tr>
+<tr class="even">
+<td>读写器为什么能算出标签密钥？</td>
+<td>标签密钥 = KDF(系统主密钥,
+UID)，读写器持有主密钥可<strong>复现计算</strong></td>
+</tr>
+<tr class="odd">
+<td>标签UID是随机的，为什么能推导？</td>
+<td>UID随机只影响派生结果不同；K_T是发行时由系统算好写入的，<strong>不是标签自己随机生成的</strong></td>
+</tr>
+<tr class="even">
+<td>主密钥是谁的？</td>
+<td>属于控制特定<strong>安全域</strong>的实体（KMC/发行方）</td>
+</tr>
+<tr class="odd">
+<td>A厂商读写器能读B厂商标签吗？</td>
+<td><strong>物理层</strong>大概率可读公开信息；<strong>安全层</strong>取决于是否同一密钥管理体系</td>
+</tr>
+<tr class="even">
+<td>空白卡认证需要主密钥吗？</td>
+<td><strong>不需要</strong>，空白卡使用公开的出厂默认密钥
+<code>FFFFFFFFFFFF</code></td>
+</tr>
+<tr class="odd">
+<td>"主密钥MK"概念何时引入？</td>
+<td>在开始修改密钥、部署自己的安全体系（<strong>个人化</strong>）时才引入</td>
+</tr>
+<tr class="even">
+<td>认证到底在确认什么？</td>
+<td>确认"对方持有合法密钥、消息是当前会话实时生成的"，而非核对厂商归属</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="九结语">九、结语</h2>
+<p>RFID密钥体系的设计精髓在于：<strong>密钥不传输，只协商参数，本地推导</strong>。读写器与标签通过预共享的根密钥进行双向认证，各自独立推导出会话密钥，核心密钥材料从未在开放信道上传输。而跨厂商互操作的边界，不是"厂商品牌"，而是"密钥管理体系（安全域）"。</p>
+<p>对于开发者手中的空白卡，一切从简——用公开的出厂默认密钥
+<code>FF FF FF FF FF FF</code>
+认证即可。只有当你开始修改密钥、构建自己的安全域时，"主密钥"的概念才真正登场。届时，你（或你的系统）就扮演了"发行方"的角色，由你来定义新的密钥规则。</p>
+]]></content>
+      <categories>
+        <category>代码人生</category>
+      </categories>
+      <tags>
+        <tag>RFID</tag>
+        <tag>安全认证</tag>
       </tags>
   </entry>
 </search>

@@ -364,5 +364,67 @@ id="六永久避坑核心铁律unraid-7.2.2-专属">六、永久避坑核心铁�
      searchFunc(path, 'local-search-input', 'local-search-result');
    </script>
 
+
+<!-- Mermaid.js 支持 -->
+<style>
+.mermaid {
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 16px 12px;
+  margin: 16px 0;
+  border: 1px solid #e8e8e8;
+  text-align: center;
+}
+.mermaid svg {
+  background-color: #f5f5f5;
+  max-width: 100%;
+  height: auto;
+}
+</style>
+<script>
+(function(){
+  var starts = ['graph TD','graph LR','graph TB','graph BT','flowchart',
+                'sequenceDiagram','classDiagram','stateDiagram','erDiagram',
+                'gantt','pie','journey','mindmap','timeline','quadrantChart'];
+
+  // 等 DOM 解析完，先把 pandoc 的代码高亮结构还原干净
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('figure.highlight.plaintext').forEach(function(fig){
+      var codeTd = fig.querySelector('td.code');
+      if (!codeTd) return;
+
+      // 用 innerHTML 拿，然后彻底剥掉所有 HTML 标签
+      var raw = codeTd.innerHTML;
+      // 1. 去掉所有 <span ...> 和 </span>（pandoc 的行号高亮包装）
+      raw = raw.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '');
+      // 2. <br> / <br/> / <br /> 统一换成真正的换行符
+      raw = raw.replace(/<br\s*\/?>/gi, '\n');
+      // 3. 去掉任何残留的其他 HTML 标签
+      raw = raw.replace(/<[^>]+>/g, '');
+      // 4. 解码 HTML 实体（&quot; &#x27; &lt; &gt; &amp; 等）
+      var ta = document.createElement('textarea');
+      ta.innerHTML = raw;
+      var text = ta.value.trim();
+
+      // 5. 确认是以 Mermaid 关键字开头的
+      if (starts.some(function(s){ return text.indexOf(s) === 0; })) {
+        console.log('[Mermaid] 准备渲染:', text.substring(0, 60) + '...');
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = text;
+        fig.replaceWith(div);
+      }
+    });
+  });
+})();
+</script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: { htmlLabels: true, curve: 'basis' }
+  });
+</script>
 </body>
    </html>
