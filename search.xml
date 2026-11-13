@@ -5802,4 +5802,155 @@ UID)，读写器持有主密钥可<strong>复现计算</strong></td>
         <tag>安全认证</tag>
       </tags>
   </entry>
+  <entry>
+    <title>深入浅出RFID防碰撞算法:从Aloha到时隙优化,再到二进制树</title>
+    <url>/2026/11/09/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BARFID%E9%98%B2%E7%A2%B0%E6%92%9E%E7%AE%97%E6%B3%95-%E4%BB%8EAloha%E5%88%B0%E6%97%B6%E9%9A%99%E4%BC%98%E5%8C%96-%E5%86%8D%E5%88%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%91/</url>
+    <content><![CDATA[<h1
+id="深入浅出rfid防碰撞算法从aloha到时隙优化再到二进制树">深入浅出RFID防碰撞算法：从Aloha到时隙优化，再到二进制树</h1>
+<p>在RFID（射频识别）系统中，当多个标签进入阅读器范围并同时发送数据时，信号会在空气中叠加，导致阅读器无法正确解析，这就是<strong>“信号碰撞”</strong>。为了在无序的标签中建立秩序，防碰撞算法应运而生。目前主流的两大流派分别是：基于概率的<strong>Aloha系列</strong>，以及基于确定性的<strong>二进制树系列</strong>。</p>
+<span id="more"></span>
+<h2 id="一-基于概率的随机算法纯aloha及其优化">一、
+基于概率的随机算法：纯Aloha及其优化</h2>
+<p>Aloha算法的核心思想是<strong>“随机错峰发言”</strong>。</p>
+<h3 id="纯aloha算法简单但冲突极高">1. 纯Aloha算法：简单但冲突极高</h3>
+<p>纯Aloha算法虽然算法简单，易于实现，但是存在一个严重的问题，那就是读写器对同一个标签，如果连续多次发生冲突，就会导致读写器出现错误判断，认为这个标签不在自己的作用范围。假设其数据帧为
+(F)，则冲突周期为 (2F)。</p>
+<p><strong>冲突周期的推导（为什么是2F？）</strong></p>
+<p><strong>通俗解释</strong>：假设标签A正在发送一个长度为 (F)
+的帧（占用时间从0到F）。因为纯Aloha不限制发送时间，任何其他标签（如标签B）只要在这个帧附近的
+<strong>前一个 (F)</strong> 到 <strong>后一个 (F)</strong>
+的时间窗口内开始发送，都会与A发生部分重叠。也就是说，标签A的“脆弱时间窗口”是
+([-F, F])，总长度就是
+<strong>(2F)</strong>。在这个窗口内，只要有别人说话，就会撞车。因此，纯Aloha的信道利用率极低，最高仅为
+<strong>18.4%</strong>。</p>
+<h3 id="时隙aloha算法slotted-aloha对齐时间轴">2. 时隙Aloha算法（Slotted
+Aloha）：对齐时间轴</h3>
+<p>为了解决冲突窗口过大的问题，Vogt.H提出了改进方案。教材原文描述为：“把时间分成多个离散时隙，每个时隙长度
+(T) 等于标签的数据帧长度，标签只能在每个时隙的分界处才能发送数据。”</p>
+<ul>
+<li><strong>优化效果</strong>：时间被划成了一个个格子，所有标签被强制要求在“格子”的起点发声。
+<ul>
+<li>如果标签A在 ([0, F]) 发声，标签B也在 ([0, F])
+发声，则完全冲突。</li>
+<li>如果标签B在 ([F, 2F]) 发声，则完美避开。</li>
+<li>此时的冲突周期从 (2F) 缩减到了
+<strong>(1F)</strong>。信道利用率翻倍，达到了
+<strong>36.8%</strong>。</li>
+</ul></li>
+</ul>
+<p><strong>一旦冲突，标签会进入随机退避机制</strong>（比如随机选择后续的几个时隙之一），而不是盲目等待较长或极短的时间。</p>
+<hr />
+<h2 id="二-基于确定性的树形算法二进制树">二、
+基于确定性的树形算法：二进制树</h2>
+<p>与Aloha“碰运气”不同，<strong>二进制树算法</strong>（Binary
+Tree）利用标签ID的唯一性，通过不断“分而治之”，能实现 100%
+的精准识别。</p>
+<h3 id="二进制树算法实现过程">1. 二进制树算法实现过程</h3>
+<p>假设有4个标签，序列号为：</p>
+<p>标签 A：<code>10110010</code>、标签 B：<code>10100011</code>、标签
+C：<code>10110011</code>、标签 D：<code>11100011</code></p>
+<p><strong>查询前缀
+Q</strong>：阅读器发出的指令。在教材的表示中，<code>1</code>
+代表通配符（不限制），<code>0</code> 代表强制要求匹配。
+<strong>标签响应（如
+1X1X001X）</strong>：多位标签同时响应时，没冲突的显示具体数字，发生冲突的位用
+<strong><code>X</code></strong> 表示。</p>
+<img src="/2026/11/09/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BARFID%E9%98%B2%E7%A2%B0%E6%92%9E%E7%AE%97%E6%B3%95-%E4%BB%8EAloha%E5%88%B0%E6%97%B6%E9%9A%99%E4%BC%98%E5%8C%96-%E5%86%8D%E5%88%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%91/ScreenShot_2026-11-09_205258_030.png" class="">
+<p><br /></p>
+<ul>
+<li><strong>第一次查询</strong>：阅读器发
+<code>11111111</code>（全部报数）。
+<ul>
+<li>4个标签全响应。第1位都是1；<strong>第2位有0有1，冲突（X）</strong>；第4位有0有1（X）；第8位有0有1（X）。</li>
+<li>阅读器看到第2位冲突最靠前，于是把第2位强制设为
+<code>0</code>，进行下一次查询。</li>
+</ul></li>
+<li><strong>第二次查询</strong>：阅读器发
+<code>10111111</code>（前两位为 <code>10</code>）。
+<ul>
+<li><strong>标签D (<code>11100011</code>)</strong>
+发现第2位是1，不符，<strong>沉默</strong>。</li>
+<li>A、B、C 继续响应。前3位 <code>101</code>
+没问题；<strong>第4位有0有1，冲突（X）</strong>。</li>
+<li>阅读器继续往下分，强制第4位为 <code>0</code>。</li>
+</ul></li>
+<li><strong>第三次查询</strong>：阅读器发
+<code>10101111</code>（前四位为 <code>1010</code>）。
+<ul>
+<li><strong>标签A和C</strong> 前四位是
+<code>1011</code>，不符，<strong>沉默</strong>。</li>
+<li>只有 <strong>标签B (<code>10100011</code>)</strong>
+完美匹配，阅读器成功识别标签B！</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>注：识别出B后，阅读器会回溯，继续查 <code>1011</code>
+分支，最终把A和C分开，最后再查D。</p>
+</blockquote>
+<h3 id="动态二进制数算法的实现过程">2. 动态二进制数算法的实现过程</h3>
+<p>为减少标签发送数据所需的时间和所消耗的功率，有人提出了改进的二进制树算法。改进思路是把数据分成两部分，读写器和标签双方各自传送其中一部分数据，这样可把传输的数据量减小一半，达到缩短传送时间的目的。根据二进制树算法的改进思路，当标签ID与查询前缀相符时，标签只发送其余的比特位，这样可以减少每次传送的位数，也可缩短传送的时间，从而缩短防碰撞执行时间。</p>
+<img src="/2026/11/09/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BARFID%E9%98%B2%E7%A2%B0%E6%92%9E%E7%AE%97%E6%B3%95-%E4%BB%8EAloha%E5%88%B0%E6%97%B6%E9%9A%99%E4%BC%98%E5%8C%96-%E5%86%8D%E5%88%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%91/ScreenShot_2026-11-09_205344_534.png" class="">
+<p><br/></p>
+<h3 id="针对二进制树的两个硬核疑问">3. 针对二进制树的两个硬核疑问</h3>
+<p><strong>疑问一：如果学生（标签）编号是16进制的字符串，第一次就要查16次吗？</strong>
+* <strong>绝对不是。</strong>
+无论ID写成十进制还是十六进制，在RFID芯片底层和无线电波传输时，全都是<strong>二进制（0和1）比特流</strong>。1个十六进制字符（比如
+<code>A</code>）刚好等于
+4个比特（<code>1010</code>）。算法是<strong>逐比特（Bit）</strong>往下探的，所以永远只有
+0 和 1 两个分支，绝对不会变成16叉树。</p>
+<p><strong>疑问二：如果阅读器查询第一位是
+<code>1</code>，结果所有标签都没响应，是不是要把前缀改为
+<code>0</code>？</strong> * <strong>不是“改”，而是“回溯/切换”。</strong>
+如果查 <code>1</code> 没人理，说明以 <code>1</code>
+开头的子树是空的（死胡同）。阅读器直接放弃这个分支（剪枝），从它的“待办事项队列
+Q”里，拿出原本就存在的另一个分支 <code>0</code>
+继续查询。改变的是阅读器的指令，标签的ID是不变的。</p>
+<hr />
+<h2 id="三-算法对比与总结">三、 算法对比与总结</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">特性</th>
+<th style="text-align: left;">Aloha系列 (纯Aloha / 时隙Aloha)</th>
+<th style="text-align: left;">二进制树算法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>核心机制</strong></td>
+<td style="text-align: left;">随机错峰发送</td>
+<td style="text-align: left;">分而治之，逐位比对</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>冲突窗口</strong></td>
+<td style="text-align: left;">(2F) (纯) / (1F) (时隙)</td>
+<td style="text-align: left;">无固定窗口，取决于ID长度</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>识别率</strong></td>
+<td style="text-align: left;">概率性，存在“标签饥饿”（可能漏读）</td>
+<td style="text-align: left;">确定性，识别率 100%，不漏读</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>硬件要求</strong></td>
+<td style="text-align: left;">极低（不需要时钟同步的纯Aloha）</td>
+<td style="text-align: left;">较高（标签需具备比特比对能力）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>适用场景</strong></td>
+<td
+style="text-align: left;">仓储物流、超市商品盘点（海量、低成本标签）</td>
+<td
+style="text-align: left;">车辆ETC、图书管理（要求极度精准、防漏读）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结语</strong>：防碰撞算法是RFID系统的灵魂。Aloha系列用极低的成本实现了宏观上的错峰，而二进制树系列用严谨的逻辑确保了微观上的绝对精准。在实际应用中，工程师往往会结合两者的优势（如动态帧时隙Aloha），让RFID技术在物联网中发挥最大的效能。</p>
+]]></content>
+  </entry>
 </search>

@@ -132,6 +132,42 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/" >根据JetBrains Fleet文档创建maven项目失败的解决办法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2022-10-26  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>打算尝试一下Fleet编辑器，根据<a
+target="_blank" rel="noopener" href="https://www.jetbrains.com/help/fleet/getting-started-with-java-in-fleet.html#open-workspace">JetBrains
+Fleet文档</a>创建maven项目.</p>
+<p>首选确认本地机器上已经安装并配置了maven</p>
+<p>按照文档提示，通过<code>CTRL+ALT+T</code> 打开 terminal
+窗口，在编辑器的下方</p>
+<p>粘贴并执行
+<code>mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false</code></p>
+<p>创建失败，提下如下</p>
+<img src="/2022/10/26/%E6%A0%B9%E6%8D%AEJetBrains%20Fleet%E6%96%87%E6%A1%A3%E5%88%9B%E5%BB%BAmaven%E9%A1%B9%E7%9B%AE%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/QQ%E6%88%AA%E5%9B%BE20221026170547.png" class="">
+	
+	</div>
+  <a type="button" href="/2022/10/26/根据JetBrains Fleet文档创建maven项目失败的解决办法/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2022/10/21/MySQL根据出生日期计算当前年龄/" >MySQL根据出生日期计算当前年龄</a>
 		</h3>
 		</div>
@@ -398,49 +434,6 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/05/28/理解线程安全/" >理解线程安全</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-05-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-           
-  	      <div class="thumbnail" style="margin-top: 0px;"><a href="/2019/05/28/理解线程安全/"><img src="/2019/05/28/理解线程安全/threadsafety.png" alt="理解线程安全"  class="nofancybox"></a>
-           
-		</div>
-	
-	
-		<h1 id="不是线程的安全">不是线程的安全</h1>
-<p>面试官问：“什么是线程安全”，如果你不能很好的回答，那就请往下看吧。</p>
-<p>论语中有句话叫“学而优则仕”，相信很多人都觉得是“学习好了可以做官”。然而，这样理解却是错的。切记望文生义。</p>
-<p>同理，“线程安全”也不是指线程的安全，而是指内存的安全。为什么如此说呢？这和操作系统有关。</p>
-<p>目前主流操作系统都是多任务的，即多个进程同时运行。为了保证安全，每个进程只能访问分配给自己的内存空间，而不能访问别的进程的，这是由操作系统保障的。</p>
-<p>在每个进程的内存空间中都会有一块特殊的公共区域，通常称为堆（内存）。进程内的所有线程都可以访问到该区域，这就是造成问题的潜在原因。</p>
-<p>假设某个线程把数据处理到一半，觉得很累，就去休息了一会，回来准备接着处理，却发现数据已经被修改了，不是自己离开时的样子了。可能被其它线程修改了。</p>
-<p>比如把你住的小区看作一个进程，小区里的道路/绿化等就属于公共区域。你拿1万块钱往地上一扔，就回家睡觉去了。睡醒后你打算去把它捡回来，发现钱已经不见了。可能被别人拿走了。</p>
-<p>因为公共区域人来人往，你放的东西在没有看管措施时，一定是不安全的。内存中的情况亦然如此。</p>
-<p>所以线程安全指的是，在堆内存中的数据由于可以被任何线程访问到，在没有限制的情况下存在被意外修改的风险。</p>
-<p>即堆内存空间在没有保护机制的情况下，对多线程来说是不安全的地方，因为你放进去的数据，可能被别的线程“破坏”。</p>
-<p>那我们该怎么办呢？<strong><em>解决问题的过程其实就是一个取舍的过程，不同的解决方案有不同的侧重点。</em></strong></p>
-	
-	</div>
-  <a type="button" href="/2019/05/28/理解线程安全/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -525,45 +518,45 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/group-concat/">group_concat<span>2</span></a></li>
+			<li><a href="/tags/行转列/">行转列<span>1</span></a></li>
 		
-			<li><a href="/tags/反射/">反射<span>1</span></a></li>
+			<li><a href="/tags/毛选/">毛选<span>1</span></a></li>
 		
-			<li><a href="/tags/工程模式/">工程模式<span>1</span></a></li>
+			<li><a href="/tags/volatile/">volatile<span>1</span></a></li>
 		
-			<li><a href="/tags/Java/">Java<span>6</span></a></li>
-		
-			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
-		
-			<li><a href="/tags/RFID/">RFID<span>4</span></a></li>
-		
-			<li><a href="/tags/泛型/">泛型<span>1</span></a></li>
-		
-			<li><a href="/tags/oracle/">oracle<span>1</span></a></li>
-		
-			<li><a href="/tags/Dubbo/">Dubbo<span>1</span></a></li>
-		
-			<li><a href="/tags/Integer/">Integer<span>1</span></a></li>
-		
-			<li><a href="/tags/group-concat-max-len/">group_concat_max_len<span>1</span></a></li>
-		
-			<li><a href="/tags/Fleet/">Fleet<span>1</span></a></li>
+			<li><a href="/tags/异常/">异常<span>1</span></a></li>
 		
 			<li><a href="/tags/货币/">货币<span>1</span></a></li>
 		
+			<li><a href="/tags/Long/">Long<span>1</span></a></li>
+		
+			<li><a href="/tags/Redis/">Redis<span>1</span></a></li>
+		
 			<li><a href="/tags/矛盾论/">矛盾论<span>1</span></a></li>
 		
-			<li><a href="/tags/String/">String<span>1</span></a></li>
+			<li><a href="/tags/STM32/">STM32<span>2</span></a></li>
 		
-			<li><a href="/tags/缓存/">缓存<span>1</span></a></li>
+			<li><a href="/tags/File/">File<span>1</span></a></li>
 		
-			<li><a href="/tags/InnoDB/">InnoDB<span>1</span></a></li>
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
-			<li><a href="/tags/SpringBoot/">SpringBoot<span>2</span></a></li>
+			<li><a href="/tags/构件图/">构件图<span>1</span></a></li>
 		
-			<li><a href="/tags/HashMap/">HashMap<span>2</span></a></li>
+			<li><a href="/tags/synchronized/">synchronized<span>1</span></a></li>
 		
-			<li><a href="/tags/调制技术/">调制技术<span>1</span></a></li>
+			<li><a href="/tags/人生/">人生<span>1</span></a></li>
+		
+			<li><a href="/tags/事务/">事务<span>1</span></a></li>
+		
+			<li><a href="/tags/jstl/">jstl<span>1</span></a></li>
+		
+			<li><a href="/tags/Arrays-asList/">Arrays.asList<span>1</span></a></li>
+		
+			<li><a href="/tags/flowable/">flowable<span>1</span></a></li>
+		
+			<li><a href="/tags/线程安全/">线程安全<span>1</span></a></li>
+		
+			<li><a href="/tags/allowMultiQueries/">allowMultiQueries<span>1</span></a></li>
 		
 		
 		   <li><a href="/tags">...<span>78</span></a></li>
@@ -579,6 +572,10 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2026/11/09/深入浅出RFID防碰撞算法-从Aloha到时隙优化-再到二进制树/" ><i class="fa fa-file-o"></i>深入浅出RFID防碰撞算法:从Aloha到时隙优化,再...</a>
+      </li>
+    
+      <li>
         <a href="/2026/11/05/RFID密钥体系与Mifare-Classic实战-从原理到STM32-RC522操作/" ><i class="fa fa-file-o"></i>RFID密钥体系与Mifare_Classic实战:从...</a>
       </li>
     
@@ -592,10 +589,6 @@ target="_blank" rel="noopener" href="http://www.hollischuang.com/archives/4057">
     
       <li>
         <a href="/2026/09/29/RFID中的调制技术/" ><i class="fa fa-file-o"></i>RFID中的调制技术</a>
-      </li>
-    
-      <li>
-        <a href="/2026/09/19/RFID系统之激活RC522/" ><i class="fa fa-file-o"></i>RFID系统之激活RC522</a>
       </li>
     
   </ul>
